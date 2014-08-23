@@ -1,16 +1,13 @@
-h1. Agile tools
+# Agile tools
 
 
-h2. Requirements
+## Requirements
 
-This software requires:
 - php >= 5.3
 - mongodb
 - composer
 - Pecl packages:
--- mongodb
--- yaml
-
+    - mongodb
 
 -- 
 Max
