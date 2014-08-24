@@ -1,8 +1,8 @@
 <?php
 
-namespace Radio\Controller;
+namespace Radio\Controllers;
 
-use Tonic\Resource;
+use Radio\Core\Resource;
 use Tonic\Response;
 
 /**
@@ -14,8 +14,14 @@ class Index extends Resource
 {
     /**
      * @method GET
+     * @template index.html
      */
-    function showHomepage()
+    public function showHomepage()
+    {
+        return new Response(Response::OK);
+    }
+
+    function testJiraClient()
     {
         $walker = $this->app->container['jira.walker'];
         $walker->push(
@@ -25,7 +31,5 @@ class Index extends Resource
             var_dump($issue);
             // send custom notification here.
         }
-
-        return new Response(Response::OK, 'Example response');
     }
 }

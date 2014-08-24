@@ -9,8 +9,11 @@ $container = require_once 'container.php';
 
 $config = array(
     'load' => array(
-        $container['dir.src'] . '/Radio/Controller/*.php',
-        $container['dir.src'] . '/Radio/Controller/*/*.php',
+        $container['dir.src'] . '/Radio/Controllers/*.php',
+        $container['dir.src'] . '/Radio/Controllers/*/*.php',
+        $container['dir.src'] . '/Radio/Controllers/*/*/*.php',
+        $container['dir.src'] . '/Radio/Controllers/*/*/*/*.php',
+        $container['dir.src'] . '/Radio/Controllers/*/*/*/*/*.php',
     ),
 );
 

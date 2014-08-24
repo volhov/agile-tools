@@ -4,6 +4,11 @@
     <option name="pathToMage" value="$PROJECT_DIR$/app/Mage.php" />
     <option name="pathToMage" value="$PROJECT_DIR$/app/Mage.php" />
     <option name="enabled" value="false" />
+    <option name="pathToPhp" value="" />
+    <option name="urlToMagento" value="" />
+    <option name="packages" value="" />
+    <option name="themes" value="" />
+    <option name="showOldMagicentoNotification" value="false" />
   </component>
 </project>
 

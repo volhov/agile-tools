@@ -1,4 +1,5 @@
 ---
 server: "mongodb://localhost:27017"
+database: "agile"
 options:
   connect: true

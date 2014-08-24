@@ -1,4 +1,7 @@
 {
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
     "require": {
         "peej/tonic": "dev-master",
         "pimple/pimple": "3.0.*@dev",
