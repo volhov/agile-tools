@@ -7,7 +7,7 @@ use Tonic\Response;
 use chobie\Jira\Api;
 
 /**
- * Api Index controller.
+ * Jira Projects controller.
  *
  * @uri /api/jira/projects
  */

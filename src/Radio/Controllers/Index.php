@@ -20,16 +20,4 @@ class Index extends Resource
     {
         return new Response(Response::OK);
     }
-
-    function testJiraClient()
-    {
-        $walker = $this->app->container['jira.walker'];
-        $walker->push(
-            'project = RR AND issuetype = "Bug Report" AND status in (Open, "In Progress", Reopened)'
-        );
-        foreach ($walker as $issue) {
-            var_dump($issue);
-            // send custom notification here.
-        }
-    }
 }

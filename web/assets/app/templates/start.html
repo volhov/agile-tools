@@ -1,0 +1,20 @@
+<div class="page-header">
+    <h1>Start</h1>
+</div>
+<h2>1. Choose a project</h2>
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            <label>Search: <input ng-model="projectKey"></label>
+        </p>
+        <ul class="projects">
+            <li ng-repeat="project in projects | filter:projectKey">
+                <img ng-src="{{project.avatarUrls['16x16']}}" />
+                <a href=""
+                   ng-click="startProject(project)">
+                    {{project.name}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

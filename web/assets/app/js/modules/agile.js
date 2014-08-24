@@ -7,6 +7,10 @@ angular.module('agile', [
 
         var templatesUrl = '/assets/app/templates';
         $routeProvider
+            .when('/start', {
+                templateUrl: templatesUrl + '/start.html',
+                controller: 'Start'
+            })
             .when('/projects', {
                 templateUrl: templatesUrl + '/projects/list.html',
                 controller: 'Projects'
@@ -16,7 +20,7 @@ angular.module('agile', [
                 controller: 'Projects.Project'
             })
             .otherwise({
-                redirectTo: '/projects'
+                redirectTo: '/start'
             });
     }]);
 

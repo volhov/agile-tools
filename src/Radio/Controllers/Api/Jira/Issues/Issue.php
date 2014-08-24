@@ -7,28 +7,31 @@ use Tonic\Response;
 use chobie\Jira\Api;
 
 /**
- * Jira Project controller.
+ * Jira Issue controller.
  *
- * @uri /api/jira/projects/{projectKey}
+ * @uri /api/jira/issues/{issueKey}
  */
-class Api_Jira_Projects_Project extends Core\Resource
+class Api_Jira_Issues_Issue extends Core\Resource
 {
     /**
      * @method GET
      */
-    function showProjectInfo($projectKey)
+    function showIssueInfo($issueKey)
     {
         /** @var Api $jiraApi */
         $jiraApi = $this->app->container['jira.api'];
-        $project = $jiraApi->getProject($projectKey);
+        /** @var Api\Result $result */
+        $result = $jiraApi->getIssue($issueKey);
+
+        $issue = $result->getResult();
 
         $response = new Core\JsonResponse();
-        if (isset($project['key'])) {
+        if (isset($issue['key'])) {
             $response->code = Response::OK;
-            $response->body = $project;
+            $response->body = $issue;
         } else {
             $response->code = Response::NOTFOUND;
-            $response->body = $project;
+            $response->body = $issue;
         }
         return $response;
     }

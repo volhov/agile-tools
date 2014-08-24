@@ -3,7 +3,7 @@ require_once '../vendor/autoload.php';
 
 use Tonic\Application;
 use Tonic\Response;
-use Tonic\Request;
+use Radio\Core\Request;
 
 $container = require_once 'container.php';
 
