@@ -10,6 +10,9 @@ namespace Radio\Core;
  */
 class Resource extends \Tonic\Resource
 {
+    /** @var Request */
+    protected $request;
+
     /**
      * Template handler.
      * Load a given template and set response body to its content.

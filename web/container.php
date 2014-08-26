@@ -47,7 +47,7 @@ $container['database'] = $container['mongo.db'];
 $container['jira.api'] = function($container) {
     $config = $container['conf.jira'];
 
-    $api = new chobie\Jira\Api(
+    $api = new Radio\Core\Jira_Api(
         $config['server'],
         new chobie\Jira\Api\Authentication\Basic(
             $config["username"],

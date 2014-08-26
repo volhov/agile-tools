@@ -16,7 +16,7 @@ class Api_Index extends Resource
     /**
      * @method GET
      */
-    function showApiInfoPage()
+    public function showApiInfoPage()
     {
         return new JsonResponse(
             Response::OK,

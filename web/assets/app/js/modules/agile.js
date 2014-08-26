@@ -11,13 +11,13 @@ angular.module('agile', [
                 templateUrl: templatesUrl + '/start.html',
                 controller: 'Start'
             })
+            .when('/version/:projectKey/:versionName', {
+                templateUrl: templatesUrl +'/version.html',
+                controller: 'Version'
+            })
             .when('/projects', {
                 templateUrl: templatesUrl + '/projects/list.html',
                 controller: 'Projects'
-            })
-            .when('/projects/:projectKey', {
-                templateUrl: templatesUrl +'/projects/project.html',
-                controller: 'Projects.Project'
             })
             .otherwise({
                 redirectTo: '/start'

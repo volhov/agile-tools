@@ -16,7 +16,7 @@ class Api_Jira_Projects_Project extends Core\Resource
     /**
      * @method GET
      */
-    function showProjectInfo($projectKey)
+    public function showProjectInfo($projectKey)
     {
         /** @var Api $jiraApi */
         $jiraApi = $this->app->container['jira.api'];

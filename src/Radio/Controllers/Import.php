@@ -21,7 +21,7 @@ class Import extends Resource
         return new Response(Response::OK);
     }
 
-    function testJiraClient()
+    public function testJiraClient()
     {
         $walker = $this->app->container['jira.walker'];
         $walker->push(

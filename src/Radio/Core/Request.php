@@ -45,4 +45,9 @@ class Request extends \Tonic\Request
             return isset($this->_post[$key]) ? $this->_post[$key] : null;
         }
     }
+
+    public function getDecodedData()
+    {
+        return json_decode($this->data, true);
+    }
 }

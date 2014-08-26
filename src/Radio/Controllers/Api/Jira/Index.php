@@ -16,7 +16,7 @@ class Api_Jira_Index extends Resource
     /**
      * @method GET
      */
-    function showApiInfoPage()
+    public function showApiInfoPage()
     {
         $jiraConf = $this->app->container['conf.jira'];
 

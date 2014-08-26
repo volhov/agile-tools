@@ -16,7 +16,7 @@ class Api_Jira_Issues_Issue extends Core\Resource
     /**
      * @method GET
      */
-    function showIssueInfo($issueKey)
+    public function showIssueInfo($issueKey)
     {
         /** @var Api $jiraApi */
         $jiraApi = $this->app->container['jira.api'];
