@@ -30,23 +30,4 @@ class Api_Projects extends Core\Resource
             $projects
         );
     }
-
-    /**
-     * @method POST
-     */
-    public function addProject()
-    {
-        $data = json_decode($this->request->data, true);
-
-        if ($data && isset($data['project'])) {
-            $project = $data['project'];
-            $project['_id'] = $project['key'];
-
-            /** @var \MongoDB $jiraApi */
-            $db = $this->app->container['database'];
-
-            $db->projects->save($project);
-
-        }
-    }
 }

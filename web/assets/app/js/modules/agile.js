@@ -1,27 +1,46 @@
 angular.module('agile', [
         'ngRoute',
-        'agile.controllers'
+        'agile.controllers',
+        'agile.filters'
     ])
-    .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-        //$locationProvider.html5Mode(true);
+    .constant('TEMPLATES_URL', '/assets/app/templates')
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',
+        function($routeProvider, $locationProvider, $httpProvider, TEMPLATES_URL) {
+//            $locationProvider.html5Mode(true);
 
-        var templatesUrl = '/assets/app/templates';
-        $routeProvider
-            .when('/start', {
-                templateUrl: templatesUrl + '/start.html',
-                controller: 'Start'
-            })
-            .when('/version/:projectKey/:versionName', {
-                templateUrl: templatesUrl +'/version.html',
-                controller: 'Version'
-            })
-            .when('/projects', {
-                templateUrl: templatesUrl + '/projects/list.html',
-                controller: 'Projects'
-            })
-            .otherwise({
-                redirectTo: '/start'
-            });
-    }]);
+//            $httpProvider.interceptors.push(function($q) {
+//                return {
+//                    'responseError': function(response) {
+//                        console.log(response);
+//                        return response;
+//                    }
+//                };
+//            });
 
-angular.module('agile.controllers', ['helper', 'api']);
+            $routeProvider
+                .when('/start', {
+                    templateUrl: TEMPLATES_URL + '/start.html',
+                    controller: 'Start'
+                })
+                .when('/version/:projectKey/:versionName', {
+                    redirectTo: function(params) {
+                        var defaultTab = 'confidence_report';
+                        return '/version/' + params.projectKey
+                            + '/' + params.versionName + '/' + defaultTab;
+                    }
+                })
+                .when('/version/:projectKey/:versionName/:tab', {
+                    templateUrl: TEMPLATES_URL +'/version.html',
+                    controller: 'Version'
+                })
+                .when('/project/:projectKey', {
+                    templateUrl: TEMPLATES_URL + '/project.html',
+                    controller: 'Project'
+                })
+                .otherwise({
+                    redirectTo: '/start'
+                });
+        }]);
+
+angular.module('agile.controllers', ['helper', 'api', 'agile.filters']);
+angular.module('agile.filters', ['helper', 'ngSanitize']);

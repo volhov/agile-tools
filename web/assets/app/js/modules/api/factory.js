@@ -60,9 +60,13 @@ angular.module('api')
                     resourceDefaults, {update: {method: 'PUT'}});
 
                 return {
-                    get: function(id) {
+                    get: function(id, expand) {
                         var deferred = $q.defer();
-                        resource.get({id: id}, function(item) {
+                        var query = {id: id};
+                        if (expand) {
+                            query.expand = expand;
+                        }
+                        resource.get(query, function(item) {
                             deferred.resolve(item);
                         }, function(response) {
                             deferred.reject(response);

@@ -28,6 +28,10 @@ try {
     /** @var \Tonic\Response $response */
     $response = $resource->exec();
 
+} catch (chobie\Jira\Api\Exception $e) {
+
+    $response = new Response(Response::SERVICEUNAVAILABLE, $e->getMessage());
+
 } catch (Tonic\NotFoundException $e) {
 
     $response = new Response(Response::NOTFOUND, $e->getMessage());

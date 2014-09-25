@@ -1,7 +1,36 @@
 <div class="page-header">
-    <h1>{{ project.name }} / {{ versionName }}</h1>
-    <div ng-show="alert.message" role="alert"
+    <h1><a href="#/project/{{ project.key }}">{{ project.name }}</a> / {{ version.name }}</h1>
+    <div data-ng-show="alert.message" role="alert"
          class="alert alert-{{alert.type}}">{{alert.message}}</div>
 </div>
-<div class="row version-page">
+<div class="version-dates pull-right">
+    <span data-ng-if="version.startDate">
+        <span class="date" title="Start Date">{{ moment(version.startDate.date).format('MMM,[&nbsp;]DD') }}</span>
+        &rarr;
+    </span>
+    <span data-ng-if="version.releaseDate">
+        <span class="date" title="Release Date">{{ moment(version.releaseDate.date).format('MMM,[&nbsp;]DD') }}</span>
+        |
+    </span>
+    {{ version.released ? 'Released' : 'Not Released'}}
+</div>
+<ul class="nav nav-tabs" role="tablist">
+    <li data-ng-class="getTabClass('confidence_report')"
+        data-ng-click="tab = 'confidence_report'">
+        <a href="">Confidence Report</a>
+    </li>
+    <li data-ng-class="getTabClass('resources')"
+        data-ng-click="tab = 'resources'">
+        <a href="">Resources</a>
+    </li>
+    <li ng-class="getTabClass('plan')"
+        data-ng-click="tab = 'plan'">
+        <a href="">Plan</a>
+    </li>
+</ul>
+<div class="version-page">
+    <div data-ng-controller="Version_ConfidenceReport"
+         data-ng-show="tab == 'confidence_report'">
+        <ng-include src="template"></ng-include>
+    </div>
 </div>

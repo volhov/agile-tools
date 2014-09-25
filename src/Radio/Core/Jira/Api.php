@@ -3,6 +3,7 @@
 namespace Radio\Core;
 
 use chobie\Jira\Api;
+use chobie\Jira\IssueType;
 
 class Jira_Api extends Api
 {
@@ -36,5 +37,20 @@ class Jira_Api extends Api
         $result = $this->api(self::REQUEST_GET, '/rest/api/2/user/picker', array('query' => $query));
 
         return $result;
+    }
+
+    public function getIssueTypes($asArray = false)
+    {
+        $result = array();
+        $types = $this->api(self::REQUEST_GET, "/rest/api/2/issuetype", array(), true);
+
+        if (!$asArray) {
+            foreach ($types as $issue_type) {
+                $result[] = new IssueType($issue_type);
+            }
+            return $result;
+        } else {
+            return $types;
+        }
     }
 }

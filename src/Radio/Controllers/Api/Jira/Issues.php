@@ -29,7 +29,7 @@ class Api_Jira_Issues extends Core\Resource
 
             return new Core\JsonResponse(
                 Response::OK,
-                $result->getResult()
+                $result->getResult()['issues']
             );
         } catch(Exceptions\Api $e) {
             return new Core\JsonResponse(
@@ -52,9 +52,12 @@ class Api_Jira_Issues extends Core\Resource
         $jql = $this->request->query('jql');
         $startAt = $this->request->query('start_at') ?: 0;
         $maxResult = $this->request->query('max_result') ?: 20;
+        $fields = $this->request->query('fields') ?: '*navigable';
 
         if ($jql) {
-            $result = $jiraApi->search($jql, $startAt, $maxResult);
+            $jiraApi->setOptions(0x00);
+            $result = $jiraApi->search($jql, $startAt, $maxResult, $fields);
+            $jiraApi->setOptions(0x01);
 
             return $result;
         } else {

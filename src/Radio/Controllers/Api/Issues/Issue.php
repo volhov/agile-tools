@@ -7,31 +7,32 @@ use Tonic\Response;
 use chobie\Jira\Api;
 
 /**
- * Jira Issue controller.
+ * Issue api controller.
  *
- * @uri /api/jira/issues/{issueKey}
+ * @uri /api/issues/{issueKey}
  */
-class Api_Jira_Issues_Issue extends Core\Resource
+class Api_Issues_Issue extends Core\Resource
 {
     /**
      * @method GET
      */
     public function showIssueInfo($issueKey)
     {
-        /** @var Core\Jira_Api $jiraApi */
-        $jiraApi = $this->app->container['jira.api'];
-        /** @var Api\Result $result */
-        $result = $jiraApi->getIssue($issueKey);
-
-        $issue = $result->getResult();
+        /** @var \MongoDB $jiraApi */
+        $db = $this->app->container['database'];
+        $issue = $db->issues->findOne(array(
+            '_id' => $issueKey
+        ));
 
         $response = new Core\JsonResponse();
-        if (isset($issue['key'])) {
+        if ($issue) {
             $response->code = Response::OK;
             $response->body = $issue;
         } else {
             $response->code = Response::NOTFOUND;
-            $response->body = $issue;
+            $response->body = array(
+                'message' => 'Issue with id "' . $issueKey . '" can\'t be found'
+            );
         }
         return $response;
     }

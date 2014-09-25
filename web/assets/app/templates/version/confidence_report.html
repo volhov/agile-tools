@@ -1,0 +1,172 @@
+<h2>Confidence Report</h2>
+
+<div data-ng-controller="Version_ConfidenceReport_Import">
+    <ng-include src="template"></ng-include>
+</div>
+
+<div data-ng-controller="Version_ConfidenceReport_Export">
+    <ng-include src="template"></ng-include>
+</div>
+
+<div class="cl-report-container" data-ng-hide="hideIssues">
+
+    <label>Filter: <input data-ng-model="searchIssue"></label>
+
+    <button type="button" class="btn btn-primary"
+            data-ng-click="saveConfidenceReport()">Save</button>
+
+    <button type="button" class="btn btn-warning"
+            data-ng-click="updateConfidenceReport(true)">Update</button>
+
+    <div class="cl-report" data-ng-hide="showUpdateLoader">
+        <div class="row cl-report-header">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <strong>Key</strong>
+                    </div>
+                    <div class="col-sm-8">
+                        <strong>Story Key / Summary / Assignees</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <strong>Status</strong>
+            </div>
+            <div class="col-sm-1">
+                <strong>Progress</strong>
+            </div>
+            <div class="col-sm-1">
+                <strong>CL</strong>
+            </div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-2"><strong>Impl</strong></div>
+                    <div class="col-sm-2"><strong>Doc</strong></div>
+                    <div class="col-sm-2"><strong>TBD</strong></div>
+                    <div class="col-sm-2"><strong>TC</strong></div>
+                    <div class="col-sm-2"><strong>QA</strong></div>
+                    <div class="col-sm-2"><strong>CR</strong></div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <strong>Note</strong>
+            </div>
+        </div>
+
+        <div class="row cl-report-row"
+             data-ng-repeat-start="issueInfo in confidenceReport.issues | filter:searchIssue"
+             data-ng-class="getRowClass(issueInfo)"
+             ng-init="issue = getIssue(issueInfo.key); assignees = getStoryAssignees(issueInfo.key)">
+            <div class="cell col-sm-6">
+                <div class="row">
+                    <div class="col-sm-2 cell-key">
+                        <a href="{{ config.yaml.jira_url }}/browse/{{ issue.key }}" target="_blank">
+                            {{ issue.key }}
+                        </a>
+                    </div>
+                    <div class="col-sm-7 cell-summary">
+                        <span class="expand-btn"
+                           data-ng-click="showDetails[issue.key] = true"
+                           data-ng-hide="showDetails[issue.key]">&plus;</span>
+                        <span class="collapse-btn"
+                           data-ng-click="showDetails[issue.key] = false"
+                           data-ng-show="showDetails[issue.key]">&minus;</span>
+                        <span class="issue-summary" data-ng-click="showDetails[issue.key] = !showDetails[issue.key]">
+                            <img data-ng-src="{{issue.issuetype.icon_url}}"
+                                 title="{{ issue.issuetype.name }}"
+                                 class="issue-icon icon-16">
+                            <span data-ng-bind-html="issue.summary | storyKey"></span>
+                        </span>
+                        <span class="issue-time">
+                            <span title="Estimated">{{ issue.time.aggr.estimated | jiraTime}}</span>
+                            / <span title="Remaining">{{ issue.time.aggr.remaining | jiraTime}}</span>
+                            / <span title="Spent">{{ issue.time.aggr.spent | jiraTime}}</span>
+                        </span>
+                    </div>
+                    <div class="col-sm-3 cell-assignee">
+                        <span class="assignee">
+                            <strong class="hidden-sm hidden-xs">A:</strong>
+                                {{ assignees.devs[0].name | assigneeShort }}
+                        </span>
+                        <span class="hidden-sm hidden-xs" data-ng-if="assignees.tbd.name">
+                            <br class="hidden-lg">
+                            <span class="assignee">
+                                <strong class="hidden-sm hidden-xs">T:</strong>
+                                    {{ assignees.tbd.name | assigneeShort }}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="cell col-sm-1 cell-status">
+                <span class="issue-status" title="{{ issueInfo.status }}">{{ issueInfo.status }}</span>
+            </div>
+            <div class="col-sm-1">
+                <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
+            </div>
+            <div class="col-sm-1">
+                <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
+            </div>
+            <div class="cell col-sm-2">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
+                        <span data-ng-show="issueInfo.impl == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
+                        <span data-ng-show="issueInfo.doc == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span data-ng-show="!issueInfo.tbd">&mdash;</span>
+                        <span data-ng-show="issueInfo.tbd == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
+                        <span data-ng-show="issueInfo.tc == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
+                        <span data-ng-show="issueInfo.qa == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                        <span data-ng-show="issueInfo.cr == 1" class="glyphicon glyphicon-ok"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <input type="text" class="form-control input-sm" data-ng-model="issueInfo.note">
+            </div>
+        </div>
+        <div class="row cl-report-row-children" data-ng-repeat-end  data-ng-show="showDetails[issue.key]">
+            <div class="cell col-sm-12">
+                <div class="row" data-ng-repeat="subTask in issue.subtasks">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2 cell-key">
+                                &nbsp;<span class="secondary-info">&ndash;</span>
+                                <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}" target="_blank">{{ subTask.key }}</a>
+                            </div>
+                            <div class="col-sm-7 cell-summary">
+                                {{ subTask.summary }}
+                            </div>
+                            <div class="col-sm-3 cell-assignee">
+                                <span class="hidden-md hidden-sm hidden-xs">{{ subTask.assignee.name }}</span>
+                                <span class="visible-md-inline" title="{{ subTask.assignee.name }}">{{ subTask.assignee.name | assigneeShort }}</span>
+                                <span class="visible-sm-inline visible-xs-inline" title="{{ subTask.assignee.name }}">{{ subTask.assignee.name | assigneeInitials }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">{{ subTask.status.name }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p data-ng-show="showUpdateLoader" class="info bg-info">
+        <span class="glyphicon glyphicon-music"></span>
+        Issues are being updated. Please wait for a moment.
+    </p>
+</div>

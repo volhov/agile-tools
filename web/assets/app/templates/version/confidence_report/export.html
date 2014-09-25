@@ -1,0 +1,93 @@
+<p>
+    <a href="" data-ng-hide="showExport" data-ng-click="showExportPage()">Export</a>
+    <a href="" data-ng-show="showExport" data-ng-click="hideExportPage()">&larr; Back</a>
+</p>
+
+<div data-ng-show="showExport">
+
+    <hr>
+
+    <p>
+        Hi!<br><br>
+        Below you can find the Confidence Levels report.
+    </p>
+
+    <table class="cl-report-export">
+        <thead class="cl-report">
+            <tr class="cl-report-header">
+                <td><strong>Key</strong></td>
+                <td><strong>Story Key / Summary</strong></td>
+                <td><strong>Assignee</strong></td>
+                <td><strong>Status</strong></td>
+                <td><strong>Progress</strong></td>
+                <td><strong>Impl</strong></td>
+                <td><strong>Doc</strong></td>
+                <td><strong>TBD</strong></td>
+                <td><strong>TC</strong></td>
+                <td><strong>QA</strong></td>
+                <td><strong>CR</strong></td>
+                <td class="current-cl"><strong>CL</strong></td>
+                <td data-ng-repeat="clDate in clDates">
+                    <strong>{{ moment(clDate).format('D.MM') }}</strong>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="cl-report-row"
+                 data-ng-repeat="issueInfo in confidenceReport.issues"
+                 data-ng-class="getRowClass(issueInfo)"
+                 data-ng-init="issue = getIssue(issueInfo.key); assignees = getStoryAssignees(issueInfo.key)">
+                <td class="cell-key">
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issue.key }}" target="_blank">
+                        {{ issue.key }}
+                    </a>
+                </td>
+                <td class="cell-summary">
+                    <span class="issue-summary" data-ng-bind-html="issue.summary | storyKey"></span>
+                </td>
+                <td class="cell cell-assignee">
+                    <strong>A:</strong> {{ assignees.devs[0].name | assigneeShort }}
+                    <span data-ng-if="assignees.tbd.name"><strong>T:</strong> {{ assignees.tbd.name | assigneeShort }}</span>
+                </td>
+                <td class="cell cell-status">{{ issueInfo.status }}</td>
+                <td class="cell cell-progress">{{ issueInfo.progress }}</td>
+                <td>
+                    <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.impl == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.doc == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="!issueInfo.tbd">&mdash;</span>
+                    <span data-ng-show="issueInfo.tbd == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.tc == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.qa == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.cr == 1">*</span>
+                </td>
+                <td class="cell cell-cl current-cl">{{ issueInfo.cl }}</td>
+                <td class="cell" data-ng-repeat="clDate in clDates">
+                    {{ issueInfo.cl_by_day[clDate] }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <p>
+        The original document is attached to the Iteration Planning page in Wiki:<br>
+        <a href="#">[Link to Wiki Page]</a>
+    </p>
+
+    <hr>
+
+</div>

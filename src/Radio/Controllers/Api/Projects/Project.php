@@ -36,4 +36,31 @@ class Api_Projects_Project extends Core\Resource
         }
         return $response;
     }
+
+    /**
+     * @method PUT
+     */
+    public function saveProject($projectKey)
+    {
+        $project = $this->request->getDecodedData();
+
+        if ($project) {
+            unset($project['id']);
+            unset($project['expansion']);
+
+            /** @var \MongoDB $db */
+            $db = $this->app->container['database'];
+            $db->projects->save($project);
+
+            $response = new Core\JsonResponse(Response::OK, array(
+                'message' => 'Project has been saved.'
+            ));
+        } else {
+            $response = new Core\JsonResponse(Response::BADREQUEST, array(
+                'message' => 'Project data can\'t be found in the request.'
+            ));
+        }
+
+        return $response;
+    }
 }
