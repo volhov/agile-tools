@@ -20,7 +20,7 @@ angular.module('helper', [])
             'Code Review': 'cr',
             'Documentation': 'doc',
             'Testing by Developer': 'tbd',
-            'QA: Test Cases': 'tc',
+            'QA: Test cases': 'tc',
             'QA: Testing': 'qa',
             'QA: Performace': 'perf'
         };

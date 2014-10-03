@@ -1,18 +1,8 @@
-<p>
-    <button type="button" class="btn btn-sm btn-default"
-            data-ng-hide="showImport"
-            data-ng-click="openImportForm()">Add user</button>
-    <button type="button" class="btn btn-sm btn-warning"
-            data-ng-show="showImport"
-            data-ng-click="hideImport()">Cancel</button>
-</p>
-
 <div class="project-import" data-ng-show="showImport">
     <label>
-        Search:
-        <input type="text" data-ng-model="userQuery"
+        <input type="search" placeholder="User Name" class="form-control input-sm"
+               data-ng-model="userQuery"
                data-ng-change="searchUser(userQuery)"/>
-        <span class="a clear-cross" data-ng-click="searchUser(userQuery = '')">&times;</span>
     </label>
     <ul>
         <li class="project-import-user"
@@ -27,4 +17,13 @@
 <p data-ng-show="showImportLoader" class="info bg-info">
     <span class="glyphicon glyphicon-music"></span>
     User is being imported. Please wait for a moment.
+</p>
+
+<p data-ng-hide="showImportLoader">
+    <button type="button" class="btn btn-sm btn-default"
+            data-ng-hide="showImport"
+            data-ng-click="openImportForm()">Add user</button>
+    <button type="button" class="btn btn-sm btn-warning"
+            data-ng-show="showImport"
+            data-ng-click="hideImport()">Cancel</button>
 </p>

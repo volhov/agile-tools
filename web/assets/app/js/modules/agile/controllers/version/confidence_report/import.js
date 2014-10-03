@@ -20,12 +20,15 @@ angular.module('agile.controllers')
                 if (issueType) {
                     query.jql += ' AND issuetype = "' + issueType + '"';
                 }
-                Api.get('JiraIssues').get(query).then(function(issues) {
+                var jiraIssuesApi = Api.get('JiraIssues');
+                jiraIssuesApi.disableCache();
+                jiraIssuesApi.get(query).then(function(issues) {
 //                    angular.forEach(issues, function(issue) {
 //                        issue.import = true;
 //                    });
                     $scope.jiraIssues = issues;
                 });
+                jiraIssuesApi.enableCache();
             };
             $scope.hideImport = function()
             {

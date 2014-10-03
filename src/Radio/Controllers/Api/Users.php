@@ -13,6 +13,10 @@ use chobie\Jira\Api;
  */
 class Api_Users extends Core\Resource
 {
+    protected $allowedSortingFields = array(
+        'key', 'name'
+    );
+
     /**
      * @method GET
      */
@@ -22,6 +26,7 @@ class Api_Users extends Core\Resource
         $db = $this->app->container['database'];
         /** @var \MongoCursor $cursor */
         $cursor = $db->users->find();
+        $this->applySorting($cursor);
 
         $users = iterator_to_array($cursor);
 
@@ -29,5 +34,22 @@ class Api_Users extends Core\Resource
             Response::OK,
             $users
         );
+    }
+
+    protected function applySorting(\MongoCursor $cursor)
+    {
+        $sort = $this->request->query('sort');
+        $fields = $sort ? explode(',', $sort) : array();
+
+        $allowedFields = array();
+        foreach ($fields as $field) {
+            if (in_array($field, $this->allowedSortingFields)) {
+                $allowedFields[$field] = 1;
+            }
+        }
+
+        if ($allowedFields) {
+            $cursor->sort($allowedFields);
+        }
     }
 }

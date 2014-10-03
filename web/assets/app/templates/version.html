@@ -12,6 +12,7 @@
         <span class="date" title="Release Date">{{ moment(version.releaseDate.date).format('MMM,[&nbsp;]DD') }}</span>
         |
     </span>
+    <span data-ng-if="!version.releaseDate">? |</span>
     {{ version.released ? 'Released' : 'Not Released'}}
 </div>
 <ul class="nav nav-tabs" role="tablist">

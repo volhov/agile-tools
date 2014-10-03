@@ -18,6 +18,8 @@
     <button type="button" class="btn btn-warning"
             data-ng-click="updateConfidenceReport(true)">Update</button>
 
+    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+
     <div class="cl-report" data-ng-hide="showUpdateLoader">
         <div class="row cl-report-header">
             <div class="col-sm-6">
@@ -86,10 +88,11 @@
                     </div>
                     <div class="col-sm-3 cell-assignee">
                         <span class="assignee">
-                            <strong class="hidden-sm hidden-xs">A:</strong>
+                            <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
                                 {{ assignees.devs[0].name | assigneeShort }}
                         </span>
-                        <span class="hidden-sm hidden-xs" data-ng-if="assignees.tbd.name">
+                        <span class="hidden-sm hidden-xs"
+                              data-ng-show="expandAssignees" data-ng-if="assignees.tbd.name">
                             <br class="hidden-lg">
                             <span class="assignee">
                                 <strong class="hidden-sm hidden-xs">T:</strong>
@@ -119,7 +122,7 @@
                         <span data-ng-show="issueInfo.doc == 1" class="glyphicon glyphicon-ok"></span>
                     </div>
                     <div class="col-sm-2">
-                        <span data-ng-show="!issueInfo.tbd">&mdash;</span>
+                        <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
                         <span data-ng-show="issueInfo.tbd == 1" class="glyphicon glyphicon-ok"></span>
                     </div>
                     <div class="col-sm-2">
