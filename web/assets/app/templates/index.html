@@ -23,6 +23,7 @@
     <script src="/assets/bower/moment/min/moment-with-locales.min.js"></script>
     <script src="/assets/bower/angular/angular.min.js"></script>
     <script src="/assets/bower/angular-route/angular-route.min.js"></script>
+    <script src="/assets/bower/angular-route-segment/build/angular-route-segment.js"></script>
     <script src="/assets/bower/angular-resource/angular-resource.min.js"></script>
     <script src="/assets/bower/angular-local-storage/angular-local-storage.min.js"></script>
     <script src="/assets/bower/angular-sanitize/angular-sanitize.min.js"></script>
@@ -69,7 +70,8 @@
 <body role="document">
 
     <div class="container-fluid theme-showcase" role="main">
-        <div data-ng-view></div>
+        <!--<div data-ng-view></div>-->
+        <div app-view-segment="0"></div>
     </div>
 
     <footer class="container-fluid">
