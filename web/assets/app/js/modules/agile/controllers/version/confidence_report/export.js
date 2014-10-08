@@ -26,10 +26,25 @@ angular.module('agile.controllers')
                             });
                         }
                     });
+                    sortClDates();
                 }
             });
 
             function setAlert(type, message) {
                 Helper.setAlert($scope.$parent.$parent.$parent, type, message);
+            }
+
+            function sortClDates()
+            {
+                $scope.clDates.sort(function(a, b) {
+                    var aDate = moment(a);
+                    var bDate = moment(b);
+                    if (aDate < bDate) {
+                        return -1;
+                    } else if (aDate > bDate) {
+                        return 1;
+                    }
+                    return 0
+                });
             }
         }]);

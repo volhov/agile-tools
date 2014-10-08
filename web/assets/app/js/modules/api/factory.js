@@ -96,6 +96,12 @@ angular.module('api')
                         });
 
                         return deferred.promise;
+                    },
+                    enableCache: function() {
+                        // Just a plug for a moment. Cache is not used for items
+                    },
+                    disableCache: function() {
+                        // Just a plug for a moment. Cache is not used for items
                     }
                 };
             };

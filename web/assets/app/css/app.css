@@ -65,13 +65,13 @@ label {
     background: #e8e8e8;
 }
 
-.cl-report-row.good .cell-status {
+.cl-report-row .good .cell-status {
     color: #0d9814;
 }
-.cl-report-row.so-so .cell-status {
+.cl-report-row .so-so .cell-status {
     color: #cd961a;
 }
-.cl-report-row.bad .cell-status {
+.cl-report-row .bad .cell-status {
     color: #ff2f31;
 }
 .cl-report-row-children {
@@ -80,7 +80,7 @@ label {
 }
 .expand-btn,
 .collapse-btn {
-    margin-left: -1.3em;
+    margin-left: -1.16em;
     margin-right: .3em;
     cursor: pointer;
 }
@@ -158,13 +158,13 @@ label {
     padding: 5px 10px;
 }
 
-.cl-report-export .cl-report-row.good {
+.cl-report-export .cl-report-row .good {
     background-color: #cfe6c4;
 }
-.cl-report-export .cl-report-row.so-so {
+.cl-report-export .cl-report-row .so-so {
     background-color: #fff7bf;
 }
-.cl-report-export .cl-report-row.bad {
+.cl-report-export .cl-report-row .bad {
     background-color: #ffd1cf;
 }
 .cl-report-export .cl-report-row .cell-status {

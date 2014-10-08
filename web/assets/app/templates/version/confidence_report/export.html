@@ -30,6 +30,7 @@
                 <td data-ng-repeat="clDate in clDates">
                     <strong>{{ moment(clDate).format('D.MM') }}</strong>
                 </td>
+                <td><strong>Note</strong></td>
             </tr>
         </thead>
         <tbody>
@@ -60,7 +61,7 @@
                     <span data-ng-show="issueInfo.doc == 1">*</span>
                 </td>
                 <td>
-                    <span data-ng-show="!issueInfo.tbd">&mdash;</span>
+                    <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
                     <span data-ng-show="issueInfo.tbd == 1">*</span>
                 </td>
                 <td>
@@ -78,6 +79,9 @@
                 <td class="cell cell-cl current-cl">{{ issueInfo.cl }}</td>
                 <td class="cell" data-ng-repeat="clDate in clDates">
                     {{ issueInfo.cl_by_day[clDate] }}
+                </td>
+                <td>
+                    {{ issueInfo.note }}
                 </td>
             </tr>
         </tbody>
