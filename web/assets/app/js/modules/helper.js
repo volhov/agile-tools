@@ -111,9 +111,11 @@ angular.module('helper', [])
                     } else if (!devIssuesOpened && !devIssuesInProgress /* && devIssuesResolved*/) {
                         issueState.impl = 1;
                     }
-                }
 
-                this.defineIssueStatus(issueState);
+                    this.defineIssueStatus(issueState);
+                } else {
+                    issueState.status = issue.status.name;
+                }
 
                 return issueState;
             },

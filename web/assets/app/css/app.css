@@ -84,6 +84,16 @@ label {
     margin-right: .3em;
     cursor: pointer;
 }
+.cell-summary .expand-btn,
+.cell-summary .collapse-btn {
+    display: none;
+}
+@media (min-width: 1400px) {
+    .cell-summary .expand-btn,
+    .cell-summary .collapse-btn{
+        display: inline;
+    }
+}
 .cell {
     padding-top: 3px;
     padding-bottom: 3px;
@@ -132,6 +142,9 @@ label {
     background-color: #fff;
     padding: 0 5px;
 }
+.nowrap {
+    white-space: nowrap;
+}
 .issue-time span {
     color: #333;
 }
@@ -158,15 +171,54 @@ label {
     padding: 5px 10px;
 }
 
-.cl-report-export .cl-report-row .good {
+.cl-report-export td {
+    border-bottom: 1px solid #fff ;
+}
+.cl-report-export .cell-summary {
+    min-width: 200px;
+}
+.cl-report-export .cell-note {
+    min-width: 150px;
+}
+.cl-report-export .cl-report-row.good {
     background-color: #cfe6c4;
 }
-.cl-report-export .cl-report-row .so-so {
+.cl-report-export .cl-report-row.so-so {
     background-color: #fff7bf;
 }
-.cl-report-export .cl-report-row .bad {
+.cl-report-export .cl-report-row.bad {
     background-color: #ffd1cf;
 }
 .cl-report-export .cl-report-row .cell-status {
     color: #333;
+}
+.cell-key {
+    /*position: relative;*/
+}
+.issue-action {
+    display: none;
+    position: relative;
+    z-index: 100;
+}
+.cl-report-row:hover .issue-action {
+    display: inline;
+}
+.issue-action.glyphicon-repeat {
+    left: 5px;
+}
+.issue-action.glyphicon-remove {
+    color: #a94442;
+    left: 10px;
+}
+.loading-indicator {
+    display: inline-block;
+    background: url(../img/loading-indicator.gif) no-repeat scroll 0 0 transparent;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    top: 1px;
+}
+.cl-report-row .loading-indicator {
+    position: absolute;
+    margin-left: 5px;
 }

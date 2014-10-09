@@ -6,11 +6,4 @@ angular.module('agile.controllers')
 
             $scope.template = TEMPLATES_URL + '/version/confidence_report/issue_info.html';
 
-            $scope.getRowClass = function(issueInfo) {
-                return (issueInfo.cl > 6) ? 'good' : (issueInfo.cl > 3) ? 'so-so' : 'bad';
-            };
-
-            $scope.getStoryAssignees = function(issueInfo) {
-                return JiraHelper.getStoryAssignees(issueInfo.issue);
-            };
         }]);

@@ -4,6 +4,7 @@
 </p>
 
 <div data-ng-show="showExport">
+    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
 
     <hr>
 
@@ -36,22 +37,34 @@
         <tbody>
             <tr class="cl-report-row"
                  data-ng-repeat="issueInfo in confidenceReport.issues"
-                 data-ng-class="getRowClass(issueInfo)"
-                 data-ng-init="issue = getIssue(issueInfo.key); assignees = getStoryAssignees(issueInfo.key)">
+                 data-ng-init="cl = issueInfo.cl - 0"
+                 data-ng-class="{good: cl > 6, 'so-so': cl > 3 && cl <= 6, 'bad': cl <= 3}">
                 <td class="cell-key">
-                    <a href="{{ config.yaml.jira_url }}/browse/{{ issue.key }}" target="_blank">
-                        {{ issue.key }}
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
+                        {{ issueInfo.key }}
                     </a>
                 </td>
                 <td class="cell-summary">
-                    <span class="issue-summary" data-ng-bind-html="issue.summary | storyKey"></span>
+                    <span class="issue-summary" data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
                 </td>
                 <td class="cell cell-assignee">
-                    <strong>A:</strong> {{ assignees.devs[0].name | assigneeShort }}
-                    <span data-ng-if="assignees.tbd.name"><strong>T:</strong> {{ assignees.tbd.name | assigneeShort }}</span>
+                    <!--<strong>A:</strong> {{ issueInfo.assignees.devs[0].name | assigneeShort }}-->
+                    <!--<span data-ng-if="issueInfo.assignees.tbd.name"><strong>T:</strong> {{ issueInfo.assignees.tbd.name | assigneeShort }}</span>-->
+                    <span class="assignee">
+                        <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
+                            {{ issueInfo.assignees.devs[0].name | assigneeShort }}
+                    </span>
+                    <span class="hidden-sm hidden-xs"
+                          data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
+                        <br>
+                        <span class="assignee">
+                            <strong class="hidden-sm hidden-xs">T:</strong>
+                                {{ issueInfo.assignees.tbd.name | assigneeShort }}
+                        </span>
+                    </span>
                 </td>
-                <td class="cell cell-status">{{ issueInfo.status }}</td>
-                <td class="cell cell-progress">{{ issueInfo.progress }}</td>
+                <td class="cell cell-status nowrap">{{ issueInfo.status }}</td>
+                <td class="cell cell-progress nowrap">{{ issueInfo.progress }}</td>
                 <td>
                     <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
                     <span data-ng-show="issueInfo.impl == 1">*</span>
@@ -80,17 +93,17 @@
                 <td class="cell" data-ng-repeat="clDate in clDates">
                     {{ issueInfo.cl_by_day[clDate] }}
                 </td>
-                <td>
+                <td class="cell cell-note">
                     {{ issueInfo.note }}
                 </td>
             </tr>
         </tbody>
     </table>
     <br>
-    <p>
-        The original document is attached to the Iteration Planning page in Wiki:<br>
-        <a href="#">[Link to Wiki Page]</a>
-    </p>
+    <!--<p>-->
+        <!--The original document is attached to the Iteration Planning page in Wiki:<br>-->
+        <!--<a href="#">[Link to Wiki Page]</a>-->
+    <!--</p>-->
 
     <hr>
 

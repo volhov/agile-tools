@@ -6,6 +6,14 @@
                     <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
                         {{ issueInfo.key }}
                     </a>
+                    <span class="loading-indicator" title="Please wait..."
+                          data-ng-show="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-repeat" title="Update issue"
+                          data-ng-click="updateIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-remove text-danger" title="Remove issue"
+                          data-ng-click="removeIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
                 </div>
                 <div class="col-sm-7 cell-summary">
                     <span class="expand-btn"
@@ -29,14 +37,17 @@
                 <div class="col-sm-3 cell-assignee">
                     <span class="assignee">
                         <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
-                            {{ assignees.devs[0].name | assigneeShort }}
+                            <!--{{ assignees.devs[0].name | assigneeShort }}-->
+                            <span data-ng-repeat="dev in issueInfo.assignees.devs">
+                                {{ dev.name | assigneeShort }}{{ $index < issueInfo.assignees.devs.length - 1 ? ', ' : ''}}
+                            </span>
                     </span>
                     <span class="hidden-sm hidden-xs"
-                          data-ng-show="expandAssignees" data-ng-if="assignees.tbd.name">
+                          data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
                         <br>
                         <span class="assignee">
                             <strong class="hidden-sm hidden-xs">T:</strong>
-                                {{ assignees.tbd.name | assigneeShort }}
+                                {{ issueInfo.assignees.tbd.name | assigneeShort }}
                         </span>
                     </span>
                 </div>

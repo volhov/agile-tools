@@ -10,18 +10,31 @@
 
 <div class="cl-report-container" data-ng-hide="hideIssues">
 
-    <label>Filter: <input data-ng-model="searchIssue"></label>
+    <div class="row">
+        <div class="col-sm-3">
+            <input type="search" class="form-control input-sm" placeholder="Filter issues"
+                   data-ng-model="searchIssue">
+        </div>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-primary"
+                    data-ng-click="saveConfidenceReport()">Save</button>
 
-    <button type="button" class="btn btn-primary"
-            data-ng-click="saveConfidenceReport()">Save</button>
+            <button type="button" class="btn btn-warning"
+                    data-ng-click="updateConfidenceReport(true)">Update</button>
 
-    <button type="button" class="btn btn-warning"
-            data-ng-click="updateConfidenceReport(true)">Update</button>
+            <button type="button" class="btn"
+                    data-ng-hide="true"
+                    data-ng-click="actualizeIssuesState()">Actualize State</button>
 
-    <button type="button" class="btn"
-            data-ng-click="actualizeIssuesState()">Actualize</button>
+            <button type="button" class="btn"
+                    data-ng-hide="true"
+                    data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
 
-    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+            <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+        </div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3"></div>
+    </div>
 
     <div class="cl-report" data-ng-hide="showUpdateLoader">
         <div class="row cl-report-header">
@@ -30,8 +43,11 @@
                     <div class="col-sm-2">
                         <strong>Key</strong>
                     </div>
-                    <div class="col-sm-8">
-                        <strong>Story Key / Summary / Assignees</strong>
+                    <div class="col-sm-7">
+                        <strong>Story Key / Summary</strong>
+                    </div>
+                    <div class="col-sm-3">
+                        <strong>Assignees</strong>
                     </div>
                 </div>
             </div>
@@ -60,13 +76,10 @@
         </div>
 
         <div class="row cl-report-row"
-             data-ng-repeat="issueInfo in confidenceReport.issues | filter:searchIssue">
-            <div data-ng-controller="Version_ConfidenceReport_IssueInfo"
-                 data-ng-init="assignees = getStoryAssignees(issueInfo)">
+             data-ng-repeat="issueInfo in confidenceReport.issues | confidenceLevelsFilter:searchIssue"
+             data-ng-controller="Version_ConfidenceReport_IssueInfo">
                 <ng-include src="template"></ng-include>
-            </div>
         </div>
-
     </div>
 
     <p data-ng-show="showUpdateLoader" class="info bg-info">
