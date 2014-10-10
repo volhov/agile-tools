@@ -1,7 +1,8 @@
 angular.module('agile', [
         'ngRoute',
         'agile.controllers',
-        'agile.filters'
+        'agile.filters',
+        'ngDraggable'
     ])
     .constant('TEMPLATES_URL', '/assets/app/templates')
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',
