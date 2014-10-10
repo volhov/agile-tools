@@ -1,6 +1,6 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
-        function($scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
+    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
+        function($rootScope, $scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
 
             $scope.template = TEMPLATES_URL + '/version/confidence_report.html';
 
@@ -120,6 +120,7 @@ angular.module('agile.controllers')
 
                     if (issueIndex > -1) {
                         $scope.confidenceReport.issues.splice(issueIndex, 1);
+                        $scope.saveConfidenceReport();
                         setAlert('success', 'Issue has been removed.');
                     }
                 }
@@ -135,6 +136,36 @@ angular.module('agile.controllers')
                 }
 
                 return classes;
+            };
+
+            $rootScope.$on('draggable:start', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
+                args.element.css({
+                    width: container.width(),
+                    left: container.offset().left
+                });
+            });
+            $rootScope.$on('draggable:move', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
+                args.element.css({
+                    left: container.offset().left
+                });
+            });
+            $rootScope.$on('draggable:end', function(event, args) {
+                args.element.css({width: '100%'});
+            });
+            $scope.onDropComplete = function(index, issueInfo) {
+                var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
+                if (index == oldIndex) {
+                    return;
+                }
+                var removed = $scope.confidenceReport.issues.splice(oldIndex, 1);
+                if (index == 'last') {
+                    $scope.confidenceReport.issues.push(removed[0]);
+                } else {
+                    $scope.confidenceReport.issues.splice(oldIndex < index ? index - 1 : index, 0, removed[0]);
+                }
+                $scope.saveConfidenceReport();
             };
 
             $scope.issueIsUpdating = issueIsUpdating;

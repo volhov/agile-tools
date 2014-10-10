@@ -61,8 +61,18 @@ label {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.cl-report-row {
+    min-height: 2em;
+}
 .cl-report-row:hover {
     background: #e8e8e8;
+}
+.cl-report-row.drag-enter {
+    border-top: 1px solid #ccc;
+}
+.cl-report-row.drag-enter:hover,
+.cl-report-row.pseudo {
+    background: transparent;
 }
 
 .cl-report-row .good .cell-status {
