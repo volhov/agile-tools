@@ -55,7 +55,7 @@ angular.module('agile.filters')
     .filter('confidenceLevelsFilter', ['$filter', function($filter) {
 
         function matching(text, expression) {
-            return String(text).toLowerCase().indexOf(expression) >= 0;
+            return String(text).toLowerCase().indexOf(expression.trim()) >= 0;
         }
 
         var filters = [{

@@ -1,6 +1,7 @@
 <p>
     <a href="" data-ng-click="fetchIssuesForImport('Story')">Import stories</a>
     | <a href="" data-ng-click="fetchIssuesForImport('Task')">Import tasks</a>
+    | <a href="" data-ng-click="fetchIssuesForImport('Bug Report', 200)">Import bugs</a>
 </p>
 
 <div class="clr-import" data-ng-show="showImport">
@@ -29,6 +30,6 @@
 </div>
 
 <p data-ng-show="showImportLoader" class="info bg-info">
-    <span class="glyphicon glyphicon-music"></span>
+    <span class="loading-indicator" title="Please wait..."></span>
     Issues are being imported. Please wait for a moment.
 </p>

@@ -1,8 +1,8 @@
 angular.module('agile', [
         'ngRoute',
         'agile.controllers',
-        'agile.filters',
-        'ngDraggable'
+        'agile.filters'
+//        'ngDraggable'
     ])
     .constant('TEMPLATES_URL', '/assets/app/templates')
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',
@@ -37,6 +37,10 @@ angular.module('agile', [
                 .when('/project/:projectKey', {
                     templateUrl: TEMPLATES_URL + '/project.html',
                     controller: 'Project'
+                })
+                .when('/performance/:user', {
+                    templateUrl: TEMPLATES_URL + '/performance.html',
+                    controller: 'Performance'
                 })
                 .otherwise({
                     redirectTo: '/start'

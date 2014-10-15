@@ -3,9 +3,8 @@
         <div class="cell col-sm-6">
             <div class="row">
                 <div class="col-sm-2 cell-key" data-ng-prevent-drag="true">
-                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
-                        {{ issueInfo.key }}
-                    </a>
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
+                       target="_blank">{{ issueInfo.key }}</a>
                     <span class="loading-indicator" title="Please wait..."
                           data-ng-show="issueIsUpdating(issueInfo)"></span>
                     <span class="issue-action a glyphicon glyphicon-repeat" title="Update issue"
@@ -56,10 +55,10 @@
         <div class="cell col-sm-1 cell-status">
             <span class="issue-status" title="{{ issueInfo.status }}">{{ issueInfo.status }}</span>
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1" data-ng-prevent-drag="true">
             <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1" data-ng-prevent-drag="true">
             <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
         </div>
         <div class="cell col-sm-2">
@@ -95,6 +94,7 @@
         </div>
     </div>
     <div class="row cl-report-row-children"
+         data-ng-prevent-drag="true"
          data-ng-show="showDetails[issueInfo.key] && issueInfo.issue.subtasks.length">
         <div class="cell col-sm-12">
             <div class="row" data-ng-repeat="subTask in issueInfo.issue.subtasks">
@@ -102,10 +102,16 @@
                     <div class="row">
                         <div class="col-sm-2 cell-key">
                             &nbsp;<span class="secondary-info">&ndash;</span>
-                            <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}" target="_blank">{{ subTask.key }}</a>
+                            <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}"
+                               target="_blank">{{ subTask.key }}</a>
                         </div>
                         <div class="col-sm-7 cell-summary">
                             {{ subTask.summary }}
+                            <span class="issue-time">
+                                <span title="Estimated">{{ subTask.time.aggr.estimated | jiraTime}}</span>
+                                / <span title="Remaining">{{ subTask.time.aggr.remaining | jiraTime}}</span>
+                                / <span title="Spent">{{ subTask.time.aggr.spent | jiraTime}}</span>
+                            </span>
                         </div>
                         <div class="col-sm-3 cell-assignee">
                             <span>{{ subTask.assignee.name | assigneeShort }}</span>

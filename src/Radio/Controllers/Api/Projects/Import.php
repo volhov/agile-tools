@@ -29,10 +29,7 @@ class Api_Projects_Import extends Core\Resource
             $adapter = new Adapters\Jira_Project($jiraProject);
             $project = $adapter->getAdaptation();
 
-            /** @var \MongoDB $db */
-            $db = $this->app->container['database'];
-
-            $db->projects->save($project);
+            $this->updateProject($project);
 
             return new Core\JsonResponse(
                 Response::OK,
@@ -47,5 +44,26 @@ class Api_Projects_Import extends Core\Resource
                 'message' => 'Project key is not defined.'
             )
         );
+    }
+
+    /**
+     * @param $project
+     */
+    protected function updateProject($project)
+    {
+        /** @var \MongoDB $db */
+        $db = $this->app->container['database'];
+
+        $existingProject = $db->projects->loadOne([
+            'key' => $project['key']
+        ]);
+
+        if ($existingProject) {
+            foreach ($project as $key => $value) {
+                $existingProject[$key] = $value;
+            }
+        }
+
+        $db->projects->save($existingProject);
     }
 }

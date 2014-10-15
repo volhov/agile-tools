@@ -4,19 +4,9 @@ angular.module('agile.controllers')
 
             $scope.moment = moment; // This is to use moment.js easily in templates.
 
-            Api.get('Project').get($routeParams.projectKey)
-                .then(function(project) {
-                    $scope.project = project;
-                });
+            loadProject();
 
-            $scope.loadProject = function(callback)
-            {
-                Api.get('Project').get($routeParams.projectKey)
-                    .then(function(project) {
-                        $scope.project = project;
-                        callback && callback();
-                    });
-            };
+            $scope.loadProject = loadProject;
 
             $scope.saveProject = function(callback)
             {
@@ -28,6 +18,14 @@ angular.module('agile.controllers')
                     });
             };
 
+            function loadProject(callback)
+            {
+                Api.get('Project').get($routeParams.projectKey)
+                    .then(function(project) {
+                        $scope.project = project;
+                        callback && callback();
+                    });
+            }
 
             function setAlert(type, message) {
                 Helper.setAlert($scope, type, message);

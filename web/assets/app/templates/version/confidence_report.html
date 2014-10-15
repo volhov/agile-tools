@@ -23,11 +23,11 @@
                     data-ng-click="updateConfidenceReport(true)">Update</button>
 
             <button type="button" class="btn"
-                    data-ng-hide="true"
+                    data-ng-hide="1"
                     data-ng-click="actualizeIssuesState()">Actualize State</button>
 
             <button type="button" class="btn"
-                    data-ng-hide="true"
+                    data-ng-hide="1"
                     data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
 
             <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
@@ -45,6 +45,11 @@
                     </div>
                     <div class="col-sm-7">
                         <strong>Story Key / Summary</strong>
+                        <span class="pull-right">
+                            <span title="Estimated">E</span>
+                            / <span title="Remaining">R</span>
+                            / <span title="Spent">S</span>
+                        </span>
                     </div>
                     <div class="col-sm-3">
                         <strong>Assignees</strong>
@@ -87,7 +92,7 @@
     </div>
 
     <p data-ng-show="showUpdateLoader" class="info bg-info">
-        <span class="glyphicon glyphicon-music"></span>
+        <span class="loading-indicator" title="Please wait..."></span>
         Issues are being updated. Please wait for a moment.
     </p>
 </div>

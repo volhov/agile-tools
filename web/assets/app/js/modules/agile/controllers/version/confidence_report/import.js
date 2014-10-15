@@ -6,19 +6,25 @@ angular.module('agile.controllers')
             $scope.showImport = false;
             $scope.showImportLoader = false;
 
-            $scope.fetchIssuesForImport = function(issueType) {
+            $scope.fetchIssuesForImport = function(issueType, maxResults, additionalFilters) {
                 $scope.showImport = true;
                 $scope.showImportLoader = false;
                 $scope.$parent.hideIssues = true;
                 resetImport();
                 var query = {
-                    max_result: 50,
+                    max_result: maxResults || 50,
                     fields: 'summary,issuetype,assignee',
                     jql: 'project = "' + $scope.project.key + '"'
                         + ' AND fixVersion = "' + $scope.version.name + '"'
                 };
                 if (issueType) {
                     query.jql += ' AND issuetype = "' + issueType + '"';
+                    if (issueType == 'Bug Report') {
+                        query.jql += ' AND status in (Open, "In Progress", Reopened, "Feedback required", "Feedback available")';
+                    }
+                }
+                if (additionalFilters) {
+                    query.jql += ' AND ' + additionalFilters;
                 }
                 var jiraIssuesApi = Api.get('JiraIssues');
                 jiraIssuesApi.disableCache();
@@ -61,6 +67,7 @@ angular.module('agile.controllers')
                                 setAlert('success', response.message);
                                 $scope.$parent.loadConfidenceReport(function() {
                                     $scope.actualizeIssuesState();
+                                    $scope.actualizeIssuesAssignees();
                                     $scope.saveConfidenceReport();
                                     $scope.hideImport();
                                     setAlert('success', 'Issues state has been updated.');

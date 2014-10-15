@@ -232,3 +232,6 @@ label {
     position: absolute;
     margin-left: 5px;
 }
+.spent-chart {
+    /*width: 100% !important;*/
+}

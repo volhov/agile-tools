@@ -66,6 +66,7 @@ angular.module('agile.controllers')
                     importKeys.push($scope.confidenceReport.issues[i].key);
                 }
                 if (importKeys.length) {
+                    $scope.showUpdateLoader = true;
                     Api.get('IssuesImport').post({
                         keys: importKeys
                     }).then(function(response) {
@@ -76,6 +77,7 @@ angular.module('agile.controllers')
                             actualizeIssuesAssignees();
 
                             $scope.saveConfidenceReport();
+                            $scope.showUpdateLoader = false;
                             setAlert('success', 'Issues have been updated.');
 
                         }, true);
@@ -144,6 +146,7 @@ angular.module('agile.controllers')
                     width: container.width(),
                     left: container.offset().left
                 });
+                container.height(args.element.height());
             });
             $rootScope.$on('draggable:move', function(event, args) {
                 var container = args.element.parents('.cl-report-row');
@@ -152,7 +155,9 @@ angular.module('agile.controllers')
                 });
             });
             $rootScope.$on('draggable:end', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
                 args.element.css({width: '100%'});
+                container.css({height: 'auto'});
             });
             $scope.onDropComplete = function(index, issueInfo) {
                 var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
@@ -171,7 +176,6 @@ angular.module('agile.controllers')
             $scope.issueIsUpdating = issueIsUpdating;
 
             // Temporary.
-            $scope.actualizeIssuesState = actualizeIssuesState;
             $scope.actualizeIssuesState = actualizeIssuesState;
             $scope.actualizeIssuesAssignees = actualizeIssuesAssignees;
 

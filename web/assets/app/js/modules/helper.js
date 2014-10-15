@@ -150,7 +150,7 @@ angular.module('helper', [])
                     for (var i = 0; i < issue.subtasks.length; i++) {
                         var subTask = issue.subtasks[i];
                         var type = getSubTaskType(subTask);
-                        if (type == 'dev') {
+                        if (type == 'dev' || type == 'inv') {
                             var addDev = true;
                             for (var aKey = 0; aKey < assignees.devs.length; aKey++) {
                                 if (assignees.devs[aKey].name == subTask.assignee.name) {
