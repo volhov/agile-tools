@@ -60,12 +60,12 @@ angular.module('agile.controllers')
                         }
                     });
                     if (importKeys.length) {
-                        $scope.$parent.saveConfidenceReport(function() {
+                        $scope.$parent.saveConfidenceReport().then(function() {
                             Api.get('IssuesImport').post({
                                 keys: importKeys
                             }).then(function(response) {
                                 setAlert('success', response.message);
-                                $scope.$parent.loadConfidenceReport(function() {
+                                $scope.$parent.loadResourcesPlan().then(function() {
                                     $scope.actualizeIssuesState();
                                     $scope.actualizeIssuesAssignees();
                                     $scope.saveConfidenceReport();

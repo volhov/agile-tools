@@ -84,8 +84,7 @@ label {
 .cl-report-row .bad .cell-status {
     color: #ff2f31;
 }
-.cl-report-row-children {
-    /*background: #f7f7f7;*/
+.issue-details {
     padding-bottom: 10px;
 }
 .expand-btn,
@@ -234,4 +233,10 @@ label {
 }
 .spent-chart {
     /*width: 100% !important;*/
+}
+.options label {
+    margin-left: 10px;
+}
+.options label:first-child {
+    margin-left: 0;
 }

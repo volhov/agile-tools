@@ -7,8 +7,8 @@
     <div class="row">
         <div class="col-md-8">
             <h3>Projects:</h3>
-            <p data-ng-show="filters.project">Fitered by: <strong>{{ filters.project.name }}</strong></p>
-            <ul>
+            <p data-ng-show="filters.project">Filtered by: <strong>{{ filters.project.name }}</strong></p>
+            <ul class="perf-projects-list">
                 <li><span class="a" data-ng-click="filters.project = null">All</span></li>
                 <li data-ng-repeat="project in projects">
                     <span class="a" data-ng-click="filters.project = project">{{ project.name }}</span>

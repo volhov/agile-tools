@@ -1,67 +1,62 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
+    .controller('Version_Resources', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
         function($rootScope, $scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
 
-            $scope.template = TEMPLATES_URL + '/version/confidence_report.html';
-
+            $scope.template = TEMPLATES_URL + '/version/resources.html';
             $scope.$watch('project', function () {
                 if ($scope.project) {
                     $scope.loadResourcesPlan();
-                    Api.get('Config')
-                        .get($scope.project.key)
-                        .then(function(config) {
-                            $scope.config = config;
-                        });
+                    loadConfig();
                 }
             });
 
             $scope.loadResourcesPlan = function(ignoreCache)
             {
-                var reportId = getConfidenceReportKey($scope.project, $scope.version);
-                var confidenceReportApi = Api.get('ConfidenceReport');
+                var reportId = getResourcesPlanKey($scope.project, $scope.version);
+                var resourcesPlanApi = Api.get('ResourcesPlan');
 
                 var enableCacheAfterLoad = false;
                 if (ignoreCache) {
-                    confidenceReportApi.disableCache();
+                    resourcesPlanApi.disableCache();
                     enableCacheAfterLoad = true;
                 }
 
-                var promise = confidenceReportApi.get(reportId, 'issues')
-                    .then(function(confidenceReport) {
-                        $scope.confidenceReport = confidenceReport;
+                var promise = resourcesPlanApi.get(reportId, 'issues')
+                    .then(function(resourcesPlan) {
+                        $scope.resourcesPlan = resourcesPlan;
 
-                        if (typeof $scope.confidenceReport.issues == 'undefined') {
-                            $scope.confidenceReport.issues = [];
+                        if (typeof $scope.resourcesPlan.issues == 'undefined') {
+                            $scope.resourcesPlan.issues = [];
                         }
-                        injectExpansion($scope.confidenceReport);
+                        injectExpansion($scope.resourcesPlan);
 
                     }, function() {
-                        createConfidenceReport(reportId);
+                        createResourcesPlan(reportId);
                     });
 
                 if (enableCacheAfterLoad) {
-                    confidenceReportApi.enableCache();
+                    resourcesPlanApi.enableCache();
                 }
 
                 return promise;
             };
 
-            $scope.saveConfidenceReport = function()
+            $scope.saveResourcesPlan = function()
             {
-                var confidenceRecordData = $.extend(true, {}, $scope.confidenceReport);
+                var confidenceRecordData = $.extend(true, {}, $scope.resourcesPlan);
                 extractExpansion(confidenceRecordData);
-                return Api.get('ConfidenceReport')
+                return Api.get('ResourcesPlan')
                     .put(confidenceRecordData._id, confidenceRecordData)
                     .then(function(response) {
                         setAlert('success', response.message);
                     });
             };
 
-            $scope.updateConfidenceReport = function(reloadAfterSave)
+            $scope.updateResourcesPlan = function(reloadAfterSave)
             {
                 var importKeys = [];
-                for (var i = 0; i < $scope.confidenceReport.issues.length; i++) {
-                    importKeys.push($scope.confidenceReport.issues[i].key);
+                for (var i = 0; i < $scope.resourcesPlan.issues.length; i++) {
+                    importKeys.push($scope.resourcesPlan.issues[i].key);
                 }
                 if (importKeys.length) {
                     $scope.showUpdateLoader = true;
@@ -74,7 +69,7 @@ angular.module('agile.controllers')
                             actualizeIssuesState();
                             actualizeIssuesAssignees();
 
-                            $scope.saveConfidenceReport();
+                            $scope.saveResourcesPlan();
                             $scope.showUpdateLoader = false;
                             setAlert('success', 'Issues have been updated.');
 
@@ -92,19 +87,19 @@ angular.module('agile.controllers')
                     $scope.loadResourcesPlan(true).then(function() {
 
                         var issueIndex = -1;
-                        for (var index = 0; index < $scope.confidenceReport.issues.length; index++) {
-                            if ($scope.confidenceReport.issues[index].key == issueInfo.key) {
+                        for (var index = 0; index < $scope.resourcesPlan.issues.length; index++) {
+                            if ($scope.resourcesPlan.issues[index].key == issueInfo.key) {
                                 issueIndex = index;
                                 break;
                             }
                         }
 
                         if (issueIndex > -1) {
-                            actualizeIssueState($scope.confidenceReport.issues[issueIndex]);
-                            actualizeIssueAssignees($scope.confidenceReport.issues[issueIndex]);
+                            actualizeIssueState($scope.resourcesPlan.issues[issueIndex]);
+                            actualizeIssueAssignees($scope.resourcesPlan.issues[issueIndex]);
                         }
 
-                        $scope.saveConfidenceReport();
+                        $scope.saveResourcesPlan();
 
                         unmarkIssueAsUpdating(issueInfo);
                         setAlert('success', 'Issue has been updated.');
@@ -114,11 +109,11 @@ angular.module('agile.controllers')
 
             $scope.removeIssue = function(issueInfo) {
                 if (confirm("Are you sure?")) {
-                    var issueIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
+                    var issueIndex = $scope.resourcesPlan.issues.indexOf(issueInfo);
 
                     if (issueIndex > -1) {
-                        $scope.confidenceReport.issues.splice(issueIndex, 1);
-                        $scope.saveConfidenceReport();
+                        $scope.resourcesPlan.issues.splice(issueIndex, 1);
+                        $scope.saveResourcesPlan();
                         setAlert('success', 'Issue has been removed.');
                     }
                 }
@@ -156,17 +151,17 @@ angular.module('agile.controllers')
                 container.css({height: 'auto'});
             });
             $scope.onDropComplete = function(index, issueInfo) {
-                var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
+                var oldIndex = $scope.resourcesPlan.issues.indexOf(issueInfo);
                 if (index == oldIndex) {
                     return;
                 }
-                var removed = $scope.confidenceReport.issues.splice(oldIndex, 1);
+                var removed = $scope.resourcesPlan.issues.splice(oldIndex, 1);
                 if (index == 'last') {
-                    $scope.confidenceReport.issues.push(removed[0]);
+                    $scope.resourcesPlan.issues.push(removed[0]);
                 } else {
-                    $scope.confidenceReport.issues.splice(oldIndex < index ? index - 1 : index, 0, removed[0]);
+                    $scope.resourcesPlan.issues.splice(oldIndex < index ? index - 1 : index, 0, removed[0]);
                 }
-                $scope.saveConfidenceReport();
+                $scope.saveResourcesPlan();
             };
 
             $scope.issueIsUpdating = issueIsUpdating;
@@ -177,23 +172,23 @@ angular.module('agile.controllers')
 
             // Protected functions
 
-            function injectExpansion(confidenceReport) {
-                angular.forEach(confidenceReport.issues, function (issueInfo) {
+            function injectExpansion(resourcesPlan) {
+                angular.forEach(resourcesPlan.issues, function (issueInfo) {
                     issueInfo.issue = getIssue(issueInfo.key);
                 });
             }
 
-            function extractExpansion(confidenceReport) {
-                angular.forEach(confidenceReport.issues, function (issueInfo) {
+            function extractExpansion(resourcesPlan) {
+                angular.forEach(resourcesPlan.issues, function (issueInfo) {
                     delete issueInfo.issue;
                 });
             }
 
             function getIssue(issueKey) {
-                if ($scope.confidenceReport && $scope.confidenceReport.expansion) {
-                    for (var i = 0; i < $scope.confidenceReport.expansion.issues.length; i++) {
-                        if ($scope.confidenceReport.expansion.issues[i].key == issueKey) {
-                            return $scope.confidenceReport.expansion.issues[i];
+                if ($scope.resourcesPlan && $scope.resourcesPlan.expansion) {
+                    for (var i = 0; i < $scope.resourcesPlan.expansion.issues.length; i++) {
+                        if ($scope.resourcesPlan.expansion.issues[i].key == issueKey) {
+                            return $scope.resourcesPlan.expansion.issues[i];
                         }
                     }
                 }
@@ -211,7 +206,7 @@ angular.module('agile.controllers')
 
             function actualizeIssuesState()
             {
-                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                angular.forEach($scope.resourcesPlan.issues, function(issueInfo) {
                     actualizeIssueState(issueInfo);
                 });
             }
@@ -222,7 +217,7 @@ angular.module('agile.controllers')
 
             function actualizeIssuesAssignees()
             {
-                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                angular.forEach($scope.resourcesPlan.issues, function(issueInfo) {
                     actualizeIssueAssignees(issueInfo);
                 });
             }
@@ -241,23 +236,32 @@ angular.module('agile.controllers')
                 return updatingIssues.indexOf(issueInfo.key) >= 0
             }
 
-            function getConfidenceReportKey(project, version)
+            function getResourcesPlanKey(project, version)
             {
                 return project.key + '-' + version.jira_id;
             }
 
-            function createConfidenceReport(reportId)
+            function createResourcesPlan(reportId)
             {
-                $scope.confidenceReport = {
+                $scope.resourcesPlan = {
                     '_id': reportId,
                     'project': $scope.project._id,
                     'version': $scope.version.jira_id,
                     'issues': []
                 };
-                return Api.get('ConfidenceReports')
-                    .post($scope.confidenceReport)
+                return Api.get('ResourcesPlans')
+                    .post($scope.resourcesPlan)
                     .then(function(response) {
                         setAlert('success', response.message);
+                    });
+            }
+
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
                     });
             }
 

@@ -1,11 +1,22 @@
 angular.module('helper', [])
     .factory('Helper', [function() {
+
+        var defaultTitle = 'Agile Tools';
+
         return {
             setAlert: function($scope, type, message) {
                 $scope.alert = {
                     type: type,
                     message: message
                 };
+            },
+            setTitle: function(title, skipDefault)
+            {
+                if (skipDefault) {
+                    document.title = title;
+                } else {
+                    document.title = title + ' | ' + defaultTitle;
+                }
             }
         };
     }])

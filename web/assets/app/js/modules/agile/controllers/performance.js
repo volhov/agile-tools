@@ -11,6 +11,7 @@ angular.module('agile.controllers')
             $scope.$watch('filters.project', reloadStats);
 
             loadUser().then(function() {
+                Helper.setTitle('Performance: ' + $scope.user.name);
                 loadProjects().then(function() {
                     reloadStats();
                 });

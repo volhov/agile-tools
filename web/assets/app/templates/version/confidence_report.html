@@ -29,11 +29,13 @@
             <button type="button" class="btn"
                     data-ng-hide="1"
                     data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
-
-            <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
         </div>
-        <div class="col-sm-3"></div>
-        <div class="col-sm-3"></div>
+        <div class="col-sm-6 options"
+             data-ng-init="showSubtasks = true">
+            <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+            <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
+            <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+        </div>
     </div>
 
     <div class="cl-report" data-ng-hide="showUpdateLoader">

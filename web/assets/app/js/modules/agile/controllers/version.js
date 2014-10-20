@@ -2,22 +2,29 @@ angular.module('agile.controllers')
     .controller('Version', ['$scope', '$location', '$routeParams', 'Api', 'Helper',
         function($scope, $location, $routeParams, Api, Helper) {
 
-            $scope.tab = 'confidence_report';
+            $scope.tab = $routeParams.tab;//'confidence_report';
 
             $scope.moment = moment; // This is to use moment.js easily in templates.
 
-            Api.get('Project').get($routeParams.projectKey)
-                .then(function(project) {
-                    $scope.project = project;
-                    $scope.version = getVersion(project, $routeParams.versionName);
-                    $scope.versionName = $routeParams.versionName;
-                });
+            loadProject().then(function() {
+                Helper.setTitle($scope.versionName + ' of ' + $scope.project.name);
+            });
 
             $scope.getTabClass = function(tabName) {
                 return $scope.tab == tabName ? 'active' : '';
             };
 
             // Protected functions
+
+
+            function loadProject() {
+                return Api.get('Project').get($routeParams.projectKey)
+                    .then(function (project) {
+                        $scope.project = project;
+                        $scope.version = getVersion(project, $routeParams.versionName);
+                        $scope.versionName = $routeParams.versionName;
+                    });
+            }
 
             function getVersion(project, versionName)
             {

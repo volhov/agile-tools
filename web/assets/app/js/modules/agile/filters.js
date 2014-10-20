@@ -55,7 +55,17 @@ angular.module('agile.filters')
     .filter('confidenceLevelsFilter', ['$filter', function($filter) {
 
         function matching(text, expression) {
-            return String(text).toLowerCase().indexOf(expression.trim()) >= 0;
+            var expressions = expression.split(',');
+            var subject = String(text).toLowerCase();
+            for (var j = 0; j < expressions.length; j++) {
+                if (!expressions[j].length) {
+                    continue;
+                }
+                if (subject.indexOf(expressions[j].trim()) >= 0) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         var filters = [{
@@ -69,6 +79,7 @@ angular.module('agile.filters')
                             for (var j = 0; j < assignees.devs.length; j++) {
                                 if (matching(assignees.devs[j].name, expression)) {
                                     results.push(input[i]);
+                                    break;
                                 }
                             }
                         }
