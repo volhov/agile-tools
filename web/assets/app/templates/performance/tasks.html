@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-8">
+        <h4>Tasks</h4>
+        <p data-ng-show="loadingTasksStats" class="info bg-info">
+            <span class="loading-indicator" title="Please wait..."></span>
+            We are collecting stats. Please wait for a moment.
+        </p>
+        <div data-ng-hide="loadingTasksStats">
+            <div class="row">
+                <div class="col-xs-4">
+                    <p>
+                        <strong>Considered:</strong> {{ stats.tasks.numberOfTasks }} issues<br/>
+                        <strong>Total:</strong> {{ stats.tasks.spentTotal | jiraTime }}<br/>
+                        <strong>Factor:</strong> {{ stats.tasks.factor }}<br/>
+                    </p>
+                </div>
+                <div class="col-xs-8">
+                    <p data-ng-hide="showHow" class="non-printable">
+                        <span class="a" data-ng-click="showHow = true">How do we collect this?</span>
+                    </p>
+                    <ol data-ng-show="showHow">
+                        <li>
+                            We get first {{ limit }} issues with following jql:
+                            <pre>{{ jql }}</pre>
+                        </li>
+                        <li>
+                            Then we look through each issue and collect the estimation and the worklogs
+                                of the current user.
+                            <br>And then a simple Math goes.
+                        </li>
+                    </ol>
+                    <p data-ng-show="showHow" class="non-printable">
+                        <span class="a" data-ng-click="showHow = false">Hide</span>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <p><strong>Estimated / Spent:</strong></p>
+                <p>
+                    <span style="background-color: rgba(220,220,220,1)">&nbsp;&nbsp;&nbsp;</span> &ndash; Estimated
+                    <br>
+                    <span style="background-color: rgba(151,187,205,1)">&nbsp;&nbsp;&nbsp;</span> &ndash; Spent
+                </p>
+                <canvas class="spent-chart" id="tasksChart" width="1000" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

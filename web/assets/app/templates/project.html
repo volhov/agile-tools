@@ -27,13 +27,13 @@
                 <div class="col-md-6">
                     <ul>
                         <li data-ng-repeat="user in project.users">
-                            <a href="#/user/{{ project.key }}/{{ user.key }}">{{ user.name }}</a>
+                            <a href="#/performance/{{ user.key }}">{{ user.name }}</a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <div data-ng-controller="Project_Users_Import">
-                        <ng-include src="template"></ng-include>
+                        <div data-ng-include="template"></div>
                     </div>
                 </div>
             </div>

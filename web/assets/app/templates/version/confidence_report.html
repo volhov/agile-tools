@@ -1,27 +1,51 @@
-<h2>Confidence Report</h2>
+<div class="clearfix">
+    <h2 class="pull-left">Confidence Report</h2>
+    <p class="pull-right help-holder">
+        <span class="glyphicon glyphicon-question-sign"></span>
+        <span class="a" data-ng-click="showHelp = true">Help</span>
+    </p>
+</div>
 
 <div data-ng-controller="Version_ConfidenceReport_Import">
-    <ng-include src="template"></ng-include>
+    <div data-ng-include="template"></div>
 </div>
 
 <div data-ng-controller="Version_ConfidenceReport_Export">
-    <ng-include src="template"></ng-include>
+    <div data-ng-include="template"></div>
 </div>
 
 <div class="cl-report-container" data-ng-hide="hideIssues">
 
-    <label>Filter: <input data-ng-model="searchIssue"></label>
-
-    <button type="button" class="btn btn-primary"
-            data-ng-click="saveConfidenceReport()">Save</button>
-
-    <button type="button" class="btn btn-warning"
-            data-ng-click="updateConfidenceReport(true)">Update</button>
-
-    <button type="button" class="btn"
-            data-ng-click="actualizeIssuesState()">Actualize</button>
-
-    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+    <div class="row filter-row">
+        <div class="col-sm-3">
+            <div class="filter-holder">
+                <input type="search" class="form-control input-sm" placeholder="Filter issues"
+                       data-ng-model="searchIssue">
+            </div>
+        </div>
+        <div class="col-sm-6 options"
+             data-ng-init="showSubtasks = true">
+            <div class="checkbox">
+                <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assignees</label>
+                <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
+                <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="pull-right filter-holder">
+                <button type="button" class="btn btn-sm btn-primary"
+                        data-ng-click="saveConfidenceReport()">Save</button>
+                <button type="button" class="btn btn-sm btn-warning"
+                        data-ng-click="updateConfidenceReport(true)">Update</button>
+                <button type="button" class="btn btn-sm"
+                        data-ng-hide="1"
+                        data-ng-click="actualizeIssuesState()">Actualize State</button>
+                <button type="button" class="btn btn-sm"
+                        data-ng-hide="1"
+                        data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
+            </div>
+        </div>
+    </div>
 
     <div class="cl-report" data-ng-hide="showUpdateLoader">
         <div class="row cl-report-header">
@@ -30,8 +54,16 @@
                     <div class="col-sm-2">
                         <strong>Key</strong>
                     </div>
-                    <div class="col-sm-8">
-                        <strong>Story Key / Summary / Assignees</strong>
+                    <div class="col-sm-7">
+                        <strong>Story Key / Summary</strong>
+                        <span class="pull-right">
+                            <span title="Estimated">E</span>
+                            / <span title="Remaining">R</span>
+                            / <span title="Spent">S</span>
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <strong>Assignees</strong>
                     </div>
                 </div>
             </div>
@@ -60,17 +92,23 @@
         </div>
 
         <div class="row cl-report-row"
-             data-ng-repeat="issueInfo in confidenceReport.issues | filter:searchIssue">
-            <div data-ng-controller="Version_ConfidenceReport_IssueInfo"
-                 data-ng-init="assignees = getStoryAssignees(issueInfo)">
-                <ng-include src="template"></ng-include>
-            </div>
+             data-ng-repeat="issueInfo in confidenceReport.issues | confidenceLevelsFilter:searchIssue"
+             data-ng-controller="Version_ConfidenceReport_IssueInfo"
+             data-ng-drop="true" data-ng-drop-success="onDropComplete($index, $data, $event)">
+                <div data-ng-include="template"></div>
         </div>
-
+        <div class="row cl-report-row pseudo"
+             data-ng-drop="true" data-ng-drop-success="onDropComplete('last', $data, $event)">
+        </div>
     </div>
 
     <p data-ng-show="showUpdateLoader" class="info bg-info">
-        <span class="glyphicon glyphicon-music"></span>
+        <span class="loading-indicator" title="Please wait..."></span>
         Issues are being updated. Please wait for a moment.
     </p>
+</div>
+
+<div class="help-container" data-ng-show="showHelp">
+    <p class="pull-right help-close"><span class="a" data-ng-click="showHelp = false">Close</span></p>
+    <div class="help-content" data-ng-include="'/assets/app/templates/version/confidence_report/help.html'"></div>
 </div>

@@ -50,14 +50,15 @@ angular.module('agile.controllers')
 
                     addUserToProject(jiraUser);
 
-                    $scope.$parent.saveProject(function() {
+                    $scope.$parent.saveProject().then(function() {
                         Api.get('UsersImport').post({
                             key: jiraUser.key
                         }).then(function(response) {
-                            setAlert('success', response.message);
-                            $scope.$parent.loadProject(function() {
-                                $scope.hideImport();
-                            });
+                            Helper.setAlert('success', response.message);
+                            $scope.$parent.loadProject()
+                                .then(function() {
+                                    $scope.hideImport();
+                                });
                         });
                     });
                 }
@@ -115,9 +116,5 @@ angular.module('agile.controllers')
             function resetImport()
             {
                 $scope.jiraUsers = [];
-            }
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent, type, message);
             }
         }]);

@@ -3,7 +3,8 @@ angular.module('agile', [
         'agile.controllers',
         'agile.filters',
         'route-segment',
-        'view-segment'
+        'view-segment',
+//        'ngDraggable'
     ])
     .constant('TEMPLATES_URL', '/assets/app/templates')
     .config(['$routeProvider', '$routeSegmentProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',
@@ -43,40 +44,32 @@ angular.module('agile', [
             ;
 
             $routeProvider
-//                .when('/version/:projectKey/:versionName', {
-//                    redirectTo: function(params) {
-//                        var defaultTab = 'confidence_report';
-//                        return '/version/' + params.projectKey
-//                            + '/' + params.versionName + '/' + defaultTab;
-//                    }
-//                })
-                .otherwise({redirectTo: '/start'});
-
-            /*
-                        $routeProvider
-                            .when('/start', {
-                                templateUrl: TEMPLATES_URL + '/start.html',
-                                controller: 'Start'
-                            })
-                            .when('/version/:projectKey/:versionName', {
-                                redirectTo: function(params) {
-                                    var defaultTab = 'confidence_report';
-                                    return '/version/' + params.projectKey
-                                        + '/' + params.versionName + '/' + defaultTab;
-                                }
-                            })
-                            .when('/version/:projectKey/:versionName/:tab', {
-                                templateUrl: TEMPLATES_URL +'/version.html',
-                                controller: 'Version'
-                            })
-                            .when('/project/:projectKey', {
-                                templateUrl: TEMPLATES_URL + '/project.html',
-                                controller: 'Project'
-                            })
-                            .otherwise({
-                                redirectTo: '/start'
-                            });
-            */
+                .when('/start', {
+                    templateUrl: TEMPLATES_URL + '/start.html',
+                    controller: 'Start'
+                })
+                .when('/version/:projectKey/:versionName', {
+                    redirectTo: function(params) {
+                        var defaultTab = 'confidence_report';
+                        return '/version/' + params.projectKey
+                            + '/' + params.versionName + '/' + defaultTab;
+                    }
+                })
+                .when('/version/:projectKey/:versionName/:tab', {
+                    templateUrl: TEMPLATES_URL +'/version.html',
+                    controller: 'Version'
+                })
+                .when('/project/:projectKey', {
+                    templateUrl: TEMPLATES_URL + '/project.html',
+                    controller: 'Project'
+                })
+                .when('/performance/:user', {
+                    templateUrl: TEMPLATES_URL + '/performance.html',
+                    controller: 'Performance'
+                })
+                .otherwise({
+                    redirectTo: '/start'
+                });
         }]);
 
 angular.module('agile.controllers', ['helper', 'api', 'agile.filters']);

@@ -1,22 +1,19 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
-        function($scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
+    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
+        function($rootScope, $scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
 
-            // Todo: Use standard angular cache instead of local variables.
             $scope.template = TEMPLATES_URL + '/version/confidence_report.html';
 
             $scope.$watch('project', function () {
                 if ($scope.project) {
-                    $scope.loadConfidenceReport();
-                    Api.get('Config')
-                        .get($scope.project.key)
-                        .then(function(config) {
-                            $scope.config = config;
-                        });
+                    $scope.loadConfidenceReport().then(function() {
+                        initFilterRowFixing();
+                    });
+                    loadConfig();
                 }
             });
 
-            $scope.loadConfidenceReport = function(callback, ignoreCache)
+            $scope.loadConfidenceReport = function(ignoreCache)
             {
                 var reportId = getConfidenceReportKey($scope.project, $scope.version);
                 var confidenceReportApi = Api.get('ConfidenceReport');
@@ -27,37 +24,34 @@ angular.module('agile.controllers')
                     enableCacheAfterLoad = true;
                 }
 
-                confidenceReportApi
-                    .get(reportId, 'issues')
+                var promise = confidenceReportApi.get(reportId, 'issues')
                     .then(function(confidenceReport) {
                         $scope.confidenceReport = confidenceReport;
 
                         if (typeof $scope.confidenceReport.issues == 'undefined') {
                             $scope.confidenceReport.issues = [];
                         }
-
-                        resetIssueCache();
                         injectExpansion($scope.confidenceReport);
 
-                        callback && callback();
                     }, function() {
-                        createConfidenceReport(reportId, callback);
+                        createConfidenceReport(reportId);
                     });
 
                 if (enableCacheAfterLoad) {
                     confidenceReportApi.enableCache();
                 }
+
+                return promise;
             };
 
-            $scope.saveConfidenceReport = function(callback)
+            $scope.saveConfidenceReport = function()
             {
                 var confidenceRecordData = $.extend(true, {}, $scope.confidenceReport);
                 extractExpansion(confidenceRecordData);
-                Api.get('ConfidenceReport')
+                return Api.get('ConfidenceReport')
                     .put(confidenceRecordData._id, confidenceRecordData)
                     .then(function(response) {
-                        setAlert('success', response.message);
-                        callback && callback();
+                        Helper.setAlert('success', response.message);
                     });
             };
 
@@ -68,27 +62,115 @@ angular.module('agile.controllers')
                     importKeys.push($scope.confidenceReport.issues[i].key);
                 }
                 if (importKeys.length) {
-                    // Todo: Implement and run import statuses instead of full import.
                     $scope.showUpdateLoader = true;
                     Api.get('IssuesImport').post({
                         keys: importKeys
                     }).then(function(response) {
-                        setAlert('success', response.message);
-                        $scope.loadConfidenceReport(function() {
+                        Helper.setAlert('success', response.message);
+                        $scope.loadConfidenceReport(true).then(function() {
 
                             actualizeIssuesState();
+                            actualizeIssuesAssignees();
 
                             $scope.saveConfidenceReport();
                             $scope.showUpdateLoader = false;
-                            setAlert('success', 'Issues state has been updated.');
-
-                        }, true);
+                            Helper.setAlert('success', 'Issues have been updated.');
+                        });
                     });
                 }
             };
 
+            $scope.updateIssue = function(issueInfo) {
+                markIssueAsUpdating(issueInfo);
+                Api.get('IssuesImport').post({
+                    keys: [issueInfo.key]
+                }).then(function(response) {
+                    Helper.setAlert('success', response.message);
+                    $scope.loadConfidenceReport(true).then(function() {
+
+                        var issueIndex = -1;
+                        for (var index = 0; index < $scope.confidenceReport.issues.length; index++) {
+                            if ($scope.confidenceReport.issues[index].key == issueInfo.key) {
+                                issueIndex = index;
+                                break;
+                            }
+                        }
+
+                        if (issueIndex > -1) {
+                            actualizeIssueState($scope.confidenceReport.issues[issueIndex]);
+                            actualizeIssueAssignees($scope.confidenceReport.issues[issueIndex]);
+                        }
+
+                        $scope.saveConfidenceReport();
+
+                        unmarkIssueAsUpdating(issueInfo);
+                        Helper.setAlert('success', 'Issue has been updated.');
+                    });
+                });
+            };
+
+            $scope.removeIssue = function(issueInfo) {
+                if (confirm("Are you sure?")) {
+                    var issueIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
+
+                    if (issueIndex > -1) {
+                        $scope.confidenceReport.issues.splice(issueIndex, 1);
+                        $scope.saveConfidenceReport();
+                        Helper.setAlert('success', 'Issue has been removed.');
+                    }
+                }
+            };
+
+            $scope.getRowClass = function(issueInfo) {
+                var classes = [];
+
+                classes.push((issueInfo.cl > 6) ? 'good' : (issueInfo.cl > 3) ? 'so-so' : 'bad');
+
+                if (issueIsUpdating(issueInfo)) {
+                    classes.push('updating');
+                }
+
+                return classes;
+            };
+
+            $rootScope.$on('draggable:start', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
+                args.element.css({
+                    width: container.width(),
+                    left: container.offset().left
+                });
+                container.height(args.element.height());
+            });
+            $rootScope.$on('draggable:move', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
+                args.element.css({
+                    left: container.offset().left
+                });
+            });
+            $rootScope.$on('draggable:end', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
+                args.element.css({width: '100%'});
+                container.css({height: 'auto'});
+            });
+            $scope.onDropComplete = function(index, issueInfo) {
+                var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
+                if (index == oldIndex) {
+                    return;
+                }
+                var removed = $scope.confidenceReport.issues.splice(oldIndex, 1);
+                if (index == 'last') {
+                    $scope.confidenceReport.issues.push(removed[0]);
+                } else {
+                    $scope.confidenceReport.issues.splice(oldIndex < index ? index - 1 : index, 0, removed[0]);
+                }
+                $scope.saveConfidenceReport();
+            };
+
+            $scope.issueIsUpdating = issueIsUpdating;
+
             // Temporary.
             $scope.actualizeIssuesState = actualizeIssuesState;
+            $scope.actualizeIssuesAssignees = actualizeIssuesAssignees;
 
             // Protected functions
 
@@ -104,45 +186,56 @@ angular.module('agile.controllers')
                 });
             }
 
-            var issueAggrStateCache = {};
-            function getAggrState(issueInfo) {
-                if (!issueAggrStateCache[issueInfo.key]) {
-                    issueAggrStateCache[issueInfo.key] = JiraHelper.getIssueState(issueInfo.issue);
-                }
-                return issueAggrStateCache[issueInfo.key];
-            }
-            function resetIssueAggrStateCache() {
-                issueAggrStateCache = {};
-            }
-
-            var issueCache = {};
             function getIssue(issueKey) {
-                if (!issueCache[issueKey]) {
-                    if ($scope.confidenceReport && $scope.confidenceReport.expansion) {
-                        angular.forEach($scope.confidenceReport.expansion.issues, function(issue) {
-                            if (issue.key == issueKey) {
-                                issueCache[issueKey] = issue;
-                            }
-                        })
+                if ($scope.confidenceReport && $scope.confidenceReport.expansion) {
+                    for (var i = 0; i < $scope.confidenceReport.expansion.issues.length; i++) {
+                        if ($scope.confidenceReport.expansion.issues[i].key == issueKey) {
+                            return $scope.confidenceReport.expansion.issues[i];
+                        }
                     }
                 }
-                return issueCache[issueKey] || {};
+                return {};
             }
-            function resetIssueCache() {
-                issueCache = {};
+
+            function actualizeIssueState(issueInfo) {
+                var issueState = JiraHelper.getIssueState(issueInfo.issue);
+                for (var property in issueState) {
+                    if (issueState.hasOwnProperty(property)) {
+                        issueInfo[property] = issueState[property];
+                    }
+                }
             }
 
             function actualizeIssuesState()
             {
-                resetIssueAggrStateCache();
                 angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
-                    var issueState = getAggrState(issueInfo);
-                    for (var property in issueState) {
-                        if (issueState.hasOwnProperty(property)) {
-                            issueInfo[property] = issueState[property];
-                        }
-                    }
+                    actualizeIssueState(issueInfo);
                 });
+            }
+
+            function actualizeIssueAssignees(issueInfo) {
+                issueInfo.assignees = JiraHelper.getStoryAssignees(issueInfo.issue);
+            }
+
+            function actualizeIssuesAssignees()
+            {
+                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                    actualizeIssueAssignees(issueInfo);
+                });
+            }
+
+            updatingIssues = [];
+            function markIssueAsUpdating(issueInfo) {
+                updatingIssues.push(issueInfo.key);
+            }
+            function unmarkIssueAsUpdating(issueInfo) {
+                var updatingIssueIndex = updatingIssues.indexOf(issueInfo.key);
+                if (updatingIssueIndex >= 0) {
+                    updatingIssues.splice(updatingIssueIndex, 1);
+                }
+            }
+            function issueIsUpdating(issueInfo) {
+                return updatingIssues.indexOf(issueInfo.key) >= 0
             }
 
             function getConfidenceReportKey(project, version)
@@ -150,7 +243,7 @@ angular.module('agile.controllers')
                 return project.key + '-' + version.jira_id;
             }
 
-            function createConfidenceReport(reportId, callback)
+            function createConfidenceReport(reportId)
             {
                 $scope.confidenceReport = {
                     '_id': reportId,
@@ -158,15 +251,34 @@ angular.module('agile.controllers')
                     'version': $scope.version.jira_id,
                     'issues': []
                 };
-                Api.get('ConfidenceReports')
+                return Api.get('ConfidenceReports')
                     .post($scope.confidenceReport)
                     .then(function(response) {
-                        callback && callback();
-                        setAlert('success', response.message);
+                        Helper.setAlert('success', response.message);
                     });
             }
 
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent, type, message);
+            function initFilterRowFixing() {
+                var $filter = $('.filter-row');
+                if ($filter.length) {
+                    var initialTopOffset = $filter.offset().top;
+                    $(window).scroll(function () {
+                        if ($(this).scrollTop() >= initialTopOffset) {
+                            $filter.addClass('fixed');
+                        } else {
+                            $filter.removeClass('fixed');
+                        }
+                    });
+                }
             }
+
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
+                    });
+            }
+
         }]);

@@ -1,25 +1,33 @@
-<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)">
+<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)" data-ng-drag="true" data-ng-drag-data="issueInfo">
     <div class="row">
         <div class="cell col-sm-6">
             <div class="row">
-                <div class="col-sm-2 cell-key">
-                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
-                        {{ issueInfo.key }}
-                    </a>
+                <div class="col-sm-2 cell-key" data-ng-prevent-drag="true">
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
+                       target="_blank">{{ issueInfo.key }}</a>
+                    <span class="loading-indicator" title="Please wait..."
+                          data-ng-show="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-repeat" title="Update issue"
+                          data-ng-click="updateIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-remove text-danger" title="Remove issue"
+                          data-ng-click="removeIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
                 </div>
-                <div class="col-sm-7 cell-summary">
-                    <span class="expand-btn"
-                          data-ng-click="showDetails[issueInfo.key] = true"
-                          data-ng-hide="showDetails[issueInfo.key] || issueInfo.issue.subtasks.length == 0">&plus;</span>
-                    <span class="collapse-btn"
-                          data-ng-click="showDetails[issueInfo.key] = false"
-                          data-ng-show="showDetails[issueInfo.key] && issueInfo.issue.subtasks.length">&minus;</span>
-                    <span class="issue-summary" data-ng-click="showDetails[issueInfo.key] = !showDetails[issueInfo.key]">
+                <div class="col-sm-7 cell-summary" data-ng-prevent-drag="true">
+                    <span class="expand-btn" data-ng-click="showDetails = true"
+                          data-ng-hide="showDetails || issueInfo.issue.subtasks.length == 0">&plus;</span>
+
+                    <span class="collapse-btn" data-ng-click="showDetails = false"
+                          data-ng-show="showDetails && issueInfo.issue.subtasks.length">&minus;</span>
+
+                    <span class="issue-summary" data-ng-click="showDetails = !showDetails">
                         <img data-ng-src="{{issueInfo.issue.issuetype.icon_url}}"
                              title="{{ issueInfo.issue.issuetype.name }}"
                              class="issue-icon icon-16">
                         <span data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
                     </span>
+
                     <span class="issue-time">
                         <span title="Estimated">{{ issueInfo.issue.time.aggr.estimated | jiraTime}}</span>
                         / <span title="Remaining">{{ issueInfo.issue.time.aggr.remaining | jiraTime}}</span>
@@ -28,15 +36,18 @@
                 </div>
                 <div class="col-sm-3 cell-assignee">
                     <span class="assignee">
-                        <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
-                            {{ assignees.devs[0].name | assigneeShort }}
+                        <strong class="hidden-sm hidden-xs a-key" data-ng-show="expandAssignees">A:</strong>
+                            <!--{{ assignees.devs[0].name | assigneeShort }}-->
+                            <span data-ng-repeat="dev in issueInfo.assignees.devs">
+                                {{ dev.name | assigneeShort }}{{ $index < issueInfo.assignees.devs.length - 1 ? ', ' : ''}}
+                            </span>
                     </span>
                     <span class="hidden-sm hidden-xs"
-                          data-ng-show="expandAssignees" data-ng-if="assignees.tbd.name">
+                          data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
                         <br>
                         <span class="assignee">
-                            <strong class="hidden-sm hidden-xs">T:</strong>
-                                {{ assignees.tbd.name | assigneeShort }}
+                            <strong class="hidden-sm hidden-xs a-key">T:</strong>
+                                {{ issueInfo.assignees.tbd.name | assigneeShort }}
                         </span>
                     </span>
                 </div>
@@ -45,10 +56,10 @@
         <div class="cell col-sm-1 cell-status">
             <span class="issue-status" title="{{ issueInfo.status }}">{{ issueInfo.status }}</span>
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1" data-ng-prevent-drag="true">
             <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1" data-ng-prevent-drag="true">
             <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
         </div>
         <div class="cell col-sm-2">
@@ -83,26 +94,10 @@
             <input type="text" class="form-control input-sm" data-ng-model="issueInfo.note">
         </div>
     </div>
-    <div class="row cl-report-row-children"
-         data-ng-show="showDetails[issueInfo.key] && issueInfo.issue.subtasks.length">
-        <div class="cell col-sm-12">
-            <div class="row" data-ng-repeat="subTask in issueInfo.issue.subtasks">
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-2 cell-key">
-                            &nbsp;<span class="secondary-info">&ndash;</span>
-                            <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}" target="_blank">{{ subTask.key }}</a>
-                        </div>
-                        <div class="col-sm-7 cell-summary">
-                            {{ subTask.summary }}
-                        </div>
-                        <div class="col-sm-3 cell-assignee">
-                            <span>{{ subTask.assignee.name | assigneeShort }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">{{ subTask.status.name }}</div>
-            </div>
-        </div>
+    <div class="issue-details"
+         data-ng-prevent-drag="true"
+         data-ng-show="showDetails">
+        <div data-ng-include="'/assets/app/templates/version/confidence_report/issue_info/children.html'"></div>
+        <div data-ng-include="'/assets/app/templates/version/confidence_report/issue_info/links.html'"></div>
     </div>
 </div>

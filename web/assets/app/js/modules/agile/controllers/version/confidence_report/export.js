@@ -7,9 +7,14 @@ angular.module('agile.controllers')
             $scope.clDates = [];
 
             $scope.showExportPage = function() {
-                $scope.showExport = true;
-                $scope.$parent.hideIssues = true;
+                $scope.saveConfidenceReport().then(function() {
+                    $scope.loadConfidenceReport().then(function() {
+                        $scope.showExport = true;
+                        $scope.$parent.hideIssues = true;
+                    });
+                });
             };
+
             $scope.hideExportPage = function() {
                 $scope.showExport = false;
                 $scope.$parent.hideIssues = false;
@@ -29,10 +34,6 @@ angular.module('agile.controllers')
                     sortClDates();
                 }
             });
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent.$parent, type, message);
-            }
 
             function sortClDates()
             {

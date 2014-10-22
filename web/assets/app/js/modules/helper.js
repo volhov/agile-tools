@@ -1,11 +1,22 @@
 angular.module('helper', [])
-    .factory('Helper', [function() {
+    .factory('Helper', ['$rootScope', function($rootScope) {
+
+        var defaultTitle = 'Agile Tools';
+
         return {
-            setAlert: function($scope, type, message) {
-                $scope.alert = {
+            setAlert: function(type, message) {
+                $rootScope.alert = {
                     type: type,
                     message: message
                 };
+            },
+            setTitle: function(title, skipDefault)
+            {
+                if (skipDefault) {
+                    document.title = title;
+                } else {
+                    document.title = title + ' | ' + defaultTitle;
+                }
             }
         };
     }])
@@ -111,9 +122,11 @@ angular.module('helper', [])
                     } else if (!devIssuesOpened && !devIssuesInProgress /* && devIssuesResolved*/) {
                         issueState.impl = 1;
                     }
-                }
 
-                this.defineIssueStatus(issueState);
+                    this.defineIssueStatus(issueState);
+                } else {
+                    issueState.status = issue.status.name;
+                }
 
                 return issueState;
             },
@@ -148,7 +161,7 @@ angular.module('helper', [])
                     for (var i = 0; i < issue.subtasks.length; i++) {
                         var subTask = issue.subtasks[i];
                         var type = getSubTaskType(subTask);
-                        if (type == 'dev') {
+                        if (type == 'dev' || type == 'inv') {
                             var addDev = true;
                             for (var aKey = 0; aKey < assignees.devs.length; aKey++) {
                                 if (assignees.devs[aKey].name == subTask.assignee.name) {
@@ -166,6 +179,9 @@ angular.module('helper', [])
                         if (type == 'qa') {
                             assignees.qa = subTask.assignee;
                         }
+                    }
+                    if (!assignees.devs.length) {
+                        assignees.devs.push(issue.assignee);
                     }
                 }
 

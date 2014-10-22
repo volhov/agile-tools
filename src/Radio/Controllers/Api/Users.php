@@ -28,7 +28,7 @@ class Api_Users extends Core\Resource
         $cursor = $db->users->find();
         $this->applySorting($cursor);
 
-        $users = iterator_to_array($cursor);
+        $users = iterator_to_array($cursor, false);
 
         return new Core\JsonResponse(
             Response::OK,

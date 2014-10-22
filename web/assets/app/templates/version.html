@@ -15,23 +15,22 @@
     <span data-ng-if="!version.releaseDate">? |</span>
     {{ version.released ? 'Released' : 'Not Released'}}
 </div>
-<ul class="nav nav-tabs" role="tablist">
-    <li data-ng-class="getTabClass('confidence_report')"
-        data-ng-click="tab = 'confidence_report'">
-        <a href="">Confidence Report</a>
+<ul class="nav nav-pills" role="tablist">
+    <li data-ng-class="getTabClass('confidence_report')">
+        <a href="#/version/{{ project.key }}/{{ versionName }}/confidence_report">Confidence Report</a>
     </li>
-    <li data-ng-class="getTabClass('resources')"
-        data-ng-click="tab = 'resources'">
-        <a href="">Resources</a>
+    <li data-ng-class="getTabClass('resources')">
+        <a href="#/version/{{ project.key }}/{{ versionName }}/resources">Resources</a>
     </li>
-    <li ng-class="getTabClass('plan')"
-        data-ng-click="tab = 'plan'">
-        <a href="">Plan</a>
+    <li data-ng-class="getTabClass('plan')">
+        <a href="#/version/{{ project.key }}/{{ versionName }}/plan">Plan</a>
     </li>
 </ul>
 <div class="version-page">
-    <div data-ng-controller="Version_ConfidenceReport"
-         data-ng-show="tab == 'confidence_report'">
-        <ng-include src="template"></ng-include>
+    <div data-ng-show="tab == 'confidence_report'" data-ng-controller="Version_ConfidenceReport">
+        <div data-ng-include="template"></div>
     </div>
+    <!--<div data-ng-show="tab == 'resources'" data-ng-controller="Version_Resources">-->
+        <!--<div data-ng-include="template"></div>-->
+    <!--</div>-->
 </div>

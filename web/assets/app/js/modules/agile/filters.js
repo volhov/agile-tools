@@ -52,5 +52,98 @@ angular.module('agile.filters')
             return fullName.replace(/[^A-Z]/g, '');
         };
     }])
+    .filter('confidenceLevelsFilter', ['$filter', function($filter) {
 
+        function matching(text, expression) {
+            var expressions = expression.split(',');
+            var subject = String(text).toLowerCase();
+            for (var j = 0; j < expressions.length; j++) {
+                if (!expressions[j].length) {
+                    continue;
+                }
+                if (subject.indexOf(expressions[j].trim()) >= 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        var filters = [{
+            key: 'a:',
+            handler: function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    try {
+                        var assignees = input[i].assignees;
+                        if (assignees.devs) {
+                            for (var j = 0; j < assignees.devs.length; j++) {
+                                if (matching(assignees.devs[j].name, expression)) {
+                                    results.push(input[i]);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch(e) {}
+                }
+                return results;
+            }
+        }, {
+            key: 't:',
+            handler: function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    try {
+                        if (matching(input[i].assignees.tbd.name, expression)) {
+                            results.push(input[i]);
+                        }
+                    } catch (e) {}
+                }
+                return results;
+            }
+        }, {
+            key: 's:',
+            handler: function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    if (matching(input[i].status, expression)) {
+                        results.push(input[i]);
+                    }
+                }
+                return results;
+            }
+        }];
+
+        return function(input, expression) {
+
+            if (!expression || !expression.length || expression.length < 3) {
+                return input;
+            }
+
+            for (var i = 0; i < filters.length; i++) {
+                if (expression.indexOf(filters[i].key) === 0) {
+                    return filters[i].handler(input, expression.substr(filters[i].key.length))
+                }
+            }
+
+            return (function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    if (matching(input[i].key, expression)) {
+                        results.push(input[i]);
+                    } else if (matching(input[i].note, expression)) {
+                        results.push(input[i]);
+                    } else if (matching(input[i].status, expression)) {
+                        results.push(input[i]);
+                    } else if (matching(input[i].progress, expression)) {
+                        results.push(input[i]);
+                    } else if (matching(input[i].issue.summary, expression)) {
+                        results.push(input[i]);
+                    }
+                }
+                return results;
+            })(input, expression);
+
+            //return $filter('filter')(input, advancedExpression);
+        };
+    }])
 ;

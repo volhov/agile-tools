@@ -1,0 +1,29 @@
+<div class="row cl-report-row-children"
+     data-ng-show="issueInfo.issue.subtasks.length && showSubtasks">
+    <div class="cell col-sm-12">
+        <p data-ng-show="showLinkedIssues"><strong>Sub-tasks</strong></p>
+        <div class="row" data-ng-repeat="subTask in issueInfo.issue.subtasks">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-2 cell-key">
+                        &nbsp;<span class="secondary-info">&ndash;</span>
+                        <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}"
+                           target="_blank">{{ subTask.key }}</a>
+                    </div>
+                    <div class="col-sm-7 cell-summary">
+                        {{ subTask.summary }}
+                                <span class="issue-time">
+                                    <span title="Estimated">{{ subTask.time.aggr.estimated | jiraTime}}</span>
+                                    / <span title="Remaining">{{ subTask.time.aggr.remaining | jiraTime}}</span>
+                                    / <span title="Spent">{{ subTask.time.aggr.spent | jiraTime}}</span>
+                                </span>
+                    </div>
+                    <div class="col-sm-3 cell-assignee">
+                        <span>{{ subTask.assignee.name | assigneeShort }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">{{ subTask.status.name }}</div>
+        </div>
+    </div>
+</div>

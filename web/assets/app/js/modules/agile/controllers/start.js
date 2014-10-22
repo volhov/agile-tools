@@ -1,5 +1,8 @@
 angular.module('agile.controllers')
-    .controller('Start', ['$scope', '$location', 'Api', function($scope, $location, Api) {
+    .controller('Start', ['$scope', '$location', 'Api', 'Helper', function($scope, $location, Api, Helper) {
+
+        Helper.setTitle('Start');
+
         Api.get('JiraProjects').get({}).then(function(projects) {
             $scope.projects = projects;
         });
