@@ -37,8 +37,4 @@ angular.module('agile.controllers')
                     $scope.projects = projects;
                 });
             }
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope, type, message);
-            }
         }]);

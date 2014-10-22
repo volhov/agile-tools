@@ -54,7 +54,7 @@ angular.module('agile.controllers')
                         Api.get('UsersImport').post({
                             key: jiraUser.key
                         }).then(function(response) {
-                            setAlert('success', response.message);
+                            Helper.setAlert('success', response.message);
                             $scope.$parent.loadProject()
                                 .then(function() {
                                     $scope.hideImport();
@@ -116,9 +116,5 @@ angular.module('agile.controllers')
             function resetImport()
             {
                 $scope.jiraUsers = [];
-            }
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent, type, message);
             }
         }]);

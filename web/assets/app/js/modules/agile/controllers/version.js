@@ -14,6 +14,8 @@ angular.module('agile.controllers')
                 return $scope.tab == tabName ? 'active' : '';
             };
 
+            Helper.setAlert(null, 'warning', 'Test');
+
             // Protected functions
 
 

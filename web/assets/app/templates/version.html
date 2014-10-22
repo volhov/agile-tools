@@ -15,7 +15,7 @@
     <span data-ng-if="!version.releaseDate">? |</span>
     {{ version.released ? 'Released' : 'Not Released'}}
 </div>
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-pills" role="tablist">
     <li data-ng-class="getTabClass('confidence_report')">
         <a href="#/version/{{ project.key }}/{{ versionName }}/confidence_report">Confidence Report</a>
     </li>
@@ -27,8 +27,10 @@
     </li>
 </ul>
 <div class="version-page">
-    <div data-ng-controller="Version_ConfidenceReport"
-         data-ng-show="tab == 'confidence_report'">
+    <div data-ng-show="tab == 'confidence_report'" data-ng-controller="Version_ConfidenceReport">
         <div data-ng-include="template"></div>
     </div>
+    <!--<div data-ng-show="tab == 'resources'" data-ng-controller="Version_Resources">-->
+        <!--<div data-ng-include="template"></div>-->
+    <!--</div>-->
 </div>

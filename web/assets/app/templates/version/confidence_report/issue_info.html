@@ -15,18 +15,19 @@
                           data-ng-hide="issueIsUpdating(issueInfo)"></span>
                 </div>
                 <div class="col-sm-7 cell-summary" data-ng-prevent-drag="true">
-                    <span class="expand-btn"
-                          data-ng-click="showDetails[issueInfo.key] = true"
-                          data-ng-hide="showDetails[issueInfo.key] || issueInfo.issue.subtasks.length == 0">&plus;</span>
-                    <span class="collapse-btn"
-                          data-ng-click="showDetails[issueInfo.key] = false"
-                          data-ng-show="showDetails[issueInfo.key] && issueInfo.issue.subtasks.length">&minus;</span>
-                    <span class="issue-summary" data-ng-click="showDetails[issueInfo.key] = !showDetails[issueInfo.key]">
+                    <span class="expand-btn" data-ng-click="showDetails = true"
+                          data-ng-hide="showDetails || issueInfo.issue.subtasks.length == 0">&plus;</span>
+
+                    <span class="collapse-btn" data-ng-click="showDetails = false"
+                          data-ng-show="showDetails && issueInfo.issue.subtasks.length">&minus;</span>
+
+                    <span class="issue-summary" data-ng-click="showDetails = !showDetails">
                         <img data-ng-src="{{issueInfo.issue.issuetype.icon_url}}"
                              title="{{ issueInfo.issue.issuetype.name }}"
                              class="issue-icon icon-16">
                         <span data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
                     </span>
+
                     <span class="issue-time">
                         <span title="Estimated">{{ issueInfo.issue.time.aggr.estimated | jiraTime}}</span>
                         / <span title="Remaining">{{ issueInfo.issue.time.aggr.remaining | jiraTime}}</span>
@@ -35,7 +36,7 @@
                 </div>
                 <div class="col-sm-3 cell-assignee">
                     <span class="assignee">
-                        <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
+                        <strong class="hidden-sm hidden-xs a-key" data-ng-show="expandAssignees">A:</strong>
                             <!--{{ assignees.devs[0].name | assigneeShort }}-->
                             <span data-ng-repeat="dev in issueInfo.assignees.devs">
                                 {{ dev.name | assigneeShort }}{{ $index < issueInfo.assignees.devs.length - 1 ? ', ' : ''}}
@@ -45,7 +46,7 @@
                           data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
                         <br>
                         <span class="assignee">
-                            <strong class="hidden-sm hidden-xs">T:</strong>
+                            <strong class="hidden-sm hidden-xs a-key">T:</strong>
                                 {{ issueInfo.assignees.tbd.name | assigneeShort }}
                         </span>
                     </span>
@@ -95,64 +96,8 @@
     </div>
     <div class="issue-details"
          data-ng-prevent-drag="true"
-         data-ng-show="showDetails[issueInfo.key]">
-        <div class="row cl-report-row-children"
-             data-ng-show="issueInfo.issue.subtasks.length && showSubtasks">
-            <div class="cell col-sm-12">
-                <p data-ng-show="showLinkedIssues"><strong>Sub-tasks</strong></p>
-                <div class="row" data-ng-repeat="subTask in issueInfo.issue.subtasks">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2 cell-key">
-                                &nbsp;<span class="secondary-info">&ndash;</span>
-                                <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}"
-                                   target="_blank">{{ subTask.key }}</a>
-                            </div>
-                            <div class="col-sm-7 cell-summary">
-                                {{ subTask.summary }}
-                                <span class="issue-time">
-                                    <span title="Estimated">{{ subTask.time.aggr.estimated | jiraTime}}</span>
-                                    / <span title="Remaining">{{ subTask.time.aggr.remaining | jiraTime}}</span>
-                                    / <span title="Spent">{{ subTask.time.aggr.spent | jiraTime}}</span>
-                                </span>
-                            </div>
-                            <div class="col-sm-3 cell-assignee">
-                                <span>{{ subTask.assignee.name | assigneeShort }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">{{ subTask.status.name }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="row cl-report-row-links"
-         data-ng-show="issueInfo.issue.links.length && showLinkedIssues">
-            <div class="cell col-sm-12">
-                <p><strong>Linked issues</strong></p>
-                <div class="row" data-ng-repeat="linkedTask in issueInfo.issue.links">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2 cell-key">
-                                &nbsp;<span class="secondary-info">&ndash;</span>
-                                <a href="{{ config.yaml.jira_url }}/browse/{{ linkedTask.key }}"
-                                   target="_blank">{{ linkedTask.key }}</a>
-                            </div>
-                            <div class="col-sm-7 cell-summary">
-                                {{ linkedTask.summary }}
-                                <span class="issue-time">
-                                    <span title="Estimated">{{ linkedTask.time.aggr.estimated | jiraTime}}</span>
-                                    / <span title="Remaining">{{ linkedTask.time.aggr.remaining | jiraTime}}</span>
-                                    / <span title="Spent">{{ linkedTask.time.aggr.spent | jiraTime}}</span>
-                                </span>
-                            </div>
-                            <div class="col-sm-3 cell-assignee">
-                                <span>{{ linkedTask.assignee.name | assigneeShort }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">{{ linkedTask.status.name }}</div>
-                </div>
-            </div>
-        </div>
+         data-ng-show="showDetails">
+        <div data-ng-include="'/assets/app/templates/version/confidence_report/issue_info/children.html'"></div>
+        <div data-ng-include="'/assets/app/templates/version/confidence_report/issue_info/links.html'"></div>
     </div>
 </div>

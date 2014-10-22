@@ -5,11 +5,13 @@ angular.module('agile.controllers')
 
             $scope.showImport = false;
             $scope.showImportLoader = false;
+            $scope.showFetchLoader = false;
 
             $scope.fetchIssuesForImport = function(issueType, maxResults, additionalFilters) {
-                $scope.showImport = true;
-                $scope.showImportLoader = false;
                 $scope.$parent.hideIssues = true;
+                $scope.showImport = false;
+                $scope.showImportLoader = false;
+                $scope.showFetchLoader = true;
                 resetImport();
                 var query = {
                     max_result: maxResults || 50,
@@ -29,10 +31,16 @@ angular.module('agile.controllers')
                 var jiraIssuesApi = Api.get('JiraIssues');
                 jiraIssuesApi.disableCache();
                 jiraIssuesApi.get(query).then(function(issues) {
-//                    angular.forEach(issues, function(issue) {
-//                        issue.import = true;
-//                    });
                     $scope.jiraIssues = issues;
+                    $scope.importedNumber = 0;
+                    angular.forEach($scope.jiraIssues, function(issue) {
+                        if (crHasIssue(issue.key)) {
+                            issue.imported = true;
+                            $scope.importedNumber++;
+                        }
+                    });
+                    $scope.showFetchLoader = false;
+                    $scope.showImport = true;
                 });
                 jiraIssuesApi.enableCache();
             };
@@ -40,6 +48,7 @@ angular.module('agile.controllers')
             {
                 $scope.showImport = false;
                 $scope.showImportLoader = false;
+                $scope.showFetchLoader = false;
                 $scope.$parent.hideIssues = false;
                 resetImport();
             };
@@ -64,13 +73,13 @@ angular.module('agile.controllers')
                             Api.get('IssuesImport').post({
                                 keys: importKeys
                             }).then(function(response) {
-                                setAlert('success', response.message);
-                                $scope.$parent.loadResourcesPlan().then(function() {
+                                Helper.setAlert('success', response.message);
+                                $scope.$parent.loadConfidenceReport().then(function() {
                                     $scope.actualizeIssuesState();
                                     $scope.actualizeIssuesAssignees();
                                     $scope.saveConfidenceReport();
                                     $scope.hideImport();
-                                    setAlert('success', 'Issues state has been updated.');
+                                    Helper.setAlert('success', 'Issues state has been updated.');
                                 });
                             });
                             // Todo: find out if this is really needed. I don't think so.
@@ -84,7 +93,9 @@ angular.module('agile.controllers')
 
             $scope.checkAll = function() {
                 angular.forEach($scope.jiraIssues, function(issue) {
-                    issue.import = true;
+                    if (!crHasIssue(issue.key)) {
+                        issue.import = true;
+                    }
                 });
             };
 
@@ -105,7 +116,6 @@ angular.module('agile.controllers')
                 return isActive;
             };
 
-
             function crHasIssue(issueKey)
             {
                 var issueExists = false;
@@ -124,7 +134,4 @@ angular.module('agile.controllers')
                 $scope.jiraIssues = [];
             }
 
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent.$parent, type, message);
-            }
         }]);

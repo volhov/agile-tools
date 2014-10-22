@@ -19,7 +19,7 @@ angular.module('agile.controllers')
                      });
                  } catch (e) {
                      $scope.loadingTasksStats = false;
-                     setAlert('warning', e.message);
+                     Helper.setAlert('warning', e.message);
                  }
             }
 
@@ -135,9 +135,5 @@ angular.module('agile.controllers')
                 var tasksChart = new Chart(ctx).Line(data, {
                     showTooltips: true
                 });
-            }
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent, type, message);
             }
         }]);

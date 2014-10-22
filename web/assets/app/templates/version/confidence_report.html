@@ -1,4 +1,10 @@
-<h2>Confidence Report</h2>
+<div class="clearfix">
+    <h2 class="pull-left">Confidence Report</h2>
+    <p class="pull-right help-holder">
+        <span class="glyphicon glyphicon-question-sign"></span>
+        <span class="a" data-ng-click="showHelp = true">Help</span>
+    </p>
+</div>
 
 <div data-ng-controller="Version_ConfidenceReport_Import">
     <div data-ng-include="template"></div>
@@ -10,31 +16,34 @@
 
 <div class="cl-report-container" data-ng-hide="hideIssues">
 
-    <div class="row">
+    <div class="row filter-row">
         <div class="col-sm-3">
-            <input type="search" class="form-control input-sm" placeholder="Filter issues"
-                   data-ng-model="searchIssue">
-        </div>
-        <div class="col-sm-3">
-            <button type="button" class="btn btn-primary"
-                    data-ng-click="saveConfidenceReport()">Save</button>
-
-            <button type="button" class="btn btn-warning"
-                    data-ng-click="updateConfidenceReport(true)">Update</button>
-
-            <button type="button" class="btn"
-                    data-ng-hide="1"
-                    data-ng-click="actualizeIssuesState()">Actualize State</button>
-
-            <button type="button" class="btn"
-                    data-ng-hide="1"
-                    data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
+            <div class="filter-holder">
+                <input type="search" class="form-control input-sm" placeholder="Filter issues"
+                       data-ng-model="searchIssue">
+            </div>
         </div>
         <div class="col-sm-6 options"
              data-ng-init="showSubtasks = true">
-            <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
-            <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
-            <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+            <div class="checkbox">
+                <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assignees</label>
+                <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
+                <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="pull-right filter-holder">
+                <button type="button" class="btn btn-sm btn-primary"
+                        data-ng-click="saveConfidenceReport()">Save</button>
+                <button type="button" class="btn btn-sm btn-warning"
+                        data-ng-click="updateConfidenceReport(true)">Update</button>
+                <button type="button" class="btn btn-sm"
+                        data-ng-hide="1"
+                        data-ng-click="actualizeIssuesState()">Actualize State</button>
+                <button type="button" class="btn btn-sm"
+                        data-ng-hide="1"
+                        data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
+            </div>
         </div>
     </div>
 
@@ -97,4 +106,9 @@
         <span class="loading-indicator" title="Please wait..."></span>
         Issues are being updated. Please wait for a moment.
     </p>
+</div>
+
+<div class="help-container" data-ng-show="showHelp">
+    <p class="pull-right help-close"><span class="a" data-ng-click="showHelp = false">Close</span></p>
+    <div class="help-content" data-ng-include="'/assets/app/templates/version/confidence_report/help.html'"></div>
 </div>

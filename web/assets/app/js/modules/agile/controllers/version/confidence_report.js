@@ -6,16 +6,14 @@ angular.module('agile.controllers')
 
             $scope.$watch('project', function () {
                 if ($scope.project) {
-                    $scope.loadResourcesPlan();
-                    Api.get('Config')
-                        .get($scope.project.key)
-                        .then(function(config) {
-                            $scope.config = config;
-                        });
+                    $scope.loadConfidenceReport().then(function() {
+                        initFilterRowFixing();
+                    });
+                    loadConfig();
                 }
             });
 
-            $scope.loadResourcesPlan = function(ignoreCache)
+            $scope.loadConfidenceReport = function(ignoreCache)
             {
                 var reportId = getConfidenceReportKey($scope.project, $scope.version);
                 var confidenceReportApi = Api.get('ConfidenceReport');
@@ -53,7 +51,7 @@ angular.module('agile.controllers')
                 return Api.get('ConfidenceReport')
                     .put(confidenceRecordData._id, confidenceRecordData)
                     .then(function(response) {
-                        setAlert('success', response.message);
+                        Helper.setAlert('success', response.message);
                     });
             };
 
@@ -68,16 +66,15 @@ angular.module('agile.controllers')
                     Api.get('IssuesImport').post({
                         keys: importKeys
                     }).then(function(response) {
-                        setAlert('success', response.message);
-                        $scope.loadResourcesPlan(true).then(function() {
+                        Helper.setAlert('success', response.message);
+                        $scope.loadConfidenceReport(true).then(function() {
 
                             actualizeIssuesState();
                             actualizeIssuesAssignees();
 
                             $scope.saveConfidenceReport();
                             $scope.showUpdateLoader = false;
-                            setAlert('success', 'Issues have been updated.');
-
+                            Helper.setAlert('success', 'Issues have been updated.');
                         });
                     });
                 }
@@ -88,8 +85,8 @@ angular.module('agile.controllers')
                 Api.get('IssuesImport').post({
                     keys: [issueInfo.key]
                 }).then(function(response) {
-                    setAlert('success', response.message);
-                    $scope.loadResourcesPlan(true).then(function() {
+                    Helper.setAlert('success', response.message);
+                    $scope.loadConfidenceReport(true).then(function() {
 
                         var issueIndex = -1;
                         for (var index = 0; index < $scope.confidenceReport.issues.length; index++) {
@@ -107,7 +104,7 @@ angular.module('agile.controllers')
                         $scope.saveConfidenceReport();
 
                         unmarkIssueAsUpdating(issueInfo);
-                        setAlert('success', 'Issue has been updated.');
+                        Helper.setAlert('success', 'Issue has been updated.');
                     });
                 });
             };
@@ -119,7 +116,7 @@ angular.module('agile.controllers')
                     if (issueIndex > -1) {
                         $scope.confidenceReport.issues.splice(issueIndex, 1);
                         $scope.saveConfidenceReport();
-                        setAlert('success', 'Issue has been removed.');
+                        Helper.setAlert('success', 'Issue has been removed.');
                     }
                 }
             };
@@ -257,11 +254,31 @@ angular.module('agile.controllers')
                 return Api.get('ConfidenceReports')
                     .post($scope.confidenceReport)
                     .then(function(response) {
-                        setAlert('success', response.message);
+                        Helper.setAlert('success', response.message);
                     });
             }
 
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent, type, message);
+            function initFilterRowFixing() {
+                var $filter = $('.filter-row');
+                if ($filter.length) {
+                    var initialTopOffset = $filter.offset().top;
+                    $(window).scroll(function () {
+                        if ($(this).scrollTop() >= initialTopOffset) {
+                            $filter.addClass('fixed');
+                        } else {
+                            $filter.removeClass('fixed');
+                        }
+                    });
+                }
             }
+
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
+                    });
+            }
+
         }]);

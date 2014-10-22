@@ -1,11 +1,11 @@
 angular.module('helper', [])
-    .factory('Helper', [function() {
+    .factory('Helper', ['$rootScope', function($rootScope) {
 
         var defaultTitle = 'Agile Tools';
 
         return {
-            setAlert: function($scope, type, message) {
-                $scope.alert = {
+            setAlert: function(type, message) {
+                $rootScope.alert = {
                     type: type,
                     message: message
                 };
@@ -179,6 +179,9 @@ angular.module('helper', [])
                         if (type == 'qa') {
                             assignees.qa = subTask.assignee;
                         }
+                    }
+                    if (!assignees.devs.length) {
+                        assignees.devs.push(issue.assignee);
                     }
                 }
 

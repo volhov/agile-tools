@@ -15,7 +15,7 @@ angular.module('agile.controllers')
                 return Api.get('Project')
                     .put($scope.project._id, $scope.project)
                     .then(function(response) {
-                        setAlert('success', response.message);
+                        Helper.setAlert('success', response.message);
                     });
             };
 
@@ -25,9 +25,5 @@ angular.module('agile.controllers')
                     .then(function(project) {
                         $scope.project = project;
                     });
-            }
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope, type, message);
             }
         }]);

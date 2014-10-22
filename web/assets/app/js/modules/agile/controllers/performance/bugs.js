@@ -20,7 +20,7 @@ angular.module('agile.controllers')
                     });
                 } catch (e) {
                     $scope.loadingBugsStats = false;
-                    setAlert('warning', e.message);
+                    Helper.setAlert('warning', e.message);
                 }
             }
 
@@ -126,8 +126,4 @@ angular.module('agile.controllers')
                 });
             }
 
-
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent.$parent, type, message);
-            }
         }]);
