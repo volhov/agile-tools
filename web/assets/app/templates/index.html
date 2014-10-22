@@ -65,13 +65,13 @@
     <script src="/assets/app/js/modules/agile/controllers/start.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/users/import.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/issue_info.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/import.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/export.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/issue_info.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/import.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/export.js"></script>
 
-    <script src="/assets/app/js/modules/agile/controllers/version/resources.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/resources.js"></script>
 
     <script src="/assets/app/js/modules/agile/controllers/performance.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/performance/bugs.js"></script>
@@ -81,13 +81,13 @@
 
     <div class="container-fluid theme-showcase" role="main">
         <!--<div data-ng-view></div>-->
-        <div app-view-segment="0"></div>
+        <div data-app-view-segment="0"></div>
     </div>
 
     <footer class="container-fluid">
         <hr/>
         <a href="http://symmetrics.de">
-            <img src="/assets/app/img/symmetrics-logo.png" height="{{ 70 / 2 }}" width="{{ 287 / 2 }}"/>
+            <img src="/assets/app/img/symmetrics-logo.png" height="35" width="144"/>
         </a>
         <p>If any issue occurs try clearing your local storage, look into JS console for errors and contact Max Gopey.</p>
     </footer>

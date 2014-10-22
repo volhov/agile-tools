@@ -11,6 +11,13 @@ angular.module('api')
         return Factory.item('confidence_reports/:id', {id: '@id'});
     }])
 
+    .factory('ResourcesPlans', ['Factory', function(Factory) {
+        return Factory.collection('resources_plans');
+    }])
+    .factory('ResourcesPlan',  ['Factory', function(Factory) {
+        return Factory.item('resources_plans/:id', {id: '@id'});
+    }])
+
     .factory('Issues', ['Factory', function(Factory) {
         return Factory.collection('issues');
     }])

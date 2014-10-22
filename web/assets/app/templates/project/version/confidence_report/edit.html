@@ -1,16 +1,4 @@
-<div class="clearfix">
-    <h2 class="pull-left">Confidence Report</h2>
-    <p class="pull-right help-holder">
-        <span class="glyphicon glyphicon-question-sign"></span>
-        <span class="a" data-ng-click="showHelp = true">Help</span>
-    </p>
-</div>
-
 <div data-ng-controller="Version_ConfidenceReport_Import">
-    <div data-ng-include="template"></div>
-</div>
-
-<div data-ng-controller="Version_ConfidenceReport_Export">
     <div data-ng-include="template"></div>
 </div>
 
@@ -33,6 +21,8 @@
         </div>
         <div class="col-sm-3">
             <div class="pull-right filter-holder">
+                <button type="button" class="btn btn-sm btn-info"
+                        data-ng-click="exportConfidenceReport()">Export</button>
                 <button type="button" class="btn btn-sm btn-primary"
                         data-ng-click="saveConfidenceReport()">Save</button>
                 <button type="button" class="btn btn-sm btn-warning"
@@ -106,9 +96,4 @@
         <span class="loading-indicator" title="Please wait..."></span>
         Issues are being updated. Please wait for a moment.
     </p>
-</div>
-
-<div class="help-container" data-ng-show="showHelp">
-    <p class="pull-right help-close"><span class="a" data-ng-click="showHelp = false">Close</span></p>
-    <div class="help-content" data-ng-include="'/assets/app/templates/version/confidence_report/help.html'"></div>
 </div>

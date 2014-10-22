@@ -9,6 +9,9 @@ use Tonic\Response;
  * Index controller.
  *
  * @uri /
+ * @uri /start/.*
+ * @uri /project/.*
+ * @uri /performance/.*
  */
 class Index extends Resource
 {

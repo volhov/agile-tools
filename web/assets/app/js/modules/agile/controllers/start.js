@@ -21,8 +21,4 @@ angular.module('agile.controllers')
                 });
             });
         };
-
-        $scope.startProjectVersion = function(version) {
-            $location.path('/version/' + $scope.project.key + '/' + version.name + '/confidence_report');
-        };
     }]);

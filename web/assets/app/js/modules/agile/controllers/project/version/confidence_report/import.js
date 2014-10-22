@@ -1,7 +1,7 @@
 angular.module('agile.controllers')
     .controller('Version_ConfidenceReport_Import', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper',
         function($scope, TEMPLATES_URL, Api, Helper) {
-            $scope.template = TEMPLATES_URL + '/version/confidence_report/import.html';
+            $scope.template = TEMPLATES_URL + '/project/version/confidence_report/import.html';
 
             $scope.showImport = false;
             $scope.showImportLoader = false;

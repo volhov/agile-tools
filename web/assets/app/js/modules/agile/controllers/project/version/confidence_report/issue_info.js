@@ -4,6 +4,6 @@ angular.module('agile.controllers')
 
             // Todo: Use standard angular cache instead of local variables.
 
-            $scope.template = TEMPLATES_URL + '/version/confidence_report/issue_info.html';
+            $scope.template = TEMPLATES_URL + '/project/version/confidence_report/edit/issue_info.html';
 
         }]);
