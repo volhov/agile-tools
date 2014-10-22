@@ -16,7 +16,7 @@ angular.module('agile.controllers')
 
             function loadResourcesPlan(ignoreCache)
             {
-                var reportId = getResourcesPlanKey($scope.project, $scope.version);
+                var planId = getResourcesPlanKey($scope.project, $scope.version);
                 var resourcesPlanApi = Api.get('ResourcesPlan');
 
                 var enableCacheAfterLoad = false;
@@ -25,11 +25,11 @@ angular.module('agile.controllers')
                     enableCacheAfterLoad = true;
                 }
 
-                var promise = resourcesPlanApi.get(reportId, 'issues')
+                var promise = resourcesPlanApi.get(planId, 'issues')
                     .then(function(resourcesPlan) {
                         $scope.resourcesPlan = resourcesPlan;
                     }, function() {
-                        //createResourcesPlan(reportId);
+                        createResourcesPlan(planId);
                     });
 
                 if (enableCacheAfterLoad) {
@@ -37,6 +37,21 @@ angular.module('agile.controllers')
                 }
 
                 return promise;
+            }
+
+            function createResourcesPlan(planId)
+            {
+                $scope.resourcesPlan = {
+                    '_id': planId,
+                    'project': $scope.project._id,
+                    'version': $scope.version.jira_id,
+                    'users': []
+                };
+                return Api.get('ResourcesPlans')
+                    .post($scope.resourcesPlan)
+                    .then(function(response) {
+                        Helper.setAlert('success', response.message);
+                    });
             }
 
 

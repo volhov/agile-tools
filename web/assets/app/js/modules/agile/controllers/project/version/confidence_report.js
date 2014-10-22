@@ -1,17 +1,19 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
-        function($rootScope, $scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
+    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', '$location', 'Api', 'Helper', 'JiraHelper',
+        function($rootScope, $scope, $location, Api, Helper, JiraHelper) {
 
-            $scope.template = TEMPLATES_URL + '/version/confidence_report.html';
-
-            $scope.$watch('project', function () {
-                if ($scope.project) {
+            $scope.$watch('version', function () {
+                if ($scope.project && $scope.version) {
                     $scope.loadConfidenceReport().then(function() {
                         initFilterRowFixing();
                     });
                     loadConfig();
                 }
             });
+
+            $scope.exportConfidenceReport = function() {
+                $location.path($location.path() + '/export');
+            };
 
             $scope.loadConfidenceReport = function(ignoreCache)
             {
@@ -122,15 +124,12 @@ angular.module('agile.controllers')
             };
 
             $scope.getRowClass = function(issueInfo) {
-                var classes = [];
-
-                classes.push((issueInfo.cl > 6) ? 'good' : (issueInfo.cl > 3) ? 'so-so' : 'bad');
-
-                if (issueIsUpdating(issueInfo)) {
-                    classes.push('updating');
-                }
-
-                return classes;
+                return {
+                    'good': issueInfo.cl > 6,
+                    'so-so': issueInfo.cl <= 6 && issueInfo.cl > 3,
+                    'bad': issueInfo.cl <= 3,
+                    'updating': issueIsUpdating(issueInfo)
+                };
             };
 
             $rootScope.$on('draggable:start', function(event, args) {

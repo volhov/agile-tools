@@ -1,9 +1,8 @@
 <p>
-    <a href="" data-ng-hide="showExport" data-ng-click="showExportPage()">Export</a>
-    <a href="" data-ng-show="showExport" data-ng-click="hideExportPage()">&larr; Back</a>
+    <span class="a" data-ng-click="hideExportPage()">&larr; Back</span>
 </p>
 
-<div data-ng-show="showExport">
+<div>
     <div class="checkbox">
         <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
     </div>
@@ -102,11 +101,6 @@
         </tbody>
     </table>
     <br>
-    <!--<p>-->
-        <!--The original document is attached to the Iteration Planning page in Wiki:<br>-->
-        <!--<a href="#">[Link to Wiki Page]</a>-->
-    <!--</p>-->
-
     <hr>
 
 </div>

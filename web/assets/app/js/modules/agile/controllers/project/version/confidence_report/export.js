@@ -1,23 +1,12 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport_Export', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper',
-        function($scope, TEMPLATES_URL, Api, Helper) {
-            $scope.template = TEMPLATES_URL + '/version/confidence_report/export.html';
+    .controller('Version_ConfidenceReport_Export', ['$scope', '$location', 'Api', 'Helper',
+        function($scope, $location, Api, Helper) {
 
-            $scope.showExport = false;
             $scope.clDates = [];
 
-            $scope.showExportPage = function() {
-                $scope.saveConfidenceReport().then(function() {
-                    $scope.loadConfidenceReport().then(function() {
-                        $scope.showExport = true;
-                        $scope.$parent.hideIssues = true;
-                    });
-                });
-            };
-
             $scope.hideExportPage = function() {
-                $scope.showExport = false;
-                $scope.$parent.hideIssues = false;
+                $location.path('/version/' + $scope.project.key
+                    + '/' + $scope.versionName + '/confidence_report');
             };
 
             $scope.$watch('confidenceReport', function () {
