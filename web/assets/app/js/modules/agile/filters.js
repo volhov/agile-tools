@@ -111,16 +111,68 @@ angular.module('agile.filters')
                 }
                 return results;
             }
+        }, {
+            key: 'cl:',
+            handler: function(input, expression) {
+                var results = [];
+                expression = expression.trim();
+                var operation, cl, clMin, clMax, execResult;
+                if (/^[0-9]+$/.test(expression)) {
+                    cl = parseInt(expression);
+                    operation = '=';
+                } else if (execResult = /^([<>])\s*([0-9]+)?$/.exec(expression)) {
+                    cl = execResult[2];
+                    operation = execResult[1];
+                } else if (execResult = /^([0-9]+)\s*\-\s*([0-9]+)$/.exec(expression)) {
+                    clMin = parseInt(execResult[1]);
+                    clMax = parseInt(execResult[2]);
+                    operation = '><';
+                }
+                if (!cl && !clMin && !clMax) {
+                    if (operation) {
+                        // The operation is defined we just still don't know the value to match with.
+                        return input;
+                    } else {
+                        // The cl "query" is broken. We show empty result set to let user know that something is wrong.
+                        return results;
+                    }
+                }
+                for (var i = 0; i < input.length; i++) {
+                    var matches = false;
+                    switch (operation) {
+                        case '=':
+                            matches = (input[i].cl == cl);
+                            break;
+                        case '<':
+                            matches = (input[i].cl < cl);
+                            break;
+                        case '>':
+                            matches = (input[i].cl > cl);
+                            break;
+                        case '><':
+                            matches = (input[i].cl >= clMin && input[i].cl <= clMax);
+                            break;
+                    }
+                    if (matches) {
+                        results.push(input[i]);
+                    }
+                }
+                return results;
+            }
         }];
 
-        return function(input, expression) {
-
+        function runFilter(input, expression)
+        {
             if (!expression || !expression.length || expression.length < 3) {
                 return input;
             }
 
             for (var i = 0; i < filters.length; i++) {
                 if (expression.indexOf(filters[i].key) === 0) {
+                    var realExpression = expression.substr(filters[i].key.length);
+                    if (!realExpression.trim().length) {
+                        return input;
+                    }
                     return filters[i].handler(input, expression.substr(filters[i].key.length))
                 }
             }
@@ -142,8 +194,22 @@ angular.module('agile.filters')
                 }
                 return results;
             })(input, expression);
+        }
 
-            //return $filter('filter')(input, advancedExpression);
-        };
+        return function(input, expression) {
+            if (!expression || !expression.length || expression.length < 3) {
+                return input;
+            }
+            if (expression.indexOf('&') >= 0) {
+                var expressions = expression.split('&');
+                var filteredInput = input;
+                for (var exprIndex = 0; exprIndex < expressions.length; exprIndex++) {
+                    filteredInput = runFilter(filteredInput, expressions[exprIndex].trim());
+                }
+                return filteredInput;
+            } else {
+                return runFilter(input, expression);
+            }
+        }
     }])
 ;

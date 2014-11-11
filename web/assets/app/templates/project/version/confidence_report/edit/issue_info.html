@@ -54,43 +54,48 @@
             </div>
         </div>
         <div class="cell col-sm-1 cell-status">
-            <span class="issue-status" title="{{ issueInfo.status }}">{{ issueInfo.status }}</span>
+            <span class="issue-status" title="{{ issueInfo.status }}"
+                    data-ng-class="{'warning': issueInfo.status == 'In QA' && !issueInfo.qa_assigned}">{{ issueInfo.status }}</span>
         </div>
-        <div class="col-sm-1" data-ng-prevent-drag="true">
-            <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
-        </div>
-        <div class="col-sm-1" data-ng-prevent-drag="true">
-            <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
-        </div>
-        <div class="cell col-sm-2">
+        <div class="col-sm-3" data-ng-prevent-drag="true">
             <div class="row">
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.impl == 1" class="glyphicon glyphicon-ok"></span>
+                <div class="col-sm-3 cell-progress">
+                    <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
                 </div>
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.doc == 1" class="glyphicon glyphicon-ok"></span>
+                <div class="col-sm-2 cell-cl">
+                    <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
                 </div>
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.tbd == 1" class="glyphicon glyphicon-ok"></span>
-                </div>
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.tc == 1" class="glyphicon glyphicon-ok"></span>
-                </div>
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.qa == 1" class="glyphicon glyphicon-ok"></span>
-                </div>
-                <div class="col-sm-2">
-                    <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.cr == 1" class="glyphicon glyphicon-ok"></span>
+                <div class="col-sm-7 cell cell-checkboxes">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.impl == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.doc == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.tbd == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.tc == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.qa == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.cr == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-2">
             <input type="text" class="form-control input-sm" data-ng-model="issueInfo.note">
         </div>
     </div>

@@ -86,10 +86,6 @@ label {
   margin-right: 5px;
   vertical-align: middle;
 }
-.cl-report-header {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 .cl-report-container .filter-holder {
   padding-top: 5px;
 }
@@ -108,6 +104,23 @@ label {
   width: 100%;
   padding: 2px 40px;
   margin: 0;
+}
+.cl-report-header {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.cl-report-header .cell-progress {
+  padding: 0 5px;
+  text-align: right;
+}
+.cl-report-header .cell-cl {
+  padding: 0 5px;
+  text-align: center;
+}
+.cl-report-header .cell-checkboxes .row div {
+  padding: 3px;
+  font-size: .8em;
+  text-align: center;
 }
 .cl-report-row {
   min-height: 2em;
@@ -139,6 +152,26 @@ label {
 }
 .cl-report-row .bad .cell-status {
   color: #ff2f31;
+}
+.cl-report-row .cell-progress {
+  padding: 0 5px;
+}
+.cl-report-row .cell-progress input {
+  padding-left: 3px;
+  padding-right: 5px;
+  text-align: right;
+}
+.cl-report-row .cell-cl {
+  padding: 0 5px;
+}
+.cl-report-row .cell-cl input {
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: center;
+}
+.cl-report-row .cell-checkboxes .row div {
+  padding: 3px;
+  text-align: center;
 }
 .cl-report-row .input-sm {
   padding-top: 2px;
@@ -210,6 +243,9 @@ label {
   right: 0;
   background-color: #fff;
   padding: 0 5px;
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+  box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 .issue-time span {
   color: #333;
@@ -220,6 +256,11 @@ label {
 }
 .cell-status .issue-status {
   white-space: nowrap;
+}
+.cell-status .issue-status.warning:after {
+  content: ' !';
+  color: red;
+  font-weight: bold;
 }
 .cell-key {
   white-space: nowrap;
@@ -273,4 +314,13 @@ label {
 .a-key {
   font-family: monospace;
   letter-spacing: -1px;
+}
+.user-media {
+  margin: 15px 0;
+}
+.user-media .media-left img {
+  border-radius: 5px;
+}
+.user-media .media-body h4 {
+  margin: 7px 0 0;
 }

@@ -91,6 +91,16 @@ angular.module('agile', [
                             })
                             .up()
                         .up()
+                .when('/users', 'users')
+                    .segment('users', {
+                        templateUrl: TEMPLATES_URL + '/users.html',
+                        controller: 'Users'
+                    })
+                    .within('users')
+                        .segment('list', {
+                            default: true,
+                            templateUrl: TEMPLATES_URL + '/users/list.html'
+                        })
             ;
 
 /*

@@ -127,7 +127,7 @@ angular.module('agile.controllers')
                 return {
                     'good': issueInfo.cl > 6,
                     'so-so': issueInfo.cl <= 6 && issueInfo.cl > 3,
-                    'bad': issueInfo.cl <= 3,
+                    'bad': issueInfo.cl <= 3 || !issueInfo.cl,
                     'updating': issueIsUpdating(issueInfo)
                 };
             };
@@ -166,6 +166,7 @@ angular.module('agile.controllers')
             };
 
             $scope.issueIsUpdating = issueIsUpdating;
+            $scope.getTotalEstimated = getTotalEstimated;
 
             // Temporary.
             $scope.actualizeIssuesState = actualizeIssuesState;
@@ -269,6 +270,17 @@ angular.module('agile.controllers')
                         }
                     });
                 }
+            }
+
+            function getTotalEstimated()
+            {
+                var estimated = 0;
+                if ($scope.confidenceReport) {
+                    angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                        estimated += issueInfo.issue.time.aggr.estimated
+                    });
+                }
+                return estimated;
             }
 
 

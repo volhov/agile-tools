@@ -93,10 +93,6 @@ label {
     margin-right: 5px;
     vertical-align: middle;
 }
-.cl-report-header {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
 .cl-report-container .filter-holder {
     padding-top: 5px;
 }
@@ -116,6 +112,29 @@ label {
     width: 100%;
     padding: 2px 40px;
     margin: 0;
+}
+.cl-report-header {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .cell-progress{
+        padding: 0 5px;
+        text-align: right;
+    }
+    .cell-cl {
+        padding: 0 5px;
+        text-align: center;
+    }
+
+    .cell-checkboxes {
+        .row {
+            div {
+                padding: 3px;
+                font-size: .8em;
+                text-align: center;
+            }
+        }
+    }
 }
 .cl-report-row {
     min-height: 2em;
@@ -149,6 +168,30 @@ label {
     }
     .bad .cell-status {
         color: #ff2f31;
+    }
+    .cell-progress {
+        padding: 0 5px;
+        input {
+            padding-left: 3px;
+            padding-right: 5px;
+            text-align: right;
+        }
+    }
+    .cell-cl {
+        padding: 0 5px;
+        input {
+            padding-left: 3px;
+            padding-right: 3px;
+            text-align: center;
+        }
+    }
+    .cell-checkboxes {
+        .row {
+            div {
+                padding: 3px;
+                text-align: center;
+            }
+        }
     }
 
     .input-sm {
@@ -224,6 +267,9 @@ label {
     right: 0;
     background-color: #fff;
     padding: 0 5px;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 .issue-time span {
     color: #333;
@@ -233,6 +279,14 @@ label {
     text-overflow: ellipsis;
     .issue-status {
         white-space: nowrap;
+//        background-color: rgba(255, 209, 164, 0.50);
+        &.warning {
+            &:after {
+                content: ' !';
+                color: red;
+                font-weight: bold;
+            }
+        }
     }
 }
 .cell-key {
@@ -299,4 +353,21 @@ label {
 .a-key {
     font-family: monospace;
     letter-spacing: -1px;
+}
+.user-media {
+    margin: 15px 0;
+
+    .media-left {
+        img {
+            border-radius: 5px;
+        }
+    }
+    .media-body {
+        h4 {
+            margin: 7px 0 0;
+        }
+        p {
+
+        }
+    }
 }

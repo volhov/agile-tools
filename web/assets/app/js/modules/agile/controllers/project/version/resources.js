@@ -4,7 +4,6 @@ angular.module('agile.controllers')
 
             $scope.template = TEMPLATES_URL + '/version/resources.html';
 
-
             $scope.$watch('project', function () {
                 if ($scope.project) {
                     loadResourcesPlan();
@@ -45,7 +44,7 @@ angular.module('agile.controllers')
                     '_id': planId,
                     'project': $scope.project._id,
                     'version': $scope.version.jira_id,
-                    'users': []
+                    'users': $scope.project.users
                 };
                 return Api.get('ResourcesPlans')
                     .post($scope.resourcesPlan)
@@ -55,8 +54,7 @@ angular.module('agile.controllers')
             }
 
 
-            function getResourcesPlanKey(project, version)
-            {
+            function getResourcesPlanKey(project, version) {
                 return project.key + '-' + version.jira_id;
             }
 

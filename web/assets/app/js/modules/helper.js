@@ -17,6 +17,18 @@ angular.module('helper', [])
                 } else {
                     document.title = title + ' | ' + defaultTitle;
                 }
+            },
+            getUserTypes: function() {
+                return [{
+                        key: 'BE',
+                        name: 'Backend'
+                    }, {
+                        key: 'FE',
+                        name: 'Frontend'
+                    }, {
+                        key: 'QA',
+                        name: 'QA'
+                    }];
             }
         };
     }])
@@ -89,8 +101,12 @@ angular.module('helper', [])
                                 break;
                             case 'doc':
                                 issueState.doc = 0;
-                                if (subTask.status.name == 'Resolved' || subTask.status.name == 'Feedback required') {
-                                    issueState.doc = 1;
+                                if (subTask.status.name == 'In Progress') {
+                                    issueState.doc = 2;
+                                } else {
+                                    if (subTask.status.name == 'Resolved' || subTask.status.name == 'Feedback required') {
+                                        issueState.doc = 1;
+                                    }
                                 }
                                 break;
                             case 'tbd':
@@ -124,6 +140,9 @@ angular.module('helper', [])
                     }
 
                     this.defineIssueStatus(issueState);
+                    if (issueState.status == 'Open' && issue.status.name == 'In Progress') {
+                        issueState.status = issue.status.name;
+                    }
                 } else {
                     issueState.status = issue.status.name;
                 }
@@ -132,17 +151,21 @@ angular.module('helper', [])
             },
             defineIssueStatus: function(issueState) {
                 if (issueState.impl == 0) {
-                    issueState.status = 'Open';
+                    if (issueState.doc == -1 || issueState.doc == 0) {
+                        issueState.status = 'Open';
+                    } else if (issueState.doc == 1 || issueState.doc == 2) {
+                        issueState.status = 'In Progress';
+                    }
                 } else if (issueState.impl == 2) {
                     issueState.status = 'In Progress';
                 } else if (issueState.impl == 1) {
-                    if (issueState.doc == 0) {
+                    if (issueState.doc == 0 || issueState.doc == 2) {
                         issueState.status = 'Doc';
-                    } else if (issueState.tbd == 0) {
+                    } else if (issueState.tbd == 0 || issueState.tbd == 2) {
                         issueState.status = 'In TBD';
-                    } else if (issueState.qa == 0) {
+                    } else if (issueState.qa == 0 || issueState.qa == 2) {
                         issueState.status = 'In QA';
-                    } else if (issueState.cr == 0 || issueState.tc == 0) {
+                    } else if (issueState.cr == 0 || issueState.cr == 2 || issueState.tc == 0 || issueState.tc == 2) {
                         issueState.status = 'Resolved';
                     } else {
                         issueState.status = 'Done';

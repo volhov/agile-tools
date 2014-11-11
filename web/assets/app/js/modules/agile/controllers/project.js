@@ -10,6 +10,8 @@ angular.module('agile.controllers')
 
             $scope.loadProject = loadProject;
 
+            $scope.userTypes = Helper.getUserTypes();
+
             $scope.saveProject = function()
             {
                 return Api.get('Project')

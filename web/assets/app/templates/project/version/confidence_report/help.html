@@ -13,7 +13,12 @@
     The <strong>Status</strong> field shows the aggregated issue status.
     <br>It may be one of: Open, In progress, Doc, In TBD, In QA, Resolved, Done.
 </p>
-<p>See "Filtering issues" section below to learn how to filter by assignees or status.</p>
+<p>
+    The <strong>CL</strong> field shows the
+        <a href="https://wiki.symmetrics.de/display/TEAMLEADS/Confidence+levels+reporting+guidelines">Confidence Level</a>
+        of the issue.
+</p>
+<p>See "Filtering issues" section below to learn how to filter by assignees, status or CL.</p>
 <p>
     The <strong>Impl</strong>, <strong>Doc</strong>, <strong>TBD</strong>, <strong>TC</strong>,
         <strong>QA</strong> and <strong>CR</strong> fields are calculated dynamically.
@@ -42,18 +47,24 @@
     <br>Issues will be filtered on-the-fly as you will enter more than 2 symbols.
 </p>
 <p>
-    Type <code>"s:qa"</code> or <code>"s:tbd"</code> or <code>"s:%whatever%"</code> to filter issues by aggregated status.
+    Type <code>s: qa</code> or <code>s: tbd</code> or <code>s: %whatever%</code> to filter issues by aggregated status.
 </p>
 <p>
-    Type <code>"a:%name%"</code> to filter issues by aggregated assignees.
+    Type <code>a: %name%</code> to filter issues by aggregated assignees.
 </p>
 <p>
-    Type <code>"t:%name%"</code> to filter issues by the developer who is responsible for TBD.
+    Type <code>t: %name%</code> to filter issues by the developer who is responsible for TBD.
+</p>
+<p>
+    Type <code>cl: %expr%</code> to filter issues by the CL. Examples:
+    <br><code>cl: 9</code> — shows issues with CL = 9.
+    <br><code>cl: >6</code> — shows issues with CL > 6. Also works with "<".
+    <br><code>cl: 4-6</code> — shows issues with CL between 4 and 6 (incl).
 </p>
 <p>
     You can also filter by multiple statuses, assignees or tester.
     Just type them separated by comma.
-    <br>Ex.: <code>"s:open,progress,doc"</code> or <code>"s:tbd,qa"</code>.
+    <br>Ex.: <code>s: open, progress, doc</code> or <code>s: tbd, qa</code>.
 </p>
 <h3>Manage view</h3>
 <p>

@@ -11,6 +11,14 @@
     <div data-ng-show="alert.message" role="alert"
          class="alert alert-{{alert.type}}">{{alert.message}}</div>
 </div>
+<div class="row filter-row">
+    <div class="col-sm-12">
+        <div class="pull-right filter-holder">
+            <button type="button" class="btn btn-sm btn-primary"
+                    data-ng-click="saveProject()">Save</button>
+        </div>
+    </div>
+</div>
 <div class="project-page">
     <div class="row">
         <div class="col-md-6">
@@ -25,11 +33,17 @@
             <h2>Users</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <ul>
-                        <li data-ng-repeat="user in project.users">
+                    <div class="row" data-ng-repeat="user in project.users">
+                        <div class="col-md-7">
                             <a href="/performance/{{ user.key }}">{{ user.name }}</a>
-                        </li>
-                    </ul>
+                        </div>
+                        <div class="col-md-5">
+                            <select data-ng-model="user.type"
+                                    data-ng-options="userType.key as userType.name for userType in userTypes">
+                                <option value="">&mdash;</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div data-ng-controller="Project_Users_Import">

@@ -88,7 +88,7 @@ class Api_Issues_Import extends Core\Resource
             $this->updateLinkedBugsData($issue);
         }
 
-        if ($importSubtasks && isset($issue['subtasks'])) {
+        if ($importSubtasks && isset($issue['subtasks']) && count($issue['subtasks'])) {
             $subTaskKeys = array();
             foreach ($issue['subtasks'] as $subTaskIssue) {
                 $subTaskKeys[] = $subTaskIssue['key'];
@@ -96,7 +96,7 @@ class Api_Issues_Import extends Core\Resource
             $this->importIssuesByKeys($subTaskKeys);
         }
 
-        if ($importLinks && isset($issue['links'])
+        if ($importLinks && isset($issue['links']) && count($issue['links'])
             && $issue['issuetype']['name'] == 'Story') {
             $linksKeys = array();
             foreach ($issue['links'] as $linkedIssue) {

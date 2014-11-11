@@ -54,7 +54,7 @@ class Api_Projects_Import extends Core\Resource
         /** @var \MongoDB $db */
         $db = $this->app->container['database'];
 
-        $existingProject = $db->projects->loadOne([
+        $existingProject = $db->projects->findOne([
             'key' => $project['key']
         ]);
 

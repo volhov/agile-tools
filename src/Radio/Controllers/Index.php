@@ -9,7 +9,9 @@ use Tonic\Response;
  * Index controller.
  *
  * @uri /
- * @uri /start/.*
+ * @uri /start
+ * @uri /users
+ * @uri /users/.*
  * @uri /project/.*
  * @uri /performance/.*
  */

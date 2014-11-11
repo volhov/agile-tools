@@ -5,8 +5,8 @@ angular.module('agile.controllers')
             $scope.clDates = [];
 
             $scope.hideExportPage = function() {
-                $location.path('/version/' + $scope.project.key
-                    + '/' + $scope.versionName + '/confidence_report');
+                $location.path('/project/' + $scope.project.key
+                    + '/' + $scope.version.name + '/confidence_report');
             };
 
             $scope.$watch('confidenceReport', function () {
