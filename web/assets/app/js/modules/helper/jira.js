@@ -180,8 +180,6 @@ angular.module('helper')
             getDetailedIssueTimeInfo: function(issue) {
 
                 var crEstimate = 3600;
-
-                // todo: consider "Feedback required" && "Feedback available"
                 var info = {
                     estimated: { inv: 0, dev: 0, doc: 0, tbd: 0, qa: 0, cr: 0 },
                     spent:     { inv: 0, dev: 0, doc: 0, tbd: 0, qa: 0, cr: 0 },
