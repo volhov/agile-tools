@@ -34,9 +34,11 @@ angular.module('agile.controllers')
                             $scope.confidenceReport.issues = [];
                         }
                         injectExpansion($scope.confidenceReport);
+                        $scope.$broadcast('confidenceReportChanged');
 
                     }, function() {
                         createConfidenceReport(reportId);
+                        $scope.$broadcast('confidenceReportChanged');
                     });
 
                 if (enableCacheAfterLoad) {
@@ -105,6 +107,8 @@ angular.module('agile.controllers')
 
                         $scope.saveConfidenceReport();
 
+                        $scope.$broadcast('confidenceReportChanged');
+
                         unmarkIssueAsUpdating(issueInfo);
                         Helper.setAlert('success', 'Issue has been updated.');
                     });
@@ -166,7 +170,6 @@ angular.module('agile.controllers')
             };
 
             $scope.issueIsUpdating = issueIsUpdating;
-            $scope.getTotalEstimated = getTotalEstimated;
 
             // Temporary.
             $scope.actualizeIssuesState = actualizeIssuesState;
@@ -271,18 +274,6 @@ angular.module('agile.controllers')
                     });
                 }
             }
-
-            function getTotalEstimated()
-            {
-                var estimated = 0;
-                if ($scope.confidenceReport) {
-                    angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
-                        estimated += issueInfo.issue.time.aggr.estimated
-                    });
-                }
-                return estimated;
-            }
-
 
             function loadConfig() {
                 Api.get('Config')

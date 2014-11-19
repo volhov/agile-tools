@@ -2,12 +2,9 @@
     <div data-ng-include="template"></div>
 </div>
 
-<div>
-    Estimated: {{ getTotalEstimated() | jiraTime }}
-    Spent: {{ getTotalSpent() }}
-    Delta: {{ getDelta() }}
+<div data-ng-controller="Version_ConfidenceReport_Stats_Overview">
+    <div data-ng-include="template"></div>
 </div>
-
 
 <div class="cl-report-container" data-ng-hide="hideIssues">
 
@@ -88,7 +85,7 @@
                 </div>
             </div>
             <div class="col-sm-2">
-                <strong>Note</strong>
+                <strong>Risks, issues, etc.</strong>
             </div>
         </div>
 

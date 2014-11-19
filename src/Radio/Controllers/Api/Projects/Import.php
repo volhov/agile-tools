@@ -62,6 +62,8 @@ class Api_Projects_Import extends Core\Resource
             foreach ($project as $key => $value) {
                 $existingProject[$key] = $value;
             }
+        } else {
+            $existingProject = $project;
         }
 
         $db->projects->save($existingProject);

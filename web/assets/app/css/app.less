@@ -18,9 +18,12 @@ input[type="search"]::-webkit-search-cancel-button {
 label {
     font-weight: normal;
 }
+.clickable {
+    cursor: pointer;
+}
 .a {
     color: #428bca;
-    cursor: pointer;
+    .clickable;
 }
 .a:hover,
 .a.focus{
@@ -31,6 +34,7 @@ label {
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
 }
+
 .loading-indicator {
     display: inline-block;
     background: url(../img/loading-indicator.gif) no-repeat scroll 0 0 transparent;
@@ -212,7 +216,6 @@ label {
 .collapse-btn {
     margin-left: -1.16em;
     margin-right: .3em;
-    cursor: pointer;
 }
 .cell-summary {
     position: relative;
@@ -256,7 +259,6 @@ label {
 
 .issue-summary {
     margin-right: 20px;
-    cursor: pointer;
 }
 .issue-time {
     color: #888;
@@ -293,7 +295,13 @@ label {
     white-space: nowrap;
 }
 .assignee {
-    white-space: nowrap;
+    .name {
+        white-space: nowrap;
+    }
+}
+
+.clr-import {
+    margin-bottom: 20px;
 }
 
 
@@ -368,6 +376,87 @@ label {
         }
         p {
 
+        }
+    }
+}
+
+.stats-summary {
+    margin: 0 0 20px;
+}
+.stats-details {
+    padding: 0 0 20px;
+}
+.stats-lines {
+    position: relative;
+
+    .stats-line-title {
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: .8em;
+        padding: 0 3px;
+        margin-left: 1px;
+        display: block;
+        width: 30px;
+        text-align: center;
+    }
+    .lines {
+        margin-bottom: 10px;
+        .line {
+            position: relative;
+
+            .section {
+                float: left;
+                height: 5px;
+
+                &.estimated {
+                    background-color: #ffe30b;
+                }
+                &.spent {
+                    background-color: #5588eb;
+                }
+                &.remaining {
+                    background-color: #8bd1d3;
+                }
+                &.overspent{
+                    position: absolute;
+                    &.over {
+                        background-color: #ff1c24;
+                    }
+                    &.under {
+                        background-color: #0fba11;
+                    }
+                }
+            }
+        }
+        .details {
+            margin-top: 5px;
+
+            strong {
+                margin-left: 30px;
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+            br {
+                display: none;
+            }
+        }
+    }
+    &.stats-one-issue {
+        .line {
+            .section {
+                height: 3px;
+           }
+        }
+        .details {
+            font-size: 0.8em;
+            strong {
+                margin: 0;
+            }
+            br {
+                display: inline;
+            }
         }
     }
 }

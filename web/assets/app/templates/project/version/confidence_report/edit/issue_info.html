@@ -15,13 +15,13 @@
                           data-ng-hide="issueIsUpdating(issueInfo)"></span>
                 </div>
                 <div class="col-sm-7 cell-summary" data-ng-prevent-drag="true">
-                    <span class="expand-btn" data-ng-click="showDetails = true"
+                    <span class="expand-btn clickable" data-ng-click="showDetails = true"
                           data-ng-hide="showDetails || issueInfo.issue.subtasks.length == 0">&plus;</span>
 
-                    <span class="collapse-btn" data-ng-click="showDetails = false"
+                    <span class="collapse-btn clickable" data-ng-click="showDetails = false"
                           data-ng-show="showDetails && issueInfo.issue.subtasks.length">&minus;</span>
 
-                    <span class="issue-summary" data-ng-click="showDetails = !showDetails">
+                    <span class="issue-summary clickable" data-ng-click="showDetails = !showDetails">
                         <img data-ng-src="{{issueInfo.issue.issuetype.icon_url}}"
                              title="{{ issueInfo.issue.issuetype.name }}"
                              class="issue-icon icon-16">
@@ -37,17 +37,14 @@
                 <div class="col-sm-3 cell-assignee">
                     <span class="assignee">
                         <strong class="hidden-sm hidden-xs a-key" data-ng-show="expandAssignees">A:</strong>
-                            <!--{{ assignees.devs[0].name | assigneeShort }}-->
-                            <span data-ng-repeat="dev in issueInfo.assignees.devs">
-                                {{ dev.name | assigneeShort }}{{ $index < issueInfo.assignees.devs.length - 1 ? ', ' : ''}}
-                            </span>
+                        <span data-agile-assignees="issueInfo.assignees.devs"></span>
                     </span>
-                    <span class="hidden-sm hidden-xs"
-                          data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
+                    <span data-ng-show="expandAssignees"
+                          data-ng-if="issueInfo.assignees.tbd.name">
                         <br>
-                        <span class="assignee">
+                        <span class="assignee tester">
                             <strong class="hidden-sm hidden-xs a-key">T:</strong>
-                                {{ issueInfo.assignees.tbd.name | assigneeShort }}
+                            <span data-agile-assignees="[issueInfo.assignees.tbd]"></span>
                         </span>
                     </span>
                 </div>
@@ -102,7 +99,17 @@
     <div class="issue-details"
          data-ng-prevent-drag="true"
          data-ng-show="showDetails">
-        <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/children.html'"></div>
-        <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/links.html'"></div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/children.html'"></div>
+                <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/links.html'"></div>
+            </div>
+            <div class="col-sm-3">
+                <div data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
+                     data-ng-init="init(issueInfo)">
+                    <div data-ng-include="template"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,4 +1,14 @@
 angular.module('agile.filters')
+    .filter('capitalize', function() {
+        return function(input) {
+            return (!!input) ? input.replace(
+                /([^\W_]+[^\s-]*) */g,
+                function(txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                }
+            ) : '';
+        }
+    })
     .filter('storyKey', ['$sce', function($sce) {
         return function(input) {
             input = input || '';
@@ -9,7 +19,8 @@ angular.module('agile.filters')
     }])
     .filter('jiraTime', [function() {
         return function(seconds, useDays) {
-            seconds = seconds || 0;
+            var sign = seconds < 0 ? '−' : '';
+            seconds = Math.abs(seconds) || 0;
             var result = {
                 days: 0,
                 hours: 0,
@@ -37,7 +48,7 @@ angular.module('agile.filters')
             if (result.minutes) {
                 resultStringParts.push(parseFloat(result.minutes.toFixed(2)) + 'm');
             }
-            return resultStringParts.length ? resultStringParts.join(' ') : 0;
+            return sign + (resultStringParts.length ? resultStringParts.join(' ') : 0);
         };
     }])
     .filter('assigneeShort', [function() {

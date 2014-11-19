@@ -18,6 +18,9 @@ input[type="search"]::-webkit-search-cancel-button {
 label {
   font-weight: normal;
 }
+.clickable {
+  cursor: pointer;
+}
 .a {
   color: #428bca;
   cursor: pointer;
@@ -190,7 +193,6 @@ label {
 .collapse-btn {
   margin-left: -1.16em;
   margin-right: .3em;
-  cursor: pointer;
 }
 .cell-summary {
   position: relative;
@@ -232,7 +234,6 @@ label {
 }
 .issue-summary {
   margin-right: 20px;
-  cursor: pointer;
 }
 .issue-time {
   color: #888;
@@ -265,8 +266,11 @@ label {
 .cell-key {
   white-space: nowrap;
 }
-.assignee {
+.assignee .name {
   white-space: nowrap;
+}
+.clr-import {
+  margin-bottom: 20px;
 }
 .cl-report-export {
   border-collapse: collapse;
@@ -323,4 +327,76 @@ label {
 }
 .user-media .media-body h4 {
   margin: 7px 0 0;
+}
+.stats-summary {
+  margin: 0 0 20px;
+}
+.stats-details {
+  padding: 0 0 20px;
+}
+.stats-lines {
+  position: relative;
+}
+.stats-lines .stats-line-title {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  font-size: .8em;
+  padding: 0 3px;
+  margin-left: 1px;
+  display: block;
+  width: 30px;
+  text-align: center;
+}
+.stats-lines .lines {
+  margin-bottom: 10px;
+}
+.stats-lines .lines .line {
+  position: relative;
+}
+.stats-lines .lines .line .section {
+  float: left;
+  height: 5px;
+}
+.stats-lines .lines .line .section.estimated {
+  background-color: #ffe30b;
+}
+.stats-lines .lines .line .section.spent {
+  background-color: #5588eb;
+}
+.stats-lines .lines .line .section.remaining {
+  background-color: #8bd1d3;
+}
+.stats-lines .lines .line .section.overspent {
+  position: absolute;
+}
+.stats-lines .lines .line .section.overspent.over {
+  background-color: #ff1c24;
+}
+.stats-lines .lines .line .section.overspent.under {
+  background-color: #0fba11;
+}
+.stats-lines .lines .details {
+  margin-top: 5px;
+}
+.stats-lines .lines .details strong {
+  margin-left: 30px;
+}
+.stats-lines .lines .details strong:first-child {
+  margin-left: 0;
+}
+.stats-lines .lines .details br {
+  display: none;
+}
+.stats-lines.stats-one-issue .line .section {
+  height: 3px;
+}
+.stats-lines.stats-one-issue .details {
+  font-size: 0.8em;
+}
+.stats-lines.stats-one-issue .details strong {
+  margin: 0;
+}
+.stats-lines.stats-one-issue .details br {
+  display: inline;
 }

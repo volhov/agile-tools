@@ -30,9 +30,9 @@ angular.module('agile.controllers')
                     var aDate = moment(a);
                     var bDate = moment(b);
                     if (aDate < bDate) {
-                        return -1;
-                    } else if (aDate > bDate) {
                         return 1;
+                    } else if (aDate > bDate) {
+                        return -1;
                     }
                     return 0
                 });
