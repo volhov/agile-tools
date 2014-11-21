@@ -6,6 +6,7 @@ $container = new Pimple\Container();
 
 $container['dir.conf'] = __DIR__ . '/../conf';
 $container['dir.src'] =  __DIR__ . '/../src';
+$container['dir.var'] =  __DIR__ . '/../var';
 $container['dir.web'] =  __DIR__;
 $container['dir.web.app'] =  $container['dir.web'] . '/assets/app';
 
@@ -49,7 +50,7 @@ $container['jira.api'] = function($container) {
 
     $api = new Radio\Core\Jira_Api(
         $config['server'],
-        new chobie\Jira\Api\Authentication\Basic(
+        new \Radio\Core\Jira_Authentication_Cookies(
             $config["username"],
             $config["password"]
         )

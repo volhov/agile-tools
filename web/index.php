@@ -19,6 +19,9 @@ $config = array(
 
 $app = new Application($config);
 $app->container = $container;
+$app->container['jira.api']->setClient(
+    new \Radio\Core\Jira_Client_CurlCookiesClient($app)
+);
 
 $request = new Request();
 
@@ -27,6 +30,12 @@ try {
     $resource = $app->getResource($request);
     /** @var \Tonic\Response $response */
     $response = $resource->exec();
+
+} catch (chobie\Jira\Api\UnauthorizedException $e) {
+
+    $response = new Response(Response::FOUND, $e->getMessage(), array(
+        'Location' => '/login'
+    ));
 
 } catch (chobie\Jira\Api\Exception $e) {
 
