@@ -4,9 +4,11 @@ angular.module('agile.directives')
             if ($scope.assignees) {
                 var names = [];
                 for (var index = 0; index < $scope.assignees.length; index++) {
-                    names.push(
-                        '<span class="name">' + assigneeShortFilter($scope.assignees[index].name) + '</span>'
-                    );
+                    if ($scope.assignees[index] && 'name' in $scope.assignees[index]) {
+                        names.push(
+                            '<span class="name">' + assigneeShortFilter($scope.assignees[index].name) + '</span>'
+                        );
+                    }
                 }
                 $scope.names = $sce.trustAsHtml(names.join(', '));
             }

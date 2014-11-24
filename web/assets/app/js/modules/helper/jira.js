@@ -154,9 +154,14 @@ angular.module('helper')
                         if (type == 'dev' || type == 'inv') {
                             var addDev = true;
                             for (var aKey = 0; aKey < assignees.devs.length; aKey++) {
-                                if (assignees.devs[aKey].name == subTask.assignee.name) {
-                                    addDev = false;
-                                    break;
+                                if ('assignee' in subTask && 'name' in subTask.assignee) {
+
+                                    if (typeof assignees.devs[aKey] != 'undefined' && 'name' in assignees.devs[aKey]) {
+                                        if (assignees.devs[aKey].name == subTask.assignee.name) {
+                                            addDev = false;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                             if (addDev) {
