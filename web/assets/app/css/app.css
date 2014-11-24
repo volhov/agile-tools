@@ -400,3 +400,6 @@ label {
 .stats-lines.stats-one-issue .details br {
   display: inline;
 }
+.yaml-textarea {
+  font-family: Courier, monospace;
+}
