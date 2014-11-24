@@ -8,8 +8,8 @@
         <img class="issue-icon icon-16" src="https://jira.symmetrics.de/images/icons/issuetypes/bug.png">bugs</a>
 </p>
 
-<div class="clr-import" data-ng-show="showImport">
-    <div class="checkbox" data-ng-show="importedNumber">
+<div class="clr-import" data-ng-if="showImport">
+    <div class="checkbox" data-ng-if="importedNumber">
         <label>
             <input type="checkbox" data-ng-model="showImported"/>
             Show imported ({{ importedNumber }})

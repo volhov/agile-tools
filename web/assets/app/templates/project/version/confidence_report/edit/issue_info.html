@@ -2,7 +2,7 @@
     <div class="row">
         <div class="cell col-sm-6">
             <div class="row">
-                <div class="col-sm-2 cell-key" data-ng-prevent-drag="true">
+                <div class="col-sm-2 cell-key">
                     <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
                        target="_blank">{{ issueInfo.key }}</a>
                     <span class="loading-indicator" title="Please wait..."
@@ -14,7 +14,7 @@
                           data-ng-click="removeIssue(issueInfo)"
                           data-ng-hide="issueIsUpdating(issueInfo)"></span>
                 </div>
-                <div class="col-sm-7 cell-summary" data-ng-prevent-drag="true">
+                <div class="col-sm-7 cell-summary">
                     <span class="expand-btn clickable" data-ng-click="showDetails = true"
                           data-ng-hide="showDetails || issueInfo.issue.subtasks.length == 0">&plus;</span>
 
@@ -54,7 +54,7 @@
             <span class="issue-status" title="{{ issueInfo.status }}"
                     data-ng-class="{'warning': issueInfo.status == 'In QA' && !issueInfo.qa_assigned}">{{ issueInfo.status }}</span>
         </div>
-        <div class="col-sm-3" data-ng-prevent-drag="true">
+        <div class="col-sm-3">
             <div class="row">
                 <div class="col-sm-3 cell-progress">
                     <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
@@ -97,15 +97,15 @@
         </div>
     </div>
     <div class="issue-details"
-         data-ng-prevent-drag="true"
-         data-ng-show="showDetails">
+         data-ng-if="showDetails">
         <div class="row">
             <div class="col-sm-9">
                 <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/children.html'"></div>
                 <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/links.html'"></div>
             </div>
             <div class="col-sm-3">
-                <div data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
+                <div data-ng-if="showStats"
+                     data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
                      data-ng-init="init(issueInfo)">
                     <div data-ng-include="template"></div>
                 </div>
