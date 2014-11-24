@@ -111,6 +111,7 @@ label {
 .cl-report-header {
   margin-top: 10px;
   margin-bottom: 10px;
+  background-color: #c3d9ff;
 }
 .cl-report-header .cell-progress {
   padding: 0 5px;
