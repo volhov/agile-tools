@@ -1,0 +1,28 @@
+<div class="page-header">
+    <div class="config-header">
+        <h1>{{ config.config._id == 'global' ? 'Global Config' : 'Config of ' + config.config._id }}</h1>
+    </div>
+    <div data-ng-show="alert.message" role="alert"
+         class="alert alert-{{alert.type}}">{{alert.message}}</div>
+</div>
+<div class="config-page">
+    <div class="row">
+        <div class="col-md-12">
+            <form role="form">
+                <div class="form-group" data-ng-class="{'has-error':!validateYaml(yamlConfig)}">
+                    <textarea class="form-control yaml-textarea" rows="10"
+                              data-ng-model="yamlConfig"></textarea>
+                </div>
+                <p class="help-block">
+                    This is yaml format. If you have any problems or questions visit:
+                    <a href="https://en.wikipedia.org/wiki/YAML">Wikipedia/YAML</a> or <a
+                        href="http://www.yaml.org/refcard.html">YAML Quick Reference card</a>.
+                </p>
+
+                <button type="button" class="btn btn-default"
+                        data-ng-disabled="!validateYaml(yamlConfig)"
+                        data-ng-click="saveConfig(yamlConfig)">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

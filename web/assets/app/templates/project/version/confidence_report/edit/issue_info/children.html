@@ -1,5 +1,5 @@
 <div class="row cl-report-row-children"
-     data-ng-show="issueInfo.issue.subtasks.length && showSubtasks">
+     data-ng-if="issueInfo.issue.subtasks.length && showSubtasks">
     <div class="cell col-sm-12">
         <p data-ng-show="showLinkedIssues"><strong>Sub-tasks</strong></p>
         <div class="row" data-ng-repeat="subTask in issueInfo.issue.subtasks">

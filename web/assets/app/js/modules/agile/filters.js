@@ -17,6 +17,11 @@ angular.module('agile.filters')
                 '<em>$1</em>$4'));
         };
     }])
+    .filter('yaml', [function() {
+        return function(input, mode) {
+            return mode == 'load' ? jsyaml.safeLoad(input) : jsyaml.safeDump(input);
+        }
+    }])
     .filter('jiraTime', [function() {
         return function(seconds, useDays) {
             var sign = seconds < 0 ? '−' : '';

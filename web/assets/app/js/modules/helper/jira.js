@@ -184,7 +184,8 @@ angular.module('helper')
             },
             getDetailedIssueTimeInfo: function(issue) {
 
-                var crEstimate = 3600;
+                // var crEstimate = 0; // CR estimate is not fixed per issue.
+
                 var info = {
                     estimated: { inv: 0, dev: 0, doc: 0, tbd: 0, qa: 0, cr: 0 },
                     spent:     { inv: 0, dev: 0, doc: 0, tbd: 0, qa: 0, cr: 0 },
@@ -213,14 +214,21 @@ angular.module('helper')
                                     + subTask.time.aggr.remaining;
                                 break;
                             case 'cr':
-                                info.estimated[subTaskType] += crEstimate;
                                 info.spent[subTaskType] += subTask.time.aggr.spent;
+                                /*
+                                 * The CR estimates are not fixed, thus it is hard to calculate
+                                 *  the remaining time or the overspent. We could only provide info on spent time.
+                                 *  The TL could use this info and compare it with the amount of days
+                                 *  since the start of the iteration.
+                                 *
+                                info.estimated[subTaskType] += crEstimate;
                                 var crIsResolved = (subTask.status.name == 'Resolved'
                                     || subTask.status.name == 'Closed');
                                 if (subTask.time.aggr.spent > crEstimate ||
                                     (subTask.time.aggr.spent < crEstimate && crIsResolved)) {
                                     info.overspent[subTaskType] += subTask.time.aggr.spent - crEstimate;
                                 }
+                                */
                                 break;
                         }
                     }
@@ -235,11 +243,12 @@ angular.module('helper')
                         timeInfo[section].total = 0;
                         for (var issueType in timeInfo[section]) {
                             if (timeInfo[section].hasOwnProperty(issueType)) {
+                                // Code Reviews are not accounted into the totals
+                                //  as the estimates are not fixed per issue.
                                 if (issueType == 'dev'
                                     || issueType == 'doc'
                                     || issueType == 'tbd'
-                                    || issueType == 'qa'
-                                    || issueType == 'cr') {
+                                    || issueType == 'qa') {
                                     timeInfo[section].total += timeInfo[section][issueType];
                                 }
                             }

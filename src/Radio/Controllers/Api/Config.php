@@ -9,6 +9,7 @@ use chobie\Jira\Api;
 /**
  * Config API controller.
  *
+ * @uri /api/config
  * @uri /api/config/{projectKey}
  */
 class Api_Config extends Core\Resource
@@ -16,16 +17,15 @@ class Api_Config extends Core\Resource
     /**
      * @method GET
      */
-    public function showConfig($projectKey)
+    public function showConfig($projectKey = null)
     {
-        $config = $this->getProjectConfig($projectKey);
+        $config = $projectKey ? $this->getProjectConfig($projectKey) : $this->getGlobalConfig();
         $yaml = array(
             'jira_url' => $this->app->container['conf.jira']['server']
         );
 
-        $response = new Core\JsonResponse();
-        if ($config) {
-            $response->code = Response::OK;
+        $response = new Core\JsonResponse(Response::OK);
+        if ($config || $yaml) {
             $response->body = array(
                 'config' => $config,
                 'yaml' => $yaml
@@ -42,12 +42,12 @@ class Api_Config extends Core\Resource
     /**
      * @method PUT
      */
-    public function saveConfig($projectKey)
+    public function saveConfig($projectKey = null)
     {
         $requestData = $this->request->getDecodedData();
 
         $newConfig = $requestData['config'];
-        $originalConfig = $this->getProjectConfig($projectKey);
+        $originalConfig = $projectKey ? $this->getProjectConfig($projectKey) : $this->getGlobalConfig();
 
         if ($originalConfig && $newConfig) {
             $config = array_merge($originalConfig, $newConfig);
@@ -72,23 +72,34 @@ class Api_Config extends Core\Resource
     {
         /** @var \MongoDB $db */
         $db = $this->app->container['database'];
-        $globalConfig = $db->config->findOne(array(
-            '_id' => 'global'
-        ));
+
+        $globalConfig = $this->getGlobalConfig();
 
         if ($globalConfig) {
             $projectConfig = $db->config->findOne(array(
                 '_id' => $projectKey
             ));
-            if ($projectConfig) {
-                $config = array_merge($globalConfig, $projectConfig);
-            } else {
-                $config = $globalConfig;
+            if (!$projectConfig) {
+                $projectConfig = array(
+                    '_id' => $projectKey
+                );
             }
-            return $config;
+            return array_merge($globalConfig, $projectConfig);
         }
 
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getGlobalConfig()
+    {
+        /** @var \MongoDB $db */
+        $db = $this->app->container['database'];
+        $globalConfig = $db->config->findOne(array('_id' => 'global'));
+
+        return $globalConfig;
     }
 
 
