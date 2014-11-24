@@ -92,6 +92,21 @@ angular.module('agile', [
                             default: true,
                             templateUrl: TEMPLATES_URL + '/users/list.html'
                         })
+                    .up()
+                .when('/config', 'config')
+                .when('/config/:projectKey', 'config.project')
+                    .segment('config', {
+                        templateUrl: TEMPLATES_URL + '/config.html',
+                        controller: 'Config'
+                    })
+                    .within('config')
+                        .segment('global', {
+                            default: true
+                        })
+                        .segment('project', {
+                            dependencies: ['projectKey']
+                        })
+                    .up()
             ;
         }]);
 
