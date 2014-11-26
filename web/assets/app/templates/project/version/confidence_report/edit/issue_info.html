@@ -1,4 +1,4 @@
-<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)" data-ng-drag="true" data-ng-drag-data="issueInfo">
+<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)">
     <div class="row">
         <div class="cell col-sm-6">
             <div class="row">
@@ -106,8 +106,8 @@
             <div class="col-sm-3">
                 <div data-ng-if="showStats"
                      data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
-                     data-ng-init="init(issueInfo)">
-                    <div data-ng-include="template"></div>
+                     data-ng-init="init(issueInfo)"
+                     data-ng-include="template">
                 </div>
             </div>
         </div>
