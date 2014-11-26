@@ -3,8 +3,8 @@ angular.module('agile', [
         'agile.controllers',
         'agile.filters',
         'route-segment',
-        'view-segment'
-//        'ngDraggable'
+        'view-segment',
+        'ui.sortable'
     ])
     .constant('TEMPLATES_URL', '/assets/app/templates')
     .config(['$routeProvider', '$routeSegmentProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',

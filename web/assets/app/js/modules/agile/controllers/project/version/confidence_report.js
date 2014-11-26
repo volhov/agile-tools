@@ -136,37 +136,11 @@ angular.module('agile.controllers')
                 };
             };
 
-            $rootScope.$on('draggable:start', function(event, args) {
-                var container = args.element.parents('.cl-report-row');
-                args.element.css({
-                    width: container.width(),
-                    left: container.offset().left
-                });
-                container.height(args.element.height());
-            });
-            $rootScope.$on('draggable:move', function(event, args) {
-                var container = args.element.parents('.cl-report-row');
-                args.element.css({
-                    left: container.offset().left
-                });
-            });
-            $rootScope.$on('draggable:end', function(event, args) {
-                var container = args.element.parents('.cl-report-row');
-                args.element.css({width: '100%'});
-                container.css({height: 'auto'});
-            });
-            $scope.onDropComplete = function(index, issueInfo) {
-                var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
-                if (index == oldIndex) {
-                    return;
+            $scope.sortableOptions = {
+                axis: 'y',
+                update: function(e, ui) {
+                    $scope.saveConfidenceReport();
                 }
-                var removed = $scope.confidenceReport.issues.splice(oldIndex, 1);
-                if (index == 'last') {
-                    $scope.confidenceReport.issues.push(removed[0]);
-                } else {
-                    $scope.confidenceReport.issues.splice(oldIndex < index ? index - 1 : index, 0, removed[0]);
-                }
-                $scope.saveConfidenceReport();
             };
 
             $scope.issueIsUpdating = issueIsUpdating;
@@ -264,8 +238,11 @@ angular.module('agile.controllers')
             function initFilterRowFixing() {
                 var $filter = $('.filter-row');
                 if ($filter.length) {
+                    // Leave a placeholder to prevent changing the window height
+                    //  and therefore the scroll event again.
+                    $filter.parent('.filter-row-container').height($filter.height());
                     var initialTopOffset = $filter.offset().top;
-                    $(window).scroll(function () {
+                    $(window).scroll(function() {
                         if ($(this).scrollTop() >= initialTopOffset) {
                             $filter.addClass('fixed');
                         } else {
