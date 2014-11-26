@@ -128,6 +128,17 @@ angular.module('agile.filters')
                 return results;
             }
         }, {
+            key: 'tp:',
+            handler: function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    if (matching(input[i].issue.issuetype.name, expression)) {
+                        results.push(input[i]);
+                    }
+                }
+                return results;
+            }
+        }, {
             key: 'cl:',
             handler: function(input, expression) {
                 var results = [];
@@ -186,7 +197,7 @@ angular.module('agile.filters')
             for (var i = 0; i < filters.length; i++) {
                 if (expression.indexOf(filters[i].key) === 0) {
                     var realExpression = expression.substr(filters[i].key.length);
-                    if (!realExpression.trim().length) {
+                    if (realExpression.trim().length < 2) {
                         return input;
                     }
                     return filters[i].handler(input, expression.substr(filters[i].key.length))
