@@ -2,10 +2,6 @@
     <div data-ng-include="template"></div>
 </div>
 
-<div data-ng-controller="Version_ConfidenceReport_Stats_Overview">
-    <div data-ng-include="template"></div>
-</div>
-
 <div class="cl-report-container" data-ng-if="!hideIssues">
 
     <div class="row filter-row">
@@ -105,4 +101,8 @@
         <span class="loading-indicator" title="Please wait..."></span>
         Issues are being updated. Please wait for a moment.
     </p>
+
+    <div data-ng-controller="Version_ConfidenceReport_Stats_Overview">
+        <div data-ng-include="template"></div>
+    </div>
 </div>

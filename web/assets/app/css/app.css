@@ -98,6 +98,10 @@ label {
 .import-options a img {
   margin-right: 3px;
 }
+.filter-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .filter-row.fixed {
   position: fixed;
   top: 0;
@@ -111,7 +115,8 @@ label {
 .cl-report-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #c3d9ff;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
 }
 .cl-report-header .cell-progress {
   padding: 0 5px;
@@ -127,6 +132,7 @@ label {
   text-align: center;
 }
 .cl-report-row {
+  padding-top: 5px;
   min-height: 2em;
 }
 @media (max-width: 1400px) {
@@ -276,6 +282,9 @@ label {
 .cl-report-export {
   border-collapse: collapse;
 }
+.cl-report-export .cl-report-header {
+  background-color: #c3d9ff;
+}
 .cl-report-export .cl-report-row.good {
   background-color: #cfe6c4;
 }
@@ -400,14 +409,6 @@ label {
 }
 .stats-lines.stats-one-issue .details br {
   display: inline;
-}
-.col-xs-12 {
-  width: 100%;
-  border-bottom: 1px solid #afcbe7;
-  margin-top: 7px;
-}
-.yaml-textarea {
-  font-family: Courier, monospace;
 }
 .yaml-textarea {
   font-family: Courier, monospace;

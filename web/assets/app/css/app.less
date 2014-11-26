@@ -107,20 +107,26 @@ label {
         margin-right: 3px;
     }
 }
-.filter-row.fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(190, 209, 255, 0.80);
-    z-index: 100;
-    width: 100%;
-    padding: 2px 40px;
-    margin: 0;
+.filter-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    &.fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(190, 209, 255, 0.80);
+        z-index: 100;
+        width: 100%;
+        padding: 2px 40px;
+        margin: 0;
+    }
 }
 .cl-report-header {
     margin-top: 10px;
     margin-bottom: 10px;
-    background-color: #c3d9ff;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
 
     .cell-progress{
         padding: 0 5px;
@@ -142,6 +148,7 @@ label {
     }
 }
 .cl-report-row {
+    padding-top: 5px;
     min-height: 2em;
 
     @media (max-width: 1400px) {
@@ -309,6 +316,10 @@ label {
 .cl-report-export {
     border-collapse: collapse;
 
+    .cl-report-header {
+        background-color: #c3d9ff;
+    }
+
     .cl-report-row {
 
         &.good {
@@ -461,12 +472,6 @@ label {
         }
     }
 }
-
-.col-xs-12 {
-    border-bottom: 1px solid rgba(175, 203, 231. 0.5);
-    margin-top: 5px;
-}
-
 .yaml-textarea {
     font-family: Courier, monospace;
 }
