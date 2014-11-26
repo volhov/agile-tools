@@ -1,10 +1,11 @@
 <p>
-    <a href="" data-ng-hide="showExport" data-ng-click="showExportPage()">Export</a>
-    <a href="" data-ng-show="showExport" data-ng-click="hideExportPage()">&larr; Back</a>
+    <span class="a" data-ng-click="hideExportPage()">&larr; Back</span>
 </p>
 
-<div data-ng-show="showExport">
-    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+<div>
+    <div class="checkbox">
+        <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+    </div>
 
     <hr>
 
@@ -17,21 +18,21 @@
         <thead class="cl-report">
             <tr class="cl-report-header">
                 <td><strong>Key</strong></td>
-                <td><strong>Story Key / Summary</strong></td>
+                <td><strong>Summary</strong></td>
                 <td><strong>Assignee</strong></td>
                 <td><strong>Status</strong></td>
-                <td><strong>Progress</strong></td>
+                <!--<td><strong>Progress</strong></td>-->
                 <td><strong>Impl</strong></td>
                 <td><strong>Doc</strong></td>
+                <td><strong>CR</strong></td>
                 <td><strong>TBD</strong></td>
                 <td><strong>TC</strong></td>
                 <td><strong>QA</strong></td>
-                <td><strong>CR</strong></td>
                 <td class="current-cl"><strong>CL</strong></td>
                 <td data-ng-repeat="clDate in clDates">
                     <strong>{{ moment(clDate).format('D.MM') }}</strong>
                 </td>
-                <td><strong>Note</strong></td>
+                <td><strong>Risks, issues, action items</strong></td>
             </tr>
         </thead>
         <tbody>
@@ -48,23 +49,21 @@
                     <span class="issue-summary" data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
                 </td>
                 <td class="cell cell-assignee">
-                    <!--<strong>A:</strong> {{ issueInfo.assignees.devs[0].name | assigneeShort }}-->
-                    <!--<span data-ng-if="issueInfo.assignees.tbd.name"><strong>T:</strong> {{ issueInfo.assignees.tbd.name | assigneeShort }}</span>-->
                     <span class="assignee">
                         <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
-                            {{ issueInfo.assignees.devs[0].name | assigneeShort }}
+                        <span data-agile-assignees="issueInfo.assignees.devs"></span>
                     </span>
                     <span class="hidden-sm hidden-xs"
                           data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
                         <br>
                         <span class="assignee">
                             <strong class="hidden-sm hidden-xs">T:</strong>
-                                {{ issueInfo.assignees.tbd.name | assigneeShort }}
+                            <span data-agile-assignees="[issueInfo.assignees.tbd]"></span>
                         </span>
                     </span>
                 </td>
                 <td class="cell cell-status nowrap">{{ issueInfo.status }}</td>
-                <td class="cell cell-progress nowrap">{{ issueInfo.progress }}</td>
+                <!--<td class="cell cell-progress nowrap">{{ issueInfo.progress }}</td>-->
                 <td>
                     <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
                     <span data-ng-show="issueInfo.impl == 1">*</span>
@@ -72,6 +71,10 @@
                 <td>
                     <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
                     <span data-ng-show="issueInfo.doc == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.cr == 1">*</span>
                 </td>
                 <td>
                     <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
@@ -85,10 +88,6 @@
                     <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
                     <span data-ng-show="issueInfo.qa == 1">*</span>
                 </td>
-                <td>
-                    <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
-                    <span data-ng-show="issueInfo.cr == 1">*</span>
-                </td>
                 <td class="cell cell-cl current-cl">{{ issueInfo.cl }}</td>
                 <td class="cell" data-ng-repeat="clDate in clDates">
                     {{ issueInfo.cl_by_day[clDate] }}
@@ -100,11 +99,6 @@
         </tbody>
     </table>
     <br>
-    <!--<p>-->
-        <!--The original document is attached to the Iteration Planning page in Wiki:<br>-->
-        <!--<a href="#">[Link to Wiki Page]</a>-->
-    <!--</p>-->
-
     <hr>
 
 </div>

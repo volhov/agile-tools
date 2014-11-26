@@ -13,6 +13,8 @@ use Tonic\Response;
  */
 class Api_Issues_Import extends Core\Resource
 {
+    const SEARCH_MAXRESULT = 50;
+
     /**
      * @method POST
      */
@@ -48,8 +50,13 @@ class Api_Issues_Import extends Core\Resource
 
         if ($keys) {
             $jiraApi->setOptions(0x00);
-            $searchResult = $jiraApi->search('key in (' . implode(',', $keys) . ')', 0, 50)
-                ->getResult();
+            $fields = Adapters\Jira_Issue::getRequiredFields();
+            $searchResult = $jiraApi->search(
+                'key in (' . implode(',', $keys) . ')',
+                0,
+                self::SEARCH_MAXRESULT,
+                implode(',', $fields)
+            )->getResult();
             $jiraApi->setOptions(0x01);
 
             foreach ($searchResult['issues'] as $jiraIssue) {
@@ -64,7 +71,7 @@ class Api_Issues_Import extends Core\Resource
      * @param array $jiraIssue      Jira Issue.
      * @param bool  $importSubtasks Import sub-tasks?
      */
-    protected function importOneIssue($jiraIssue, $importSubtasks = true)
+    protected function importOneIssue($jiraIssue, $importSubtasks = true, $importLinks = true)
     {
         $adapter = new Adapters\Jira_Issue($jiraIssue);
         $issue = $adapter->getAdaptation();
@@ -75,21 +82,27 @@ class Api_Issues_Import extends Core\Resource
         $db->issues->save($issue);
 
         if ($issue['issuetype']['name'] == 'Sub-task') {
-            $db->issues->update(
-                ['subtasks.key' => $issue['key']],
-                ['$set' => [
-                    'subtasks.$.assignee' => $issue['assignee'],
-                    'subtasks.$.issuetype.custom' => $issue['issuetype']['custom']
-                ]]
-            );
+            $this->updateSubtasksData($issue);
+        }
+        if ($issue['issuetype']['name'] == 'Bug Report') {
+            $this->updateLinkedBugsData($issue);
         }
 
-        if ($importSubtasks && $issue['subtasks']) {
+        if ($importSubtasks && isset($issue['subtasks']) && count($issue['subtasks'])) {
             $subTaskKeys = array();
             foreach ($issue['subtasks'] as $subTaskIssue) {
                 $subTaskKeys[] = $subTaskIssue['key'];
             }
             $this->importIssuesByKeys($subTaskKeys);
+        }
+
+        if ($importLinks && isset($issue['links']) && count($issue['links'])
+            && $issue['issuetype']['name'] == 'Story') {
+            $linksKeys = array();
+            foreach ($issue['links'] as $linkedIssue) {
+                $linksKeys[] = $linkedIssue['key'];
+            }
+            $this->importIssuesByKeys($linksKeys);
         }
     }
 
@@ -109,5 +122,45 @@ class Api_Issues_Import extends Core\Resource
             return $keys;
         }
         return $keys;
+    }
+
+    /**
+     * Update subtask data in issues after importing subtask.
+     *
+     * @param array $issue Imported Issue data.
+     */
+    protected function updateSubtasksData($issue)
+    {
+        /** @var \MongoDB $db */
+        $db = $this->app->container['database'];
+
+        $db->issues->update(
+            ['subtasks.key' => $issue['key']],
+            ['$set' => [
+                'subtasks.$.assignee' => $issue['assignee'],
+                'subtasks.$.time' => $issue['time'],
+                'subtasks.$.issuetype.custom' => $issue['issuetype']['custom']
+            ]]
+        );
+    }
+
+
+    /**
+     * Update linked bugs data in issues after importing linked bugs.
+     *
+     * @param array $issue Imported Issue data.
+     */
+    protected function updateLinkedBugsData($issue)
+    {
+        /** @var \MongoDB $db */
+        $db = $this->app->container['database'];
+
+        $db->issues->update(
+            ['links.key' => $issue['key']],
+            ['$set' => [
+                'links.$.assignee' => $issue['assignee'],
+                'links.$.time' => $issue['time'],
+            ]]
+        );
     }
 }

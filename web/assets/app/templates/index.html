@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="/assets/app/img/favicon.png">
     <title>Agile Tools</title>
     <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap-theme.min.css">
     <link href="/assets/bower/pace/themes/pace-theme-minimal.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/app/css/app.css">
+    <link rel="stylesheet" href="/assets/app/css/app-print.css" media="print">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,12 +25,17 @@
     <script src="/assets/bower/moment/min/moment-with-locales.min.js"></script>
     <script src="/assets/bower/angular/angular.min.js"></script>
     <script src="/assets/bower/angular-route/angular-route.min.js"></script>
+    <script src="/assets/bower/angular-route-segment/build/angular-route-segment.js"></script>
     <script src="/assets/bower/angular-resource/angular-resource.min.js"></script>
     <script src="/assets/bower/angular-local-storage/angular-local-storage.min.js"></script>
     <script src="/assets/bower/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/assets/bower/ngDraggable/ngDraggable.js"></script>
+    <script src="/assets/bower/chartjs/Chart.js"></script>
+    <script src="/assets/bower/js-yaml/dist/js-yaml.min.js"></script>
+    <!-- Disabled for some time -->
+    <!--<script src="/assets/bower/ngDraggable/ngDraggable.js"></script>-->
 
     <script src="/assets/app/js/modules/helper.js"></script>
+    <script src="/assets/app/js/modules/helper/jira.js"></script>
     <script src="/assets/app/js/modules/api.js"></script>
     <script src="/assets/app/js/modules/api/factory.js"></script>
 
@@ -58,23 +65,38 @@
     <!-- Agile Modules -->
     <script src="/assets/app/js/modules/agile.js"></script>
     <script src="/assets/app/js/modules/agile/filters.js"></script>
+    <script src="/assets/app/js/modules/agile/directives.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/start.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/config.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/users/import.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/issue_info.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/import.js"></script>
-    <script src="/assets/app/js/modules/agile/controllers/version/confidence_report/export.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/issue_info.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/import.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/export.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/overview.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/one-issue.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/resources.js"></script>
+
+    <script src="/assets/app/js/modules/agile/controllers/users.js"></script>
+
+    <script src="/assets/app/js/modules/agile/controllers/performance.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/performance/bugs.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/performance/tasks.js"></script>
 </head>
 <body role="document">
 
     <div class="container-fluid theme-showcase" role="main">
-        <div data-ng-view></div>
+        <!--<div data-ng-view></div>-->
+        <div data-app-view-segment="0"></div>
     </div>
 
     <footer class="container-fluid">
         <hr/>
+        <a href="http://symmetrics.de">
+            <img src="/assets/app/img/symmetrics-logo.png" height="35" width="144"/>
+        </a>
         <p>If any issue occurs try clearing your local storage, look into JS console for errors and contact Max Gopey.</p>
     </footer>
 </body>

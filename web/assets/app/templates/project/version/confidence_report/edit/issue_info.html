@@ -1,0 +1,115 @@
+<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)" data-ng-drag="true" data-ng-drag-data="issueInfo">
+    <div class="row">
+        <div class="cell col-sm-6">
+            <div class="row">
+                <div class="col-sm-2 cell-key">
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
+                       target="_blank">{{ issueInfo.key }}</a>
+                    <span class="loading-indicator" title="Please wait..."
+                          data-ng-show="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-repeat" title="Update issue"
+                          data-ng-click="updateIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                    <span class="issue-action a glyphicon glyphicon-remove text-danger" title="Remove issue"
+                          data-ng-click="removeIssue(issueInfo)"
+                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                </div>
+                <div class="col-sm-7 cell-summary">
+                    <span class="expand-btn clickable" data-ng-click="showDetails = true"
+                          data-ng-hide="showDetails || issueInfo.issue.subtasks.length == 0">&plus;</span>
+
+                    <span class="collapse-btn clickable" data-ng-click="showDetails = false"
+                          data-ng-show="showDetails && issueInfo.issue.subtasks.length">&minus;</span>
+
+                    <span class="issue-summary clickable" data-ng-click="showDetails = !showDetails">
+                        <img data-ng-src="{{issueInfo.issue.issuetype.icon_url}}"
+                             title="{{ issueInfo.issue.issuetype.name }}"
+                             class="issue-icon icon-16">
+                        <span data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
+                    </span>
+
+                    <span class="issue-time">
+                        <span title="Estimated">{{ issueInfo.issue.time.aggr.estimated | jiraTime}}</span>
+                        / <span title="Remaining">{{ issueInfo.issue.time.aggr.remaining | jiraTime}}</span>
+                        / <span title="Spent">{{ issueInfo.issue.time.aggr.spent | jiraTime}}</span>
+                    </span>
+                </div>
+                <div class="col-sm-3 cell-assignee">
+                    <span class="assignee">
+                        <strong class="hidden-sm hidden-xs a-key" data-ng-show="expandAssignees">A:</strong>
+                        <span data-agile-assignees="issueInfo.assignees.devs"></span>
+                    </span>
+                    <span data-ng-show="expandAssignees"
+                          data-ng-if="issueInfo.assignees.tbd.name">
+                        <br>
+                        <span class="assignee tester">
+                            <strong class="hidden-sm hidden-xs a-key">T:</strong>
+                            <span data-agile-assignees="[issueInfo.assignees.tbd]"></span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="cell col-sm-1 cell-status">
+            <span class="issue-status" title="{{ issueInfo.status }}"
+                    data-ng-class="{'warning': issueInfo.status == 'In QA' && !issueInfo.qa_assigned}">{{ issueInfo.status }}</span>
+        </div>
+        <div class="col-sm-3">
+            <div class="row">
+                <div class="col-sm-3 cell-progress">
+                    <input type="text" class="form-control input-sm" size="6" data-ng-model="issueInfo.progress">
+                </div>
+                <div class="col-sm-2 cell-cl">
+                    <input type="text" class="form-control input-sm" size="2" data-ng-model="issueInfo.cl">
+                </div>
+                <div class="col-sm-7 cell cell-checkboxes">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.impl == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.doc == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.tbd == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.tc == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.qa == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                            <span data-ng-show="issueInfo.cr == 1" class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control input-sm" data-ng-model="issueInfo.note">
+        </div>
+    </div>
+    <div class="issue-details"
+         data-ng-if="showDetails">
+        <div class="row">
+            <div class="col-sm-9">
+                <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/children.html'"></div>
+                <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/links.html'"></div>
+            </div>
+            <div class="col-sm-3">
+                <div data-ng-if="showStats"
+                     data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
+                     data-ng-init="init(issueInfo)">
+                    <div data-ng-include="template"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

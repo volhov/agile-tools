@@ -8,11 +8,15 @@ angular.module('api')
                 var cacheKeys = [];
                 var cacheKeyPrefix = resourcePath.replace('/\//g', '.') + '.';
 
+                function getCacheKey(query) {
+                    return cacheKeyPrefix + JSON.stringify(query || {});
+                }
+
                 return {
                     get: function(query) {
                         var deferred = $q.defer();
 
-                        var cacheKey = cacheKeyPrefix + JSON.stringify(query || {});
+                        var cacheKey = getCacheKey(query);
                         var cached = useCache && Storage.get(cacheKey);
                         if (cached) {
                             deferred.resolve(cached);
@@ -47,9 +51,26 @@ angular.module('api')
                     },
                     enableCache: function() {
                         useCache = true;
+
+                        return this;
                     },
                     disableCache: function() {
                         useCache = false;
+
+                        return this;
+                    },
+                    resetCache: function(query) {
+                        var cacheKey = getCacheKey(query);
+                        if (query) {
+                            Storage.remove(cacheKey);
+                        } else {
+                            cacheKey = cacheKey.replace(/\{\}$/,'.*');
+                            cacheKey = cacheKey.replace(/\./,'\\.');
+                            console.log(cacheKey);
+                            Storage.clearAll(cacheKey);
+                        }
+
+                        return this;
                     }
                 };
             };
@@ -99,9 +120,15 @@ angular.module('api')
                     },
                     enableCache: function() {
                         // Just a plug for a moment. Cache is not used for items
+                        return this;
                     },
                     disableCache: function() {
                         // Just a plug for a moment. Cache is not used for items
+                        return this;
+                    },
+                    resetCache: function(query) {
+                        Storage.clearAll();
+                        return this;
                     }
                 };
             };

@@ -1,5 +1,8 @@
 angular.module('agile.controllers')
-    .controller('Start', ['$scope', '$location', 'Api', function($scope, $location, Api) {
+    .controller('Start', ['$scope', '$location', 'Api', 'Helper', function($scope, $location, Api, Helper) {
+
+        Helper.setTitle('Start');
+
         Api.get('JiraProjects').get({}).then(function(projects) {
             $scope.projects = projects;
         });
@@ -17,9 +20,5 @@ angular.module('agile.controllers')
                     $scope.project = project;
                 });
             });
-        };
-
-        $scope.startProjectVersion = function(version) {
-            $location.path('/version/' + $scope.project.key + '/' + version.name + '/confidence_report');
         };
     }]);

@@ -6,6 +6,31 @@ use Radio\Core\Adapter;
 
 class Jira_Issue extends Adapter
 {
+    public static function getRequiredFields()
+    {
+        return array(
+            'key',
+            'id',
+            'summary',
+            'project',
+            'issuetype',
+            'priority',
+            'status',
+            'assignee',
+            'customfield_10150', // custom task type
+            'subtasks',
+            'issuelinks',
+            'fixVersions',
+            'timetracking',
+            'timeoriginalestimate',
+            'timeestimate',
+            'timespent',
+            'aggregatetimeoriginalestimate',
+            'aggregatetimeestimate',
+            'aggregatetimespent',
+        );
+    }
+
     protected function adapt()
     {
         $issue = array(
@@ -34,6 +59,7 @@ class Jira_Issue extends Adapter
             ),
             'subtasks' => array(),
             'versions' => array(),
+            'links' => array(),
             'assignee' => array(
                 'key' => $this->original['fields']['assignee']['name'],
                 'name' => $this->original['fields']['assignee']['displayName'],
@@ -45,22 +71,8 @@ class Jira_Issue extends Adapter
         }
 
         foreach ($this->original['fields']['subtasks'] as $subtask) {
-            $issue['subtasks'][] = array(
-                'key' => $subtask['key'],
-                'summary' => $subtask['fields']['summary'],
-                'issuetype' => array(
-                    'id' => $subtask['fields']['issuetype']['id'],
-                    'name' => $subtask['fields']['issuetype']['name'],
-                ),
-                'priority' => array(
-                    'id' => $subtask['fields']['priority']['id'],
-                    'name' => $subtask['fields']['priority']['name'],
-                ),
-                'status' => array(
-                    'id' => $subtask['fields']['status']['id'],
-                    'name' => $subtask['fields']['status']['name'],
-                ),
-            );
+            $subtaskAdapter = new Jira_Issue_Subtask($subtask);
+            $issue['subtasks'][] = $subtaskAdapter->getAdaptation();
         }
 
         foreach ($this->original['fields']['fixVersions'] as $version) {
@@ -68,6 +80,14 @@ class Jira_Issue extends Adapter
                 'id' => $version['id'],
                 'name' => $version['name'],
             );
+        }
+
+        foreach ($this->original['fields']['issuelinks'] as $link) {
+            $linkAdapter = new Jira_Issue_Link($link);
+            $linkedIssue = $linkAdapter->getAdaptation();
+            if ($linkedIssue['issuetype']['name'] == 'Bug Report') {
+                $issue['links'][] = $linkAdapter->getAdaptation();
+            }
         }
 
         if (isset($this->original['fields']['timetracking'])) {

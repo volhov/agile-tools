@@ -1,21 +1,21 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'JiraHelper',
-        function($rootScope, $scope, TEMPLATES_URL, Api, Helper, JiraHelper) {
+    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', '$location', 'Api', 'Helper', 'JiraHelper',
+        function($rootScope, $scope, $location, Api, Helper, JiraHelper) {
 
-            $scope.template = TEMPLATES_URL + '/version/confidence_report.html';
-
-            $scope.$watch('project', function () {
-                if ($scope.project) {
-                    $scope.loadConfidenceReport();
-                    Api.get('Config')
-                        .get($scope.project.key)
-                        .then(function(config) {
-                            $scope.config = config;
-                        });
+            $scope.$watch('version', function () {
+                if ($scope.project && $scope.version) {
+                    $scope.loadConfidenceReport().then(function() {
+                        initFilterRowFixing();
+                    });
+                    loadConfig();
                 }
             });
 
-            $scope.loadConfidenceReport = function(callback, ignoreCache)
+            $scope.exportConfidenceReport = function() {
+                $location.path($location.path() + '/export');
+            };
+
+            $scope.loadConfidenceReport = function(ignoreCache)
             {
                 var reportId = getConfidenceReportKey($scope.project, $scope.version);
                 var confidenceReportApi = Api.get('ConfidenceReport');
@@ -26,36 +26,36 @@ angular.module('agile.controllers')
                     enableCacheAfterLoad = true;
                 }
 
-                confidenceReportApi
-                    .get(reportId, 'issues')
+                var promise = confidenceReportApi.get(reportId, 'issues')
                     .then(function(confidenceReport) {
                         $scope.confidenceReport = confidenceReport;
 
                         if (typeof $scope.confidenceReport.issues == 'undefined') {
                             $scope.confidenceReport.issues = [];
                         }
-
                         injectExpansion($scope.confidenceReport);
+                        $scope.$broadcast('confidenceReportChanged');
 
-                        callback && callback();
                     }, function() {
-                        createConfidenceReport(reportId, callback);
+                        createConfidenceReport(reportId);
+                        $scope.$broadcast('confidenceReportChanged');
                     });
 
                 if (enableCacheAfterLoad) {
                     confidenceReportApi.enableCache();
                 }
+
+                return promise;
             };
 
-            $scope.saveConfidenceReport = function(callback)
+            $scope.saveConfidenceReport = function()
             {
                 var confidenceRecordData = $.extend(true, {}, $scope.confidenceReport);
                 extractExpansion(confidenceRecordData);
-                Api.get('ConfidenceReport')
+                return Api.get('ConfidenceReport')
                     .put(confidenceRecordData._id, confidenceRecordData)
                     .then(function(response) {
-                        setAlert('success', response.message);
-                        callback && callback();
+                        Helper.setAlert('success', response.message);
                     });
             };
 
@@ -66,19 +66,20 @@ angular.module('agile.controllers')
                     importKeys.push($scope.confidenceReport.issues[i].key);
                 }
                 if (importKeys.length) {
+                    $scope.showUpdateLoader = true;
                     Api.get('IssuesImport').post({
                         keys: importKeys
                     }).then(function(response) {
-                        setAlert('success', response.message);
-                        $scope.loadConfidenceReport(function() {
+                        Helper.setAlert('success', response.message);
+                        $scope.loadConfidenceReport(true).then(function() {
 
                             actualizeIssuesState();
                             actualizeIssuesAssignees();
 
                             $scope.saveConfidenceReport();
-                            setAlert('success', 'Issues have been updated.');
-
-                        }, true);
+                            $scope.showUpdateLoader = false;
+                            Helper.setAlert('success', 'Issues have been updated.');
+                        });
                     });
                 }
             };
@@ -88,8 +89,8 @@ angular.module('agile.controllers')
                 Api.get('IssuesImport').post({
                     keys: [issueInfo.key]
                 }).then(function(response) {
-                    setAlert('success', response.message);
-                    $scope.loadConfidenceReport(function() {
+                    Helper.setAlert('success', response.message);
+                    $scope.loadConfidenceReport(true).then(function() {
 
                         var issueIndex = -1;
                         for (var index = 0; index < $scope.confidenceReport.issues.length; index++) {
@@ -106,11 +107,11 @@ angular.module('agile.controllers')
 
                         $scope.saveConfidenceReport();
 
+                        $scope.$broadcast('confidenceReportChanged');
+
                         unmarkIssueAsUpdating(issueInfo);
-
-                        setAlert('success', 'Issue has been updated.');
-
-                    }, true);
+                        Helper.setAlert('success', 'Issue has been updated.');
+                    });
                 });
             };
 
@@ -121,21 +122,18 @@ angular.module('agile.controllers')
                     if (issueIndex > -1) {
                         $scope.confidenceReport.issues.splice(issueIndex, 1);
                         $scope.saveConfidenceReport();
-                        setAlert('success', 'Issue has been removed.');
+                        Helper.setAlert('success', 'Issue has been removed.');
                     }
                 }
             };
 
             $scope.getRowClass = function(issueInfo) {
-                var classes = [];
-
-                classes.push((issueInfo.cl > 6) ? 'good' : (issueInfo.cl > 3) ? 'so-so' : 'bad');
-
-                if (issueIsUpdating(issueInfo)) {
-                    classes.push('updating');
-                }
-
-                return classes;
+                return {
+                    'good': issueInfo.cl > 6,
+                    'so-so': issueInfo.cl <= 6 && issueInfo.cl > 3,
+                    'bad': issueInfo.cl <= 3 || !issueInfo.cl,
+                    'updating': issueIsUpdating(issueInfo)
+                };
             };
 
             $rootScope.$on('draggable:start', function(event, args) {
@@ -144,6 +142,7 @@ angular.module('agile.controllers')
                     width: container.width(),
                     left: container.offset().left
                 });
+                container.height(args.element.height());
             });
             $rootScope.$on('draggable:move', function(event, args) {
                 var container = args.element.parents('.cl-report-row');
@@ -152,7 +151,9 @@ angular.module('agile.controllers')
                 });
             });
             $rootScope.$on('draggable:end', function(event, args) {
+                var container = args.element.parents('.cl-report-row');
                 args.element.css({width: '100%'});
+                container.css({height: 'auto'});
             });
             $scope.onDropComplete = function(index, issueInfo) {
                 var oldIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
@@ -171,7 +172,6 @@ angular.module('agile.controllers')
             $scope.issueIsUpdating = issueIsUpdating;
 
             // Temporary.
-            $scope.actualizeIssuesState = actualizeIssuesState;
             $scope.actualizeIssuesState = actualizeIssuesState;
             $scope.actualizeIssuesAssignees = actualizeIssuesAssignees;
 
@@ -246,7 +246,7 @@ angular.module('agile.controllers')
                 return project.key + '-' + version.jira_id;
             }
 
-            function createConfidenceReport(reportId, callback)
+            function createConfidenceReport(reportId)
             {
                 $scope.confidenceReport = {
                     '_id': reportId,
@@ -254,15 +254,33 @@ angular.module('agile.controllers')
                     'version': $scope.version.jira_id,
                     'issues': []
                 };
-                Api.get('ConfidenceReports')
+                return Api.get('ConfidenceReports')
                     .post($scope.confidenceReport)
                     .then(function(response) {
-                        callback && callback();
-                        setAlert('success', response.message);
+                        Helper.setAlert('success', response.message);
                     });
             }
 
-            function setAlert(type, message) {
-                Helper.setAlert($scope.$parent, type, message);
+            function initFilterRowFixing() {
+                var $filter = $('.filter-row');
+                if ($filter.length) {
+                    var initialTopOffset = $filter.offset().top;
+                    $(window).scroll(function () {
+                        if ($(this).scrollTop() >= initialTopOffset) {
+                            $filter.addClass('fixed');
+                        } else {
+                            $filter.removeClass('fixed');
+                        }
+                    });
+                }
             }
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
+                    });
+            }
+
         }]);

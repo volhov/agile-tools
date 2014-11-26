@@ -52,7 +52,7 @@ class Api_Jira_Issues extends Core\Resource
         $jql = $this->request->query('jql');
         $startAt = $this->request->query('start_at') ?: 0;
         $maxResult = $this->request->query('max_result') ?: 20;
-        $fields = $this->request->query('fields') ?: '*navigable';
+        $fields = $this->request->query('_fields') ?: '*navigable';
 
         if ($jql) {
             $jiraApi->setOptions(0x00);

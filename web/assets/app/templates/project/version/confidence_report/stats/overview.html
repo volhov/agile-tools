@@ -1,0 +1,20 @@
+<div class="stats-summary stats-lines clickable"
+     data-ng-click="showDetails = !showDetails">
+    <div data-time-stats
+         data-info="info"
+         data-issue-type="'total'"
+         data-display-type="'absolute'"></div>
+</div>
+
+<div class="stats-details stats-lines"
+     data-ng-show="showDetails">
+    <label><input type="radio" data-ng-model="$parent.detailsDisplayType" value="relative"/> Relative</label>
+    <label><input type="radio" data-ng-model="$parent.detailsDisplayType" value="absolute"/> Absolute</label>
+    <div data-ng-repeat="title in ['Dev', 'Doc', 'TBD', 'QA', 'CR']">
+        <div data-time-stats
+             data-info="info"
+             data-title="title"
+             data-issue-type="title.toLowerCase()"
+             data-display-type="$parent.detailsDisplayType"></div>
+    </div>
+</div>

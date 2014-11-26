@@ -20,14 +20,38 @@ class Api_Projects extends Core\Resource
     {
         /** @var \MongoDB $jiraApi */
         $db = $this->app->container['database'];
-        /** @var \MongoCursor $cursor */
-        $cursor = $db->projects->find();
 
-        $projects = iterator_to_array($cursor);
+        /** @var \MongoCursor $cursor */
+        $cursor = $this->applyFilters($db->projects);
+
+        $projects = iterator_to_array($cursor, false);
 
         return new Core\JsonResponse(
             Response::OK,
             $projects
         );
+    }
+
+
+    /**
+     * @param \MongoCollection $projects
+     *
+     * @return \MongoCursor
+     */
+    protected function applyFilters(\MongoCollection $projects)
+    {
+        $filter = array();
+        $projection = array();
+        if ($this->request->query('user')) {
+            $filter['users.key'] = $this->request->query('user');
+        }
+        if ($this->request->query('_fields')) {
+            $fields = explode(',', $this->request->query('_fields'));
+            foreach ($fields as $field) {
+                $projection[trim($field)] = 1;
+            }
+        }
+
+        return $projects->find($filter, $projection);
     }
 }

@@ -28,7 +28,7 @@ class Api_Issues extends Core\Resource
         /** @var \MongoCursor $cursor */
         $cursor = $this->applyFilters($db->issues);
 
-        $issues = iterator_to_array($cursor);
+        $issues = iterator_to_array($cursor, false);
 
         return new Core\JsonResponse(
             Response::OK,
