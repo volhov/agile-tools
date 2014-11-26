@@ -49,8 +49,6 @@
                     <span class="issue-summary" data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
                 </td>
                 <td class="cell cell-assignee">
-                    <!--<strong>A:</strong> {{ issueInfo.assignees.devs[0].name | assigneeShort }}-->
-                    <!--<span data-ng-if="issueInfo.assignees.tbd.name"><strong>T:</strong> {{ issueInfo.assignees.tbd.name | assigneeShort }}</span>-->
                     <span class="assignee">
                         <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
                         <span data-agile-assignees="issueInfo.assignees.devs"></span>
