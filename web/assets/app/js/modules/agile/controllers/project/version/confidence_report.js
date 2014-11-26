@@ -240,7 +240,7 @@ angular.module('agile.controllers')
                 if ($filter.length) {
                     // Leave a placeholder to prevent changing the window height
                     //  and therefore the scroll event again.
-                    $filter.parent('.filter-row-container').height($filter.height());
+                    $filter.parent('.filter-row-container').height($filter.outerHeight());
                     var initialTopOffset = $filter.offset().top;
                     $(window).scroll(function() {
                         if ($(this).scrollTop() >= initialTopOffset) {
