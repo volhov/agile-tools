@@ -59,8 +59,10 @@ class Api_Issues_Import extends Core\Resource
             )->getResult();
             $jiraApi->setOptions(0x01);
 
-            foreach ($searchResult['issues'] as $jiraIssue) {
-                $this->importOneIssue($jiraIssue);
+            if (isset($searchResult['issues'])) {
+                foreach ($searchResult['issues'] as $jiraIssue) {
+                    $this->importOneIssue($jiraIssue);
+                }
             }
         }
     }

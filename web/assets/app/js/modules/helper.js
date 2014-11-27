@@ -1,14 +1,24 @@
 angular.module('helper', [])
-    .factory('Helper', ['$rootScope', function($rootScope) {
+    .factory('Helper', ['$rootScope', '$timeout', function($rootScope, $timeout) {
 
         var defaultTitle = 'Agile Tools';
+        var alertTimeoutPromise;
 
         return {
-            setAlert: function(type, message) {
+            setAlert: function(type, message, persistant) {
                 $rootScope.alert = {
                     type: type,
                     message: message
                 };
+                if (alertTimeoutPromise) {
+                    $timeout.cancel(alertTimeoutPromise);
+                }
+                if (!persistant) {
+                    alertTimeoutPromise = $timeout(function() {
+                        $rootScope.alert = null;
+                        alertTimeoutPromise = null;
+                    }, 5000);
+                }
             },
             setTitle: function(title, skipDefault)
             {

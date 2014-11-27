@@ -49,6 +49,10 @@ label {
   margin-left: 40px;
   margin-right: 40px;
 }
+.alert {
+  padding: 10px 15px;
+  border-radius: 0;
+}
 .page-header {
   position: relative;
 }

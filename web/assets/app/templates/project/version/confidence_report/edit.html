@@ -90,7 +90,7 @@
              data-ng-class="{empty:!sortedIssues.export.length}"
              data-ui-sortable="sortableOptions" data-ng-model="sortedIssues.export">
             <div class="row cl-report-row"
-                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:true} | confidenceLevelsFilter:$parent.$parent.searchIssue"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:true} | confidenceReportIssues:$parent.$parent.searchIssue"
                  data-ng-controller="Version_ConfidenceReport_IssueInfo"
                  data-ng-include="template">
             </div>
@@ -100,7 +100,7 @@
              data-ng-class="{empty:!sortedIssues.watch.length}"
              data-ui-sortable="sortableOptions" data-ng-model="sortedIssues.watch">
             <div class="row cl-report-row"
-                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:false} | confidenceLevelsFilter:$parent.$parent.searchIssue"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:false} | confidenceReportIssues:$parent.$parent.searchIssue"
                  data-ng-controller="Version_ConfidenceReport_IssueInfo"
                  data-ng-include="template">
             </div>
