@@ -1,0 +1,104 @@
+<p>
+    <span class="a" data-ng-click="hideExportPage()">&larr; Back</span>
+</p>
+
+<div>
+    <div class="checkbox">
+        <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assigness</label>
+    </div>
+
+    <hr>
+
+    <p>
+        Hi!<br><br>
+        Below you can find the Confidence Levels report.
+    </p>
+
+    <table class="cl-report-export">
+        <thead class="cl-report">
+            <tr class="cl-report-header">
+                <td><strong>Key</strong></td>
+                <td><strong>Summary</strong></td>
+                <td><strong>Assignee</strong></td>
+                <td><strong>Status</strong></td>
+                <!--<td><strong>Progress</strong></td>-->
+                <td><strong>Impl</strong></td>
+                <td><strong>Doc</strong></td>
+                <td><strong>CR</strong></td>
+                <td><strong>TBD</strong></td>
+                <td><strong>TC</strong></td>
+                <td><strong>QA</strong></td>
+                <td class="current-cl"><strong>CL</strong></td>
+                <td data-ng-repeat="clDate in clDates">
+                    <strong>{{ moment(clDate).format('D.MM') }}</strong>
+                </td>
+                <td><strong>Risks, issues, action items</strong></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="cl-report-row"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:true}"
+                 data-ng-init="cl = issueInfo.cl - 0"
+                 data-ng-class="{good: cl > 6, 'so-so': cl > 3 && cl <= 6, 'bad': cl <= 3}">
+                <td class="cell-key">
+                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
+                        {{ issueInfo.key }}
+                    </a>
+                </td>
+                <td class="cell-summary">
+                    <span class="issue-summary" data-ng-bind-html="issueInfo.issue.summary | storyKey"></span>
+                </td>
+                <td class="cell cell-assignee">
+                    <span class="assignee">
+                        <strong class="hidden-sm hidden-xs" data-ng-show="expandAssignees">A:</strong>
+                        <span data-agile-assignees="issueInfo.assignees.devs"></span>
+                    </span>
+                    <span class="hidden-sm hidden-xs"
+                          data-ng-show="expandAssignees" data-ng-if="issueInfo.assignees.tbd.name">
+                        <br>
+                        <span class="assignee">
+                            <strong class="hidden-sm hidden-xs">T:</strong>
+                            <span data-agile-assignees="[issueInfo.assignees.tbd]"></span>
+                        </span>
+                    </span>
+                </td>
+                <td class="cell cell-status nowrap">{{ issueInfo.status }}</td>
+                <!--<td class="cell cell-progress nowrap">{{ issueInfo.progress }}</td>-->
+                <td>
+                    <span data-ng-show="issueInfo.impl == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.impl == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.doc == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.doc == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.cr == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.cr == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.tbd == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.tbd == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.tc == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.tc == 1">*</span>
+                </td>
+                <td>
+                    <span data-ng-show="issueInfo.qa == -1">&mdash;</span>
+                    <span data-ng-show="issueInfo.qa == 1">*</span>
+                </td>
+                <td class="cell cell-cl current-cl">{{ issueInfo.cl }}</td>
+                <td class="cell" data-ng-repeat="clDate in clDates">
+                    {{ issueInfo.cl_by_day[clDate] }}
+                </td>
+                <td class="cell cell-note">
+                    {{ issueInfo.note }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+
+</div>

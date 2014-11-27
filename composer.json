@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "peej/tonic": "dev-master",
+        "pimple/pimple": "3.0.*@dev",
+        "symfony/yaml": "2.6.*@dev",
+        "chobie/jira-api-restclient": "2.0.*@dev"
+    }
+}

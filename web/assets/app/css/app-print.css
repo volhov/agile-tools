@@ -1,0 +1,12 @@
+.non-printable {
+    display: none;
+}
+.alert {
+    display: none;
+}
+.perf-projects-list {
+    display: none;
+}
+footer {
+    display: none;
+}

@@ -1,0 +1,57 @@
+<p class="import-options">
+    Import:
+    <a href="" data-ng-click="fetchIssuesForImport('Story')">
+        <img class="issue-icon icon-16" src="https://jira.symmetrics.de/images/icons/issuetypes/story.png">stories</a>
+    | <a href="" data-ng-click="fetchIssuesForImport('Task')">
+        <img class="issue-icon icon-16" src="https://jira.symmetrics.de/images/icons/issuetypes/task.png">tasks</a>
+    | <a href="" data-ng-click="fetchIssuesForImport('Bug Report', 200)">
+        <img class="issue-icon icon-16" src="https://jira.symmetrics.de/images/icons/issuetypes/bug.png">bugs</a>
+</p>
+
+<div class="clr-import"
+     data-ng-if="showImport"
+     data-ng-init="showImported = false;">
+    <div class="checkbox" data-ng-show="importedNumber">
+        <label>
+            <input type="checkbox" data-ng-model="showImported"/>
+            Show imported ({{ importedNumber }})
+        </label>
+    </div>
+    <div class="clr-import-checkbox-ctrl">
+        <p>
+            <span class="a" data-ng-click="checkAll()">Check all</span> /
+            <span class="a" data-ng-click="uncheckAll()">Uncheck all</span>
+        </p>
+    </div>
+    <div class="clr-import-issue checkbox"
+         data-ng-repeat="jiraIssue in jiraIssues"
+         data-ng-hide="jiraIssue.imported && !showImported">
+        <label>
+            <input type="checkbox" data-ng-model="jiraIssue.import"
+                    data-ng-hide="jiraIssue.imported"/>
+
+            <a href="{{ config.yaml.jira_url }}/browse/{{ jiraIssue.key }}"
+               target="_blank" class="issue-key-url">
+                <img data-ng-src="{{jiraIssue.fields.issuetype.iconUrl}}"
+                     title="{{jiraIssue.fields.issuetype.name}}"
+                     class="issue-icon icon-16">{{ jiraIssue.key }}</a>
+            / <span data-ng-bind-html="jiraIssue.fields.summary | storyKey"></span>
+            / <strong>A:</strong> {{ jiraIssue.fields.assignee.displayName }}
+            / <strong>S:</strong> {{ jiraIssue.fields.status.name }}
+        </label>
+    </div>
+    <button type="button" class="btn btn-primary"
+            data-ng-disabled="!importButtonIsActive()"
+            data-ng-click="importIssues()">Import</button>
+    <button type="button" class="btn btn-warning"
+            data-ng-click="hideImport()">Cancel</button>
+</div>
+
+<p data-ng-show="showFetchLoader" class="info bg-info">
+    <span class="loading-indicator" title="Please wait..."></span>
+    Issues are being fetched. Please wait for a moment.
+</p>
+<p data-ng-show="showImportLoader" class="info bg-info">
+    <span class="loading-indicator" title="Please wait..."></span>
+    Issues are being imported. Please wait for a moment.
+</p>

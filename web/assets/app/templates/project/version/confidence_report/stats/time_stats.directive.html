@@ -1,0 +1,30 @@
+<div class="lines"
+     data-ng-if="info.estimated[issueType] || info.spent[issueType]"
+     data-ng-class="displayType">
+    <div class="clickable" data-ng-click="showDetails = !showDetails">
+        <span data-ng-if="title" class="stats-line-title">{{ title }}</span>
+        <div class="line clearfix">
+            <div class="section estimated" title="Estimated: {{ info.estimated[issueType] | jiraTime }}"
+                 data-ng-style="getSectionStyles('estimated', issueType)"></div>
+            <div class="section overspent" title="Overspent: {{ info.overspent[issueType] | jiraTime }}"
+                 data-ng-style="getSectionStyles('overspent', issueType)"
+                 data-ng-class="getDeltaType(issueType)"></div>
+        </div>
+        <div class="line clearfix">
+            <div class="section spent" title="Spent: {{ info.spent[issueType] | jiraTime }}"
+                 data-ng-style="getSectionStyles('spent', issueType)"></div>
+            <div class="section remaining" title="Remaining: {{ info.remaining[issueType] | jiraTime }}"
+                 data-ng-style="getSectionStyles('remaining', issueType)"></div>
+        </div>
+    </div>
+
+    <div class="details {{ issueType }}-details" data-ng-show="showDetails">
+        <strong>Estimated:</strong> {{ info.estimated[issueType] | jiraTime }}<br class="odd">
+        <strong>Spent:</strong> {{ info.spent[issueType] | jiraTime }}<br class="even">
+        <strong>Remaining:</strong> {{ info.remaining[issueType] | jiraTime }}<br class="odd">
+        <strong>Overspent:</strong> {{ info.overspent[issueType] | jiraTime }}<br class="even">
+        <strong>Performance:</strong> {{
+            (info.estimated[issueType] / (info.spent[issueType] + info.remaining[issueType])).toFixed(2)
+        }}
+    </div>
+</div>
