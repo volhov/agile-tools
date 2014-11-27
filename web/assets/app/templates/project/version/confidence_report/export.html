@@ -37,7 +37,7 @@
         </thead>
         <tbody>
             <tr class="cl-report-row"
-                 data-ng-repeat="issueInfo in confidenceReport.issues"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:true}"
                  data-ng-init="cl = issueInfo.cl - 0"
                  data-ng-class="{good: cl > 6, 'so-so': cl > 3 && cl <= 6, 'bad': cl <= 3}">
                 <td class="cell-key">

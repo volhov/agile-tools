@@ -478,6 +478,22 @@ label {
 .yaml-textarea {
     font-family: Courier, monospace;
 }
-.ui-sortable-placeholder {
-    margin-bottom: 10px;
+.sorting-container {
+    &.empty {
+        min-height: 30px;
+        border: 1px dotted #aaa;
+
+        .sorting-placeholder {
+            border: 0 none;
+        }
+    }
+    &.sorting-active {
+        min-height: 30px;
+    }
+}
+.sorting-placeholder {
+    border: 1px dotted #aaa;
+}
+.ui-sortable-helper {
+    background-color: rgba(232, 232, 232, 0.5) !important;
 }

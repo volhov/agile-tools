@@ -63,7 +63,10 @@ angular.module('agile.controllers')
                             importKeys.push(issue.key);
                             if (!crHasIssue(issue.key)) {
                                 $scope.$parent.confidenceReport.issues.push({
-                                    key: issue.key
+                                    key: issue.key,
+                                    export: true,       // Initially add issue to "export" section
+                                    status: 'Importing' // This status is temporary. It will be overwritten soon
+                                                        //  when issue will be imported and reloaded.
                                 });
                             }
                         }
