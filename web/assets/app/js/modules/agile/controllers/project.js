@@ -6,6 +6,7 @@ angular.module('agile.controllers')
 
             loadProject().then(function() {
                 Helper.setTitle($scope.project.name);
+                loadConfig();
             });
 
             $scope.loadProject = loadProject;
@@ -26,6 +27,14 @@ angular.module('agile.controllers')
                 return Api.get('Project').get($routeParams.projectKey)
                     .then(function(project) {
                         $scope.project = project;
+                    });
+            }
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
                     });
             }
         }]);

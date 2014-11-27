@@ -14,15 +14,23 @@ angular.module('agile.controllers')
                     .then(function (config) {
                         $scope.config = config;
                         var editableConfig = angular.copy(config.config);
+                        var customCss = null;
+                        delete editableConfig._id;
+                        if ('custom_css' in editableConfig) {
+                            customCss = editableConfig.custom_css;
+                            delete editableConfig.custom_css;
+                        }
                         delete editableConfig._id;
                         $scope.yamlConfig = yamlFilter(editableConfig, 'dump');
+                        $scope.customCss = customCss;
                     });
             }
 
-            function saveConfig(yamlConfig)
+            function saveConfig(yamlConfig, customCss)
             {
                 var config = $scope.config;
                 var editableConfig = validateYaml(yamlConfig);
+                editableConfig.custom_css = customCss;
                 if (!editableConfig) {
                     Helper.setAlert('danger', 'Config is not valid.');
                     return;
