@@ -98,6 +98,10 @@ label {
 .import-options a img {
   margin-right: 3px;
 }
+.filter-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .filter-row.fixed {
   position: fixed;
   top: 0;
@@ -111,6 +115,8 @@ label {
 .cl-report-header {
   margin-top: 10px;
   margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
 }
 .cl-report-header .cell-progress {
   padding: 0 5px;
@@ -125,7 +131,11 @@ label {
   font-size: .8em;
   text-align: center;
 }
+.cl-report {
+  margin-bottom: 30px;
+}
 .cl-report-row {
+  padding-top: 5px;
   min-height: 2em;
 }
 @media (max-width: 1400px) {
@@ -275,6 +285,9 @@ label {
 .cl-report-export {
   border-collapse: collapse;
 }
+.cl-report-export .cl-report-header {
+  background-color: #c3d9ff;
+}
 .cl-report-export .cl-report-row.good {
   background-color: #cfe6c4;
 }
@@ -399,4 +412,23 @@ label {
 }
 .stats-lines.stats-one-issue .details br {
   display: inline;
+}
+.yaml-textarea {
+  font-family: Courier, monospace;
+}
+.sorting-container.empty {
+  min-height: 30px;
+  border: 1px dotted #aaa;
+}
+.sorting-container.empty .sorting-placeholder {
+  border: 0 none;
+}
+.sorting-container.sorting-active {
+  min-height: 30px;
+}
+.sorting-placeholder {
+  border: 1px dotted #aaa;
+}
+.ui-sortable-helper {
+  background-color: rgba(232, 232, 232, 0.5) !important;
 }

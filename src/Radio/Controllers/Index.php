@@ -10,6 +10,8 @@ use Tonic\Response;
  *
  * @uri /
  * @uri /start
+ * @uri /config
+ * @uri /config/.*
  * @uri /users
  * @uri /users/.*
  * @uri /project/.*

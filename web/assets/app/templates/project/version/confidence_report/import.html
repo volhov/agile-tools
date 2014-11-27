@@ -8,7 +8,9 @@
         <img class="issue-icon icon-16" src="https://jira.symmetrics.de/images/icons/issuetypes/bug.png">bugs</a>
 </p>
 
-<div class="clr-import" data-ng-show="showImport">
+<div class="clr-import"
+     data-ng-if="showImport"
+     data-ng-init="showImported = false;">
     <div class="checkbox" data-ng-show="importedNumber">
         <label>
             <input type="checkbox" data-ng-model="showImported"/>
@@ -34,6 +36,8 @@
                      title="{{jiraIssue.fields.issuetype.name}}"
                      class="issue-icon icon-16">{{ jiraIssue.key }}</a>
             / <span data-ng-bind-html="jiraIssue.fields.summary | storyKey"></span>
+            / <strong>A:</strong> {{ jiraIssue.fields.assignee.displayName }}
+            / <strong>S:</strong> {{ jiraIssue.fields.status.name }}
         </label>
     </div>
     <button type="button" class="btn btn-primary"

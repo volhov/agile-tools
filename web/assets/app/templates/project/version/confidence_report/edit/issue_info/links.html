@@ -1,5 +1,5 @@
 <div class="row cl-report-row-links"
-     data-ng-show="issueInfo.issue.links.length && showLinkedIssues">
+     data-ng-if="issueInfo.issue.links.length && showLinkedIssues">
     <div class="cell col-sm-12">
         <p><strong>Linked issues</strong></p>
         <div class="row" data-ng-repeat="linkedTask in issueInfo.issue.links">

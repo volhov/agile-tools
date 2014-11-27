@@ -22,10 +22,6 @@
             <p>Collected for {{ moment().format('DD.MM.YYYY') }}</p>
         </div>
     </div>
-    <div data-ng-controller="Performance_Bugs">
-        <div data-ng-include="template"></div>
-    </div>
-    <div data-ng-controller="Performance_Tasks">
-        <div data-ng-include="template"></div>
-    </div>
+    <div data-ng-controller="Performance_Bugs" data-ng-include="template"></div>
+    <div data-ng-controller="Performance_Tasks" data-ng-include="template"></div>
 </div>

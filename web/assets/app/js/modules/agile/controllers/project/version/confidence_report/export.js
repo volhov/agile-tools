@@ -1,6 +1,6 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport_Export', ['$scope', '$location', 'Api', 'Helper',
-        function($scope, $location, Api, Helper) {
+    .controller('Version_ConfidenceReport_Export', ['$scope', '$location', 'filterFilter', 'Helper',
+        function($scope, $location, filterFilter, Helper) {
 
             $scope.clDates = [];
 
@@ -11,7 +11,8 @@ angular.module('agile.controllers')
 
             $scope.$watch('confidenceReport', function () {
                 if ($scope.confidenceReport && $scope.confidenceReport.issues) {
-                    angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                    var exportedIssues = filterFilter($scope.confidenceReport.issues, {export: true});
+                    angular.forEach(exportedIssues, function(issueInfo) {
                         if (issueInfo.cl_by_day) {
                             angular.forEach(issueInfo.cl_by_day, function(cl, clDate) {
                                 if ($scope.clDates.indexOf(clDate) < 0) {
