@@ -16,9 +16,12 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
      */
     protected $app;
 
+    protected $cookiesDirPath;
+
     public function __construct(Application $app)
     {
         $this->app = $app;
+        $this->cookiesDirPath = $this->app->container['dir.var'] . '/cookies';
     }
 
     /**
@@ -111,8 +114,14 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
 
     protected function getCookieJarPath(AuthenticationInterface $credential)
     {
-        return $this->app->container['dir.var'] . '/' . $credential->getCredential() . '.cookies';
+        $this->checkCookiesDirPath();
+        return $this->cookiesDirPath . '/' . $credential->getCredential();
     }
 
-
+    protected function checkCookiesDirPath()
+    {
+        if (!is_dir($this->cookiesDirPath)) {
+            mkdir($this->cookiesDirPath, 0755, true);
+        }
+    }
 }

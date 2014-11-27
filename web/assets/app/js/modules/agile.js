@@ -2,13 +2,14 @@ angular.module('agile', [
         'ngRoute',
         'agile.controllers',
         'agile.filters',
+        'agile.services',
         'route-segment',
         'view-segment',
         'ui.sortable'
     ])
     .constant('TEMPLATES_URL', '/assets/app/templates')
-    .config(['$routeProvider', '$routeSegmentProvider', '$locationProvider', '$httpProvider', 'TEMPLATES_URL',
-        function($routeProvider, $routeSegmentProvider, $locationProvider, $httpProvider, TEMPLATES_URL) {
+    .config(['$routeProvider', '$routeSegmentProvider', '$locationProvider', 'TEMPLATES_URL',
+        function($routeProvider, $routeSegmentProvider, $locationProvider, TEMPLATES_URL) {
 
             $locationProvider.html5Mode(true);
 
@@ -32,84 +33,66 @@ angular.module('agile', [
              */
             $routeSegmentProvider
                 .when('/start', 'start')
-                    .segment('start', {
-                        templateUrl: TEMPLATES_URL + '/start.html',
-                        controller: 'Start'
-                    })
+                    .segment('start', getSegmentParams('Start', '/start.html', true))
                 .when('/performance/:user', 'performance')
-                    .segment('performance', {
-                        templateUrl: TEMPLATES_URL + '/performance.html',
-                        controller: 'Performance',
-                        dependencies: ['user']
-                    })
+                    .segment('performance', getSegmentParams('Performance', '/performance.html', true, false, ['user']))
                 .when('/project/:projectKey', 'project')
                 .when('/project/:projectKey/:versionName/confidence_report', 'project.version.confidence_report')
                 .when('/project/:projectKey/:versionName/confidence_report/export', 'project.version.confidence_report.export')
                 .when('/project/:projectKey/:versionName/resources', 'project.version.resources')
-                    .segment('project', {
-                        templateUrl: TEMPLATES_URL + '/project.html',
-                        controller: 'Project'
-                    })
+                    .segment('project', getSegmentParams('Project', '/project.html', true))
                     .within('project')
-                        .segment('overview', {
-                            default: true,
-                            templateUrl: TEMPLATES_URL + '/project/overview.html'
-                        })
-                        .segment('version', {
-                            templateUrl: TEMPLATES_URL + '/project/version.html',
-                            controller: 'Version'
-                        })
+                        .segment('overview', getSegmentParams('Project', '/project/overview.html', false, true))
+                        .segment('version', getSegmentParams('Version', '/project/version.html'))
                         .within('version')
-                            .segment('confidence_report', {
-                                templateUrl: TEMPLATES_URL +'/project/version/confidence_report.html',
-                                controller: 'Version_ConfidenceReport',
-                                dependencies: ['projectKey', 'versionName']
-                            })
+                            .segment('confidence_report', getSegmentParams('Version_ConfidenceReport', '/project/version/confidence_report.html', false, false, ['projectKey', 'versionName']))
                             .within('confidence_report')
-                                .segment('edit', {
-                                    default: true,
-                                    templateUrl: TEMPLATES_URL +'/project/version/confidence_report/edit.html'
-                                })
-                                .segment('export', {
-                                    templateUrl: TEMPLATES_URL +'/project/version/confidence_report/export.html',
-                                    controller: 'Version_ConfidenceReport_Export'
-                                })
+                                .segment('edit', getSegmentParams('Version_ConfidenceReport', '/project/version/confidence_report/edit.html', false, true))
+                                .segment('export', getSegmentParams('Version_ConfidenceReport_Export', '/project/version/confidence_report/export.html'))
                                 .up()
-                            .segment('resources', {
-                                templateUrl: TEMPLATES_URL +'/project/version/resources.html',
-                                controller: 'Version_Resources',
-                                dependencies: ['projectKey', 'versionName']
-                            })
+                            .segment('resources', getSegmentParams('Version_Resources', '/project/version/resources.html', false, false, ['projectKey', 'versionName']))
                             .up()
                         .up()
                 .when('/users', 'users')
-                    .segment('users', {
-                        templateUrl: TEMPLATES_URL + '/users.html',
-                        controller: 'Users'
-                    })
+                    .segment('users', getSegmentParams('Users', '/users.html', true))
                     .within('users')
-                        .segment('list', {
-                            default: true,
-                            templateUrl: TEMPLATES_URL + '/users/list.html'
-                        })
+                        .segment('list', getSegmentParams('Users', '/list.html', false, true))
                     .up()
                 .when('/config', 'config')
                 .when('/config/:projectKey', 'config.project')
-                    .segment('config', {
-                        templateUrl: TEMPLATES_URL + '/config.html',
-                        controller: 'Config'
-                    })
+                    .segment('config', getSegmentParams('Config', '/config.html', true, false))
                     .within('config')
-                        .segment('global', {
-                            default: true
-                        })
-                        .segment('project', {
-                            dependencies: ['projectKey']
-                        })
+                        .segment('global', getSegmentParams('Config', '/config.html', false, true))
+                        .segment('project', getSegmentParams('Config', '/config.html', false, false, ['projectKey']))
                     .up()
+                .when('/login', 'login')
+                    .segment('login', getSegmentParams('Login', '/login.html'))
             ;
+
+            /**
+             * Segment params factory function.
+             */
+            function getSegmentParams(controller, template, isSecure, isDefault, dependencies)
+            {
+                var params = {
+                    controller: controller,
+                    templateUrl: TEMPLATES_URL + template,
+                    default: isDefault,
+                    dependencies: dependencies
+                };
+                if (isSecure) {
+                    params.resolve = {
+                        auth: ['Auth', function(Auth) {
+                            return Auth.check();
+                        }]
+                    };
+                    params.resolveFailed = getSegmentParams('Login', '/login.html');
+                }
+                return params;
+            }
         }]);
 
 angular.module('agile.controllers', ['helper', 'api', 'agile.filters', 'agile.directives']);
 angular.module('agile.filters', ['helper', 'ngSanitize']);
 angular.module('agile.directives', ['helper', 'ngSanitize', 'agile.filters']);
+angular.module('agile.services', ['helper']);

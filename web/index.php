@@ -5,6 +5,8 @@ use Tonic\Application;
 use Tonic\Response;
 use Radio\Core\Request;
 
+session_start();
+
 $container = require_once 'container.php';
 
 $config = array(

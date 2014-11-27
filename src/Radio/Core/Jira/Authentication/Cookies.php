@@ -2,30 +2,32 @@
 namespace Radio\Core;
 
 use chobie\Jira\Api\Authentication\AuthenticationInterface;
+use Radio\Core\Jira_Authentication_ResetableAuthentication as ResetableAuthentication;
 
-class Jira_Authentication_Cookies implements AuthenticationInterface
+class Jira_Authentication_Cookies implements AuthenticationInterface, ResetableAuthentication
 {
-    private $userId;
-    private $password;
-
-    public function __construct($userId, $password)
-    {
-        $this->userId = $userId;
-        $this->password = $password;
-    }
+    protected $sessionKey = 'jira-credentials';
 
     public function getCredential()
     {
-        return md5($this->userId . ':' . $this->password);
+        if (!isset($_SESSION[$this->sessionKey])) {
+            $_SESSION[$this->sessionKey] = md5(time() . ':' . rand(1000, 9999));
+        }
+        return $_SESSION[$this->sessionKey];
+    }
+
+    public function reset()
+    {
+        unset($_SESSION[$this->sessionKey]);
     }
 
     public function getId()
     {
-        return $this->userId;
+        return null;
     }
 
     public function getPassword()
     {
-        return $this->password;
+        return null;
     }
 }

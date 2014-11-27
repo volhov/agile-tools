@@ -22,8 +22,10 @@ angular.module('api')
                             deferred.resolve(cached);
                         } else {
                             resource.query(query, function(collection) {
-                                Storage.add(cacheKey, collection);
-                                cacheKeys.push(cacheKey);
+                                if (collection.length) {
+                                    Storage.add(cacheKey, collection);
+                                    cacheKeys.push(cacheKey);
+                                }
                                 deferred.resolve(collection);
                             }, function(response) {
                                 deferred.reject(response);

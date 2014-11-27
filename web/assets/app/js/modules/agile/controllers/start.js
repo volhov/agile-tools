@@ -11,10 +11,7 @@ angular.module('agile.controllers')
             Api.get('ProjectsImport').post({
                 key: project.key
             }).then(function(response) {
-                $scope.alert = {
-                    type: 'success',
-                    message: response.message
-                };
+                Helper.setAlert('success', response.message);
 
                 Api.get('Project').get(project.key).then(function(project) {
                     $scope.project = project;

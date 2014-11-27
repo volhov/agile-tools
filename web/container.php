@@ -50,10 +50,7 @@ $container['jira.api'] = function($container) {
 
     $api = new Radio\Core\Jira_Api(
         $config['server'],
-        new \Radio\Core\Jira_Authentication_Cookies(
-            $config["username"],
-            $config["password"]
-        )
+        new \Radio\Core\Jira_Authentication_Cookies()
     );
 
     return $api;
