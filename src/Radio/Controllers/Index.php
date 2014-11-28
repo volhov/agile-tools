@@ -15,6 +15,7 @@ use Tonic\Response;
  * @uri /users
  * @uri /users/.*
  * @uri /project/.*
+ * @uri /projects
  * @uri /performance/.*
  */
 class Index extends Resource

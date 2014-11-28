@@ -40,6 +40,22 @@ class Jira_Api extends Api
         return $result;
     }
 
+    /**
+     * Use Jira user search to search users.
+     *
+     * @api /rest/api/2/user/search?username={query}
+     *
+     * @param string $query Query.
+     *
+     * @return Api\Result
+     */
+    public function searchUsers($query)
+    {
+        $result = $this->api(self::REQUEST_GET, '/rest/api/2/user/search', array('username' => $query));
+
+        return $result;
+    }
+
     public function getIssueTypes($asArray = false)
     {
         $result = array();

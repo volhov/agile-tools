@@ -14,7 +14,7 @@ angular.module('agile.services')
         var redirectTo = null;
         var userInfo = {};
         var loginUrl = $routeSegment.getSegmentUrl('login', {});
-        var startUrl = $routeSegment.getSegmentUrl('start', {});
+        var startUrl = $routeSegment.getSegmentUrl('projects', {});
         return {
             signIn: function(username, password) {
                 var postData = {

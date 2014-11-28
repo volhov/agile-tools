@@ -1,0 +1,36 @@
+<div class="page-header">
+    <div class="projects-header">
+        <h1>Projects</h1>
+        <p>Already imported ones</p>
+    </div>
+    <div data-ng-show="alert.message" role="alert"
+         class="alert alert-{{alert.type}}">{{alert.message}}</div>
+</div>
+<div class="row filter-row">
+    <div class="col-sm-3">
+        <div class="filter-holder">
+            <input type="search" class="form-control input-sm" placeholder="Filter projects"
+                   data-ng-model="searchProject">
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-sm btn-success" href="/start">Start new</a>
+    </div>
+</div>
+<div class="projects-page">
+    <div class="row">
+        <div class="col-md-3" data-ng-repeat="project in projects | filter:searchProject">
+            <div class="media condensed-media project-media">
+                <div class="media-left">
+                    <a href="/project/{{ project.key }}">
+                        <img data-ng-src="{{ project.avatar_urls['48x48'] }}" src="" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4><a href="/project/{{ project.key }}" class="media-heading">{{ project.name }}</a></h4>
+                    <p>Key: {{ project.key }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
