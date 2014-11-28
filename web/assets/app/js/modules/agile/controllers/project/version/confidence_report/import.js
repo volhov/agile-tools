@@ -14,9 +14,9 @@ angular.module('agile.controllers')
                 $scope.showFetchLoader = true;
                 resetImport();
                 var query = {
-                    max_result: maxResults || 50,
-                    fields: 'summary,issuetype,assignee',
-                    jql: 'project = "' + $scope.project.key + '"'
+                    "max_result": maxResults || 50,
+                    "_fields": 'summary,issuetype,assignee,status',
+                    "jql": 'project = "' + $scope.project.key + '"'
                         + ' AND fixVersion = "' + $scope.version.name + '"'
                 };
                 if (issueType) {
@@ -63,7 +63,10 @@ angular.module('agile.controllers')
                             importKeys.push(issue.key);
                             if (!crHasIssue(issue.key)) {
                                 $scope.$parent.confidenceReport.issues.push({
-                                    key: issue.key
+                                    key: issue.key,
+                                    export: true,       // Initially add issue to "export" section
+                                    status: 'Importing' // This status is temporary. It will be overwritten soon
+                                                        //  when issue will be imported and reloaded.
                                 });
                             }
                         }

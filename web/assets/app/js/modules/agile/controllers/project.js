@@ -2,14 +2,13 @@ angular.module('agile.controllers')
     .controller('Project', ['$scope', '$location', '$routeParams', 'Api', 'Helper',
         function($scope, $location, $routeParams, Api, Helper) {
 
-            $scope.moment = moment; // This is to use moment.js easily in templates.
-
             loadProject().then(function() {
                 Helper.setTitle($scope.project.name);
+                loadConfig();
             });
 
+            $scope.moment = moment; // This is to use moment.js easily in templates.
             $scope.loadProject = loadProject;
-
             $scope.userTypes = Helper.getUserTypes();
 
             $scope.saveProject = function()
@@ -26,6 +25,14 @@ angular.module('agile.controllers')
                 return Api.get('Project').get($routeParams.projectKey)
                     .then(function(project) {
                         $scope.project = project;
+                    });
+            }
+
+            function loadConfig() {
+                Api.get('Config')
+                    .get($scope.project.key)
+                    .then(function (config) {
+                        $scope.config = config;
                     });
             }
         }]);

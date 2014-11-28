@@ -31,11 +31,11 @@ class Api_Jira_Users extends Core\Resource
         /** @var Core\Jira_Api $jiraApi */
         $jiraApi = $this->app->container['jira.api'];
         /** @var Result $result */
-        $result = $jiraApi->pickUsers($query);
+        $result = $jiraApi->searchUsers($query);
 
         return new Core\JsonResponse(
             Response::OK,
-            $result->getResult()['users']
+            $result->getResult()
         );
     }
 }

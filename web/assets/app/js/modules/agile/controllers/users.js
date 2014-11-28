@@ -33,21 +33,42 @@ angular.module('agile.controllers')
                         query: $scope.searchUser
                     })
                     .then(function(users) {
-                        $scope.jiraUsers = users;
+                        $scope.jiraUsers = filterJiraUsers(users);
                     });
+            }
+
+            function userExists(user)
+            {
+                for (var i = 0; i < $scope.users.length; i++) {
+                    if ($scope.users[i].key == user.key) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             function addUser(user)
             {
-                // todo: on importing user implement updating if user already exists
                 return Api.get('UsersImport').post({
                     key: user.key
                 }).then(function(response) {
                     Helper.setAlert('success', response.message);
-                    $scope.searchUser = '';
                     Api.get('Users').resetCache();
                     Api.get('JiraUsers').resetCache();
-                    loadUsers();
+                    loadUsers().then(function() {
+                        $scope.jiraUsers = filterJiraUsers($scope.jiraUsers);
+                    });
                 });
+            }
+
+            function filterJiraUsers(users)
+            {
+                var filteredUsers = [];
+                for (var i = 0; i < users.length; i++) {
+                    if (!userExists(users[i])) {
+                        filteredUsers.push(users[i]);
+                    }
+                }
+                return filteredUsers;
             }
         }]);

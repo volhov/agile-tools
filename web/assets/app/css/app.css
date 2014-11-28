@@ -49,6 +49,10 @@ label {
   margin-left: 40px;
   margin-right: 40px;
 }
+.alert {
+  padding: 10px 15px;
+  border-radius: 0;
+}
 .page-header {
   position: relative;
 }
@@ -98,6 +102,10 @@ label {
 .import-options a img {
   margin-right: 3px;
 }
+.filter-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .filter-row.fixed {
   position: fixed;
   top: 0;
@@ -111,7 +119,8 @@ label {
 .cl-report-header {
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #c3d9ff;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
 }
 .cl-report-header .cell-progress {
   padding: 0 5px;
@@ -126,7 +135,11 @@ label {
   font-size: .8em;
   text-align: center;
 }
+.cl-report {
+  margin-bottom: 30px;
+}
 .cl-report-row {
+  padding-top: 5px;
   min-height: 2em;
 }
 @media (max-width: 1400px) {
@@ -276,6 +289,9 @@ label {
 .cl-report-export {
   border-collapse: collapse;
 }
+.cl-report-export .cl-report-header {
+  background-color: #c3d9ff;
+}
 .cl-report-export .cl-report-row.good {
   background-color: #cfe6c4;
 }
@@ -320,13 +336,13 @@ label {
   font-family: monospace;
   letter-spacing: -1px;
 }
-.user-media {
+.condensed-media {
   margin: 15px 0;
 }
-.user-media .media-left img {
+.condensed-media .media-left img {
   border-radius: 5px;
 }
-.user-media .media-body h4 {
+.condensed-media .media-body h4 {
   margin: 7px 0 0;
 }
 .stats-summary {
@@ -401,11 +417,34 @@ label {
 .stats-lines.stats-one-issue .details br {
   display: inline;
 }
-.col-xs-12 {
-  width: 100%;
-  border-bottom: 1px solid #afcbe7;
-  margin-top: 7px;
-}
 .yaml-textarea {
   font-family: Courier, monospace;
+}
+.sorting-container.empty {
+  min-height: 30px;
+  border: 1px dotted #aaa;
+}
+.sorting-container.empty .sorting-placeholder {
+  border: 0 none;
+}
+.sorting-container.sorting-active {
+  min-height: 30px;
+}
+.sorting-placeholder {
+  border: 1px dotted #aaa;
+}
+.ui-sortable-helper {
+  background-color: rgba(232, 232, 232, 0.5) !important;
+}
+.projects-page {
+  margin-top: 30px;
+}
+.projects-page .project-media {
+  height: 70px;
+}
+.users-page {
+  margin-top: 30px;
+}
+.users-page .user-media {
+  height: 70px;
 }

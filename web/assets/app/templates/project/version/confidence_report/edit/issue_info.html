@@ -1,4 +1,4 @@
-<div class="col-xs-12" data-ng-class="getRowClass(issueInfo)" data-ng-drag="true" data-ng-drag-data="issueInfo">
+<div class="col-xs-12" data-ng-class="getRowClass()">
     <div class="row">
         <div class="cell col-sm-6">
             <div class="row">
@@ -6,13 +6,13 @@
                     <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
                        target="_blank">{{ issueInfo.key }}</a>
                     <span class="loading-indicator" title="Please wait..."
-                          data-ng-show="issueIsUpdating(issueInfo)"></span>
+                          data-ng-show="issueIsUpdating"></span>
                     <span class="issue-action a glyphicon glyphicon-repeat" title="Update issue"
-                          data-ng-click="updateIssue(issueInfo)"
-                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                          data-ng-click="updateIssue()"
+                          data-ng-hide="issueIsUpdating"></span>
                     <span class="issue-action a glyphicon glyphicon-remove text-danger" title="Remove issue"
-                          data-ng-click="removeIssue(issueInfo)"
-                          data-ng-hide="issueIsUpdating(issueInfo)"></span>
+                          data-ng-click="removeIssue()"
+                          data-ng-hide="issueIsUpdating"></span>
                 </div>
                 <div class="col-sm-7 cell-summary">
                     <span class="expand-btn clickable" data-ng-click="showDetails = true"
@@ -106,8 +106,8 @@
             <div class="col-sm-3">
                 <div data-ng-if="showStats"
                      data-ng-controller="Version_ConfidenceReport_Stats_OneIssue"
-                     data-ng-init="init(issueInfo)">
-                    <div data-ng-include="template"></div>
+                     data-ng-init="init(issueInfo)"
+                     data-ng-include="template">
                 </div>
             </div>
         </div>
