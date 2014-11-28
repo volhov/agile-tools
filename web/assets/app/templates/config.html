@@ -9,19 +9,31 @@
     <div class="row">
         <div class="col-md-12">
             <form role="form">
-                <div class="form-group" data-ng-class="{'has-error':!validateYaml(yamlConfig)}">
-                    <textarea class="form-control yaml-textarea" rows="10"
-                              data-ng-model="yamlConfig"></textarea>
-                </div>
+                <h4>General settings</h4>
                 <p class="help-block">
                     This is yaml format. If you have any problems or questions visit:
                     <a href="https://en.wikipedia.org/wiki/YAML">Wikipedia/YAML</a> or <a
                         href="http://www.yaml.org/refcard.html">YAML Quick Reference card</a>.
                 </p>
+                <div class="form-group" data-ng-class="{'has-error':!validateYaml(yamlConfig)}">
+                    <textarea class="form-control yaml-textarea" rows="10"
+                              data-ng-model="yamlConfig"></textarea>
+                </div>
+
+                <div data-ng-if="config.config._id != 'global'">
+                    <h4>Custom CSS</h4>
+                    <p class="help-block">
+                        Will be applied in {{ config.config._id }} project
+                    </p>
+                    <div class="form-group">
+                        <textarea class="form-control yaml-textarea" rows="10"
+                                  data-ng-model="$parent.customCss"></textarea>
+                    </div>
+                </div>
 
                 <button type="button" class="btn btn-default"
                         data-ng-disabled="!validateYaml(yamlConfig)"
-                        data-ng-click="saveConfig(yamlConfig)">Save</button>
+                        data-ng-click="saveConfig(yamlConfig, customCss)">Save</button>
             </form>
         </div>
     </div>

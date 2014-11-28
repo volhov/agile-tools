@@ -1,4 +1,4 @@
 .idea/workspace.xml
 vendor/*
 web/assets/bower
-conf/jira.yaml
+var/cookies

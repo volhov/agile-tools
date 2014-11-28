@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="/assets/app/img/favicon.png">
     <title>Agile Tools</title>
     <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap-theme.min.css">
     <link href="/assets/bower/pace/themes/pace-theme-minimal.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/app/css/app.css">
     <link rel="stylesheet" href="/assets/app/css/app-print.css" media="print">
@@ -20,6 +19,7 @@
     <![endif]-->
 
     <script src="/assets/bower/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/bower/jquery-ui/jquery-ui.min.js"></script>
     <script src="/assets/bower/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/assets/bower/pace/pace.min.js"></script>
     <script src="/assets/bower/moment/min/moment-with-locales.min.js"></script>
@@ -31,43 +31,30 @@
     <script src="/assets/bower/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="/assets/bower/chartjs/Chart.js"></script>
     <script src="/assets/bower/js-yaml/dist/js-yaml.min.js"></script>
-    <!-- Disabled for some time -->
-    <!--<script src="/assets/bower/ngDraggable/ngDraggable.js"></script>-->
+    <script src="/assets/bower/angular-ui-sortable/sortable.js"></script>
 
     <script src="/assets/app/js/modules/helper.js"></script>
     <script src="/assets/app/js/modules/helper/jira.js"></script>
     <script src="/assets/app/js/modules/api.js"></script>
     <script src="/assets/app/js/modules/api/factory.js"></script>
-
     <script src="/assets/app/js/modules/api/resources.js"></script>
-
-    <!-- Jira API Resources -->
-    <!--<script src="/assets/app/js/modules/api/jira/projects.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/jira/projects/project.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/jira/issues.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/jira/issues/issue.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/jira/issue_types.js"></script>-->
-
-    <!-- API Resources -->
-    <!--<script src="/assets/app/js/modules/api/config.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/projects.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/projects/project.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/projects/import.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/users.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/users/user.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/users/import.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/issues.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/issues/issue.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/issues/import.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/confidence_reports.js"></script>-->
-    <!--<script src="/assets/app/js/modules/api/confidence_reports/confidence_report.js"></script>-->
 
     <!-- Agile Modules -->
     <script src="/assets/app/js/modules/agile.js"></script>
-    <script src="/assets/app/js/modules/agile/filters.js"></script>
-    <script src="/assets/app/js/modules/agile/directives.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/confidence_report_issues.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/jira_time.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/assignee.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/capitalize.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/story_key.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/yaml.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/agile_assignees.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/authorization.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/time_stats.js"></script>
+    <script src="/assets/app/js/modules/agile/services/auth.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/start.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/config.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/login.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/projects.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/users/import.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/version.js"></script>
@@ -78,16 +65,14 @@
     <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/overview.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/one-issue.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/project/version/resources.js"></script>
-
     <script src="/assets/app/js/modules/agile/controllers/users.js"></script>
-
     <script src="/assets/app/js/modules/agile/controllers/performance.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/performance/bugs.js"></script>
     <script src="/assets/app/js/modules/agile/controllers/performance/tasks.js"></script>
 </head>
-<body role="document">
+<body role="document" data-authorization>
 
-    <div class="container-fluid theme-showcase" role="main">
+    <div class="container-fluid theme-showcase">
         <!--<div data-ng-view></div>-->
         <div data-app-view-segment="0"></div>
     </div>
@@ -97,7 +82,9 @@
         <a href="http://symmetrics.de">
             <img src="/assets/app/img/symmetrics-logo.png" height="35" width="144"/>
         </a>
-        <p>If any issue occurs try clearing your local storage, look into JS console for errors and contact Max Gopey.</p>
+        <p>If any issue occurs try clearing your local storage,
+            look into JS console for errors and contact Max Gopey.</p>
+        <div data-auth-info=""></div>
     </footer>
 </body>
 </html>
