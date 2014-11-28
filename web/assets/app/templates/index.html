@@ -18,6 +18,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Third-party applications -->
     <script src="/assets/bower/jquery/dist/jquery.min.js"></script>
     <script src="/assets/bower/jquery-ui/jquery-ui.min.js"></script>
     <script src="/assets/bower/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -33,13 +34,23 @@
     <script src="/assets/bower/js-yaml/dist/js-yaml.min.js"></script>
     <script src="/assets/bower/angular-ui-sortable/sortable.js"></script>
 
+    <!-- Helper Module -->
     <script src="/assets/app/js/modules/helper.js"></script>
-    <script src="/assets/app/js/modules/helper/jira.js"></script>
-    <script src="/assets/app/js/modules/api.js"></script>
-    <script src="/assets/app/js/modules/api/factory.js"></script>
-    <script src="/assets/app/js/modules/api/resources.js"></script>
+    <script src="/assets/app/js/modules/helper/services/helper.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/status.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/task_type.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/issue_state.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/assignees.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/time.js"></script>
 
-    <!-- Agile Modules -->
+    <!-- Api Module -->
+    <script src="/assets/app/js/modules/api.js"></script>
+    <script src="/assets/app/js/modules/api/services/api.js"></script>
+    <script src="/assets/app/js/modules/api/services/factory.js"></script>
+    <script src="/assets/app/js/modules/api/services/resources.js"></script>
+
+    <!-- Agile Module -->
     <script src="/assets/app/js/modules/agile.js"></script>
     <script src="/assets/app/js/modules/agile/filters/confidence_report_issues.js"></script>
     <script src="/assets/app/js/modules/agile/filters/jira_time.js"></script>
@@ -73,7 +84,6 @@
 <body role="document" data-authorization>
 
     <div class="container-fluid theme-showcase">
-        <!--<div data-ng-view></div>-->
         <div data-app-view-segment="0"></div>
     </div>
 
