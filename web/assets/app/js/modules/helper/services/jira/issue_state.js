@@ -64,7 +64,7 @@ angular.module('helper')
 
             function defineSimpleTaskState(issue, issueState)
             {
-                if (issue.issuetype.name != 'Task') {
+                if (issue.issuetype.name != 'Task' && issue.issuetype.name != 'Bug Report') {
                     return;
                 }
                 var taskType = getTaskType(issue);
