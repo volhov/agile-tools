@@ -2,7 +2,6 @@ angular.module('agile.controllers')
     .controller('Performance', ['$scope', '$routeParams', '$filter', 'Api', 'Helper',
         function($scope, $routeParams, $filter, Api, Helper) {
 
-            $scope.moment = moment; // This is to use moment.js easily in templates.
             $scope.filters = {
                 project: null
             };

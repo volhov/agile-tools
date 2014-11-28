@@ -1,6 +1,6 @@
 angular.module('agile.controllers')
-    .controller('Performance_Bugs', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper',
-        function($scope, TEMPLATES_URL, Api, Helper) {
+    .controller('Performance_Bugs', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'dateFormatFilter',
+        function($scope, TEMPLATES_URL, Api, Helper, dateFormatFilter) {
 
             $scope.template = TEMPLATES_URL + '/performance/bugs.html';
 
@@ -33,7 +33,7 @@ angular.module('agile.controllers')
                 }
 
                 var jql = 'issuetype = "Bug Report" AND status in (Resolved, Closed) ' +
-                    ' AND created <= "' + moment().format('YYYY-MM-DD') + '"' + // this is to cache bugs per day
+                    ' AND created <= "' + dateFormatFilter('now', 'YYYY-MM-DD') + '"' + // this is to cache bugs per day
                     ' AND Teilnehmer = ' + $scope.user.key;
                 if ($scope.filters.project) {
                     jql += ' AND project = ' + $scope.filters.project.key;

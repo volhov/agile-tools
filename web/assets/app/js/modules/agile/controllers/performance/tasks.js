@@ -1,6 +1,6 @@
 angular.module('agile.controllers')
-    .controller('Performance_Tasks', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper',
-        function($scope, TEMPLATES_URL, Api, Helper) {
+    .controller('Performance_Tasks', ['$scope', 'TEMPLATES_URL', 'Api', 'Helper', 'dateFormatFilter',
+        function($scope, TEMPLATES_URL, Api, Helper, dateFormatFilter) {
 
             $scope.template = TEMPLATES_URL + '/performance/tasks.html';
 
@@ -31,7 +31,7 @@ angular.module('agile.controllers')
                     };
                 }
                 var jql = 'issuetype in (Task, Sub-task) AND status in (Resolved, Closed) ' +
-                    ' AND created <= "' + moment().format('YYYY-MM-DD') + '"' + // this is to cache issues per day
+                    ' AND created <= "' + dateFormatFilter('now', 'YYYY-MM-DD') + '"' + // this is to cache issues per day
                     ' AND assignee = ' + $scope.user.key;
                 if ($scope.filters.project) {
                     jql += ' AND project = ' + $scope.filters.project.key;

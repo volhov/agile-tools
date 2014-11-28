@@ -2,8 +2,6 @@ angular.module('agile.controllers')
     .controller('Version', ['$scope', '$routeSegment', '$routeParams', 'Api', 'Helper',
         function($scope, $routeSegment, $routeParams, Api, Helper) {
 
-            $scope.moment = moment; // This is to use moment.js easily in templates.
-
             $scope.$watch('project', function () {
                 if ($scope.project) {
                     $scope.version = getVersion($routeParams.versionName);

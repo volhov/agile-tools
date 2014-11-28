@@ -28,8 +28,8 @@ angular.module('agile.controllers')
             function sortClDates()
             {
                 $scope.clDates.sort(function(a, b) {
-                    var aDate = moment(a);
-                    var bDate = moment(b);
+                    var aDate = new Date(a);
+                    var bDate = new Date(b);
                     if (aDate < bDate) {
                         return 1;
                     } else if (aDate > bDate) {

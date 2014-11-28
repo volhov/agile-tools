@@ -7,7 +7,6 @@ angular.module('agile.controllers')
                 loadConfig();
             });
 
-            $scope.moment = moment; // This is to use moment.js easily in templates.
             $scope.loadProject = loadProject;
             $scope.userTypes = Helper.getUserTypes();
 
