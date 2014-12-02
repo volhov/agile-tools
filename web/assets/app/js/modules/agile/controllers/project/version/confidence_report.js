@@ -212,7 +212,7 @@ angular.module('agile.controllers')
 
             function initFilterRowFixing() {
                 var $filter = $('.filter-row');
-                if ($filter.length) {
+                if ($filter.length && !$filter.data('row-fixed')) {
                     // Leave a placeholder to prevent changing the window height
                     //  and therefore the scroll event again.
                     $filter.parent('.filter-row-container').height($filter.outerHeight());
@@ -224,6 +224,7 @@ angular.module('agile.controllers')
                             $filter.removeClass('fixed');
                         }
                     });
+                    $filter.data('row-fixed', true);
                 }
             }
 
