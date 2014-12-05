@@ -256,6 +256,7 @@ angular.module('agile.controllers')
             {
                 return {
                     axis: 'y',
+                    delay: 200,
                     connectWith: '.sorting-container',
                     placeholder: 'sorting-placeholder',
                     start: function(e, ui) {
