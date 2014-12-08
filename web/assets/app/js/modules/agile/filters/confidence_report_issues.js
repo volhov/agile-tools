@@ -70,6 +70,22 @@ angular.module('agile.filters')
                 return results;
             }
         }, {
+            key: 'c:',
+            handler: function(input, expression) {
+                var results = [];
+                for (var i = 0; i < input.length; i++) {
+                    if (input[i].issue.components) {
+                        for (var k = 0; k < input[i].issue.components.length; k++) {
+                            if (matching(input[i].issue.components[k].name, expression)) {
+                                results.push(input[i]);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return results;
+            }
+        }, {
             key: 'cl:',
             handler: function(input, expression) {
                 var results = [];

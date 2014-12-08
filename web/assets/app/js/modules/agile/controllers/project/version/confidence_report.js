@@ -3,6 +3,19 @@ angular.module('agile.controllers')
         function($rootScope, $scope, $location, Api, Helper, JiraHelper) {
 
             $scope.searchIssue = '';
+
+            $scope.loadConfidenceReport = loadConfidenceReport;
+            $scope.saveConfidenceReport = saveConfidenceReport;
+            $scope.updateConfidenceReport = updateConfidenceReport;
+            $scope.updateIssue = updateIssue;
+            $scope.removeIssue = removeIssue;
+
+            $scope.sortableOptions = getSortingOptions();
+
+            $scope.exportConfidenceReport = function() {
+                $location.path($location.path() + '/export');
+            };
+
             $scope.$watch('version', function () {
                 if ($scope.project && $scope.version) {
                     $scope.loadConfidenceReport().then(function() {
@@ -16,11 +29,9 @@ angular.module('agile.controllers')
                 fillSortedIssues();
             });
 
-            $scope.exportConfidenceReport = function() {
-                $location.path($location.path() + '/export');
-            };
+            // Protected functions
 
-            $scope.loadConfidenceReport = function(ignoreCache)
+            function loadConfidenceReport(ignoreCache)
             {
                 var reportId = getConfidenceReportKey($scope.project, $scope.version);
                 var confidenceReportApi = Api.get('ConfidenceReport');
@@ -51,9 +62,9 @@ angular.module('agile.controllers')
                 }
 
                 return promise;
-            };
+            }
 
-            $scope.saveConfidenceReport = function()
+            function saveConfidenceReport()
             {
                 var confidenceRecordData = $.extend(true, {}, $scope.confidenceReport);
                 extractExpansion(confidenceRecordData);
@@ -62,9 +73,9 @@ angular.module('agile.controllers')
                     .then(function(response) {
                         Helper.setAlert('success', response.message);
                     });
-            };
+            }
 
-            $scope.updateConfidenceReport = function()
+            function updateConfidenceReport()
             {
                 var importKeys = [];
                 for (var i = 0; i < $scope.confidenceReport.issues.length; i++) {
@@ -88,9 +99,10 @@ angular.module('agile.controllers')
                         });
                     });
                 }
-            };
+            }
 
-            $scope.updateIssue = function(issueInfo) {
+
+            function updateIssue(issueInfo) {
                 Api.get('IssuesImport').post({
                     keys: [issueInfo.key]
                 }).then(function(response) {
@@ -116,9 +128,9 @@ angular.module('agile.controllers')
                         });
                     });
                 });
-            };
+            }
 
-            $scope.removeIssue = function(issueInfo) {
+            function removeIssue(issueInfo) {
                 if (confirm("Are you sure?")) {
                     var issueIndex = $scope.confidenceReport.issues.indexOf(issueInfo);
 
@@ -130,15 +142,7 @@ angular.module('agile.controllers')
                         });
                     }
                 }
-            };
-
-            $scope.sortableOptions = getSortingOptions();
-
-            // Temporary.
-            $scope.actualizeIssuesState = actualizeIssuesState;
-            $scope.actualizeIssuesAssignees = actualizeIssuesAssignees;
-
-            // Protected functions
+            }
 
             function injectExpansion(confidenceReport) {
                 angular.forEach(confidenceReport.issues, function (issueInfo) {
@@ -210,7 +214,11 @@ angular.module('agile.controllers')
                     });
             }
 
-            function initFilterRowFixing() {
+            /**
+             * Todo: move to directive.
+             */
+            function initFilterRowFixing()
+            {
                 var $filter = $('.filter-row');
                 if ($filter.length && !$filter.data('row-fixed')) {
                     // Leave a placeholder to prevent changing the window height
