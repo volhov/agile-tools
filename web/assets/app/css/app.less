@@ -155,8 +155,6 @@ label {
     margin-bottom: 30px;
 }
 .cl-report-row {
-    padding-top: 5px;
-    min-height: 2em;
 
     @media (max-width: 1400px) {
         font-size: 13px;
@@ -179,6 +177,11 @@ label {
         background: transparent;
     }
 
+    .cl-report-row-col {
+        padding-top: 5px;
+        min-height: 2em;
+    }
+
     .good .cell-status {
         color: #0d9814;
     }
@@ -187,6 +190,9 @@ label {
     }
     .bad .cell-status {
         color: #ff2f31;
+    }
+    .wrong-version {
+        background-color: rgba(255, 47, 49, 0.15);
     }
     .cell-progress {
         padding: 0 5px;

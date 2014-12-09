@@ -138,10 +138,6 @@ label {
 .cl-report {
   margin-bottom: 30px;
 }
-.cl-report-row {
-  padding-top: 5px;
-  min-height: 2em;
-}
 @media (max-width: 1400px) {
   .cl-report-row {
     font-size: 13px;
@@ -161,6 +157,10 @@ label {
 .cl-report-row.pseudo {
   background: transparent;
 }
+.cl-report-row .cl-report-row-col {
+  padding-top: 5px;
+  min-height: 2em;
+}
 .cl-report-row .good .cell-status {
   color: #0d9814;
 }
@@ -169,6 +169,9 @@ label {
 }
 .cl-report-row .bad .cell-status {
   color: #ff2f31;
+}
+.cl-report-row .wrong-version {
+  background-color: rgba(255, 47, 49, 0.15);
 }
 .cl-report-row .cell-progress {
   padding: 0 5px;

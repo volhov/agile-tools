@@ -29,6 +29,13 @@ angular.module('agile.controllers')
                 fillSortedIssues();
             });
 
+            $scope.$on('confidenceReportIssuesUpdated', function() {
+                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
+                    actualizeIssueState(issueInfo);
+                    actualizeIssueAssignees(issueInfo);
+                });
+            });
+
             // Protected functions
 
             function loadConfidenceReport(ignoreCache)
@@ -89,12 +96,13 @@ angular.module('agile.controllers')
                         Helper.setAlert('success', response.message);
                         $scope.loadConfidenceReport(true).then(function() {
 
-                            actualizeIssuesState();
-                            actualizeIssuesAssignees();
+                            $scope.$broadcast('confidenceReportIssuesUpdated');
 
                             $scope.saveConfidenceReport();
-                            $scope.showUpdateLoader = false;
+
                             $scope.$broadcast('confidenceReportChanged');
+
+                            $scope.showUpdateLoader = false;
                             Helper.setAlert('success', 'Issues have been updated.');
                         });
                     });
@@ -176,22 +184,8 @@ angular.module('agile.controllers')
                 }
             }
 
-            function actualizeIssuesState()
-            {
-                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
-                    actualizeIssueState(issueInfo);
-                });
-            }
-
             function actualizeIssueAssignees(issueInfo) {
                 issueInfo.assignees = JiraHelper.getStoryAssignees(issueInfo.issue);
-            }
-
-            function actualizeIssuesAssignees()
-            {
-                angular.forEach($scope.confidenceReport.issues, function(issueInfo) {
-                    actualizeIssueAssignees(issueInfo);
-                });
             }
 
             function getConfidenceReportKey(project, version)
