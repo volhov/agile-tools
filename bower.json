@@ -1,0 +1,37 @@
+{
+  "name": "agile.tools",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Radio/agile-tools",
+  "authors": [
+    "Max Gopey <max.gopey@symmetrics.de>"
+  ],
+  "description": "Symmetrics Agile Tools",
+  "main": "web/index.php",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "web/assets",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "latest",
+    "angular": "latest",
+    "angular-resource": "latest",
+    "angular-route": "latest",
+    "bootstrap": "latest",
+    "angular-local-storage": "latest",
+    "angular-sanitize": "latest",
+    "pace": "latest",
+    "moment": "latest",
+    "angular-route-segment": "latest",
+    "chartjs": "latest",
+    "js-yaml": "latest",
+    "angular-ui-sortable": "latest"
+  },
+  "resolutions": {
+    "angular": "latest"
+  }
+}

@@ -1,0 +1,38 @@
+<div class="page-header">
+    <h1>Start</h1>
+    <div data-ng-show="alert.message" role="alert"
+         class="alert alert-{{alert.type}}">{{alert.message}}</div>
+</div>
+<div class="row start-page">
+    <div class="col-md-5">
+        <h2>1. Choose a project</h2>
+        <p>It will be imported once you click.</p>
+        <p>
+            <label>Filter: <input data-ng-model="searchProject"></label>
+        </p>
+        <ul class="projects">
+            <li data-ng-repeat="project in projects | filter:searchProject">
+                <img data-ng-src="{{project.avatarUrls['16x16']}}" src=""/>
+                <span class="a" data-ng-click="startProject(project)">
+                    {{project.name}}
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-7">
+        <div data-ng-show="project.key">
+            <h2>2. Choose a version of {{ project.name }}</h2>
+            <p>And you will start immediately.</p>
+            <p>
+                <label>Filter: <input data-ng-model="searchVersion.name"></label>
+            </p>
+            <ul class="project-versions">
+                <li data-ng-repeat="version in project.versions | filter:searchVersion">
+                    <a href="/project/{{ project.key }}/{{ version.name }}">
+                        {{version.name}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="clearfix">
+    <h2 class="pull-left">Resources</h2>
+</div>
+
+<div class="resources-container">
+
+    <div class="plan-settings-info" data-ng-hide="showSettingsForm">
+
+        <span class="a" data-ng-click="showSettingsForm = true">Edit</span>
+    </div>
+    <form class="form-horizontal" role="form"
+            data-ng-show="showSettingsForm">
+        <div class="form-group">
+            <label for="startDate" class="col-sm-1 control-label">Iteration start</label>
+            <div class="col-sm-3">
+                <input class="form-control input-sm" id="startDate" placeholder="dd.mm.yyyy"
+                       data-ng-model="resourcesPlan.startDate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endDate" class="col-sm-1 control-label">Iteration end</label>
+            <div class="col-sm-3">
+                <input class="form-control input-sm" id="endDate" placeholder="dd.mm.yyyy"
+                       data-ng-model="resourcesPlan.endDate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">Iteration length</label>
+            <div class="col-sm-3">
+                <p class="form-control-static">{{ resourcesPlan.endDate | dateDiff:resourcesPlan.startDate }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="buffer" class="col-sm-1 control-label">Buffer</label>
+            <div class="col-sm-3">
+                <input class="form-control input-sm" id="buffer" placeholder="h"
+                       data-ng-model="resourcesPlan.buffer">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="qaDays" class="col-sm-1 control-label">QA days</label>
+            <div class="col-sm-3">
+                <input class="form-control input-sm" id="qaDays" placeholder="d"
+                       data-ng-model="resourcesPlan.qaDays">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="devDays" class="col-sm-1 control-label">Dev days</label>
+            <div class="col-sm-3">
+                <input class="form-control input-sm" id="devDays" placeholder="d"
+                       data-ng-model="resourcesPlan.devDays">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary"
+                data-ng-click="showSettingsForm = false">Done</button>
+    </form>
+
+    <div data-ng-repeat="userType in userTypes">
+        <div class="row">
+            <div class="col-sm-2"><strong>{{ userType.name }}</strong></div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-3">Avail</div>
+                    <div class="col-sm-3">Alloc</div>
+                    <div class="col-sm-3">Diff</div>
+                </div>
+            </div>
+        </div>
+        <div class="row"
+             data-ng-repeat="user in resourcesPlan.users">
+            <div class="col-sm-2">
+                {{ user.name }} . {{ user.type }}  .  {{ userType.key}}
+            </div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-3">{{ user.available }}</div>
+                    <div class="col-sm-3">{{ user.allocated }}</div>
+                    <div class="col-sm-3">{{ user.available - user.allocated }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

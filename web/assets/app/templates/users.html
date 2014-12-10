@@ -1,0 +1,51 @@
+<div class="page-header">
+    <div class="users-header">
+        <h1>Users</h1>
+    </div>
+    <div data-ng-show="alert.message" role="alert"
+         class="alert alert-{{alert.type}}">{{alert.message}}</div>
+</div>
+<div class="row filter-row">
+    <div class="col-sm-3">
+        <div class="filter-holder">
+            <input type="search" class="form-control input-sm" placeholder="Filter users"
+                   data-ng-model="searchUser">
+        </div>
+    </div>
+</div>
+<div class="users-page">
+    <div class="row">
+        <div class="col-md-3" data-ng-repeat="user in users | filter:searchUser">
+            <div class="media condensed-media user-media">
+                <div class="media-left">
+                    <a href="/users/{{ user.key }}">
+                        <img data-ng-src="{{ user.avatar_urls['48x48'] }}" src="" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4><a href="/users/{{ user.key }}" class="media-heading">{{ user.name }}</a></h4>
+                    <p data-ng-show="user.type || user.projects.length || 1">
+                        {{ user.type || 'Works' }}
+                        <span data-ng-show="user.projects.length"> at {{ user.projects.join(' ') }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" data-ng-repeat="user in jiraUsers">
+            <div class="media condensed-media user-media jira-user-media">
+                <div class="media-left">
+                    <a href="/users/{{ user.key }}">
+                        <img data-ng-src="{{ user.avatarUrls['48x48'] }}" src="" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4>
+                        <span class="media-heading">{{ user.displayName }}</span>
+                        <button class="btn btn-success btn-xs" data-ng-click="addUser(user)">Add</button>
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

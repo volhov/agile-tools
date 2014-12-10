@@ -1,0 +1,4 @@
+.idea/workspace.xml
+vendor/*
+web/assets/bower
+var/cookies

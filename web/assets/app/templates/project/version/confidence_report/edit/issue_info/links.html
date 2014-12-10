@@ -1,0 +1,29 @@
+<div class="row cl-report-row-links"
+     data-ng-if="issueInfo.issue.links.length && showLinkedIssues">
+    <div class="cell col-sm-12">
+        <p><strong>Linked issues</strong></p>
+        <div class="row" data-ng-repeat="linkedTask in issueInfo.issue.links">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-2 cell-key">
+                        &nbsp;<span class="secondary-info">&ndash;</span>
+                        <a href="{{ config.yaml.jira_url }}/browse/{{ linkedTask.key }}"
+                           target="_blank">{{ linkedTask.key }}</a>
+                    </div>
+                    <div class="col-sm-7 cell-summary">
+                        {{ linkedTask.summary }}
+                                <span class="issue-time">
+                                    <span title="Estimated">{{ linkedTask.time.aggr.estimated | jiraTime}}</span>
+                                    / <span title="Remaining">{{ linkedTask.time.aggr.remaining | jiraTime}}</span>
+                                    / <span title="Spent">{{ linkedTask.time.aggr.spent | jiraTime}}</span>
+                                </span>
+                    </div>
+                    <div class="col-sm-3 cell-assignee">
+                        <span>{{ linkedTask.assignee.name | assigneeShort }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">{{ linkedTask.status.name }}</div>
+        </div>
+    </div>
+</div>

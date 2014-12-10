@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-ng-app="agile">
+<!--<html lang="en" data-ng-app="agile" ng-strict-di>-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="/assets/app/img/favicon.png">
+    <title>Agile Tools</title>
+    <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css">
+    <link href="/assets/bower/pace/themes/blue/pace-theme-minimal.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/app/css/app.css">
+    <link rel="stylesheet" href="/assets/app/css/app-print.css" media="print">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Third-party applications -->
+    <script src="/assets/bower/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/bower/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/assets/bower/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/bower/pace/pace.min.js"></script>
+    <script src="/assets/bower/moment/min/moment-with-locales.min.js"></script>
+    <script src="/assets/bower/angular/angular.min.js"></script>
+    <script src="/assets/bower/angular-route/angular-route.min.js"></script>
+    <script src="/assets/bower/angular-route-segment/build/angular-route-segment.js"></script>
+    <script src="/assets/bower/angular-resource/angular-resource.min.js"></script>
+    <script src="/assets/bower/angular-local-storage/dist/angular-local-storage.min.js"></script>
+    <script src="/assets/bower/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/assets/bower/chartjs/Chart.js"></script>
+    <script src="/assets/bower/js-yaml/dist/js-yaml.min.js"></script>
+    <script src="/assets/bower/angular-ui-sortable/sortable.js"></script>
+
+    <!-- Helper Module -->
+    <script src="/assets/app/js/modules/helper.js"></script>
+    <script src="/assets/app/js/modules/helper/services/helper.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/status.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/task_type.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/issue_state.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/assignees.js"></script>
+    <script src="/assets/app/js/modules/helper/services/jira/time.js"></script>
+
+    <!-- Api Module -->
+    <script src="/assets/app/js/modules/api.js"></script>
+    <script src="/assets/app/js/modules/api/services/api.js"></script>
+    <script src="/assets/app/js/modules/api/services/factory.js"></script>
+    <script src="/assets/app/js/modules/api/services/resources.js"></script>
+
+    <!-- Agile Module -->
+    <script src="/assets/app/js/modules/agile.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/confidence_report_issues.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/jira_time.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/assignee.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/capitalize.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/story_key.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/yaml.js"></script>
+    <script src="/assets/app/js/modules/agile/filters/date.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/agile_assignees.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/authorization.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/time_stats.js"></script>
+    <script src="/assets/app/js/modules/agile/directives/confidence_report_filter.js"></script>
+    <script src="/assets/app/js/modules/agile/services/auth.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/start.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/config.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/login.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/projects.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/users/import.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/issue_info.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/import.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/export.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/overview.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/confidence_report/stats/one-issue.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/project/version/resources.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/users.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/performance.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/performance/bugs.js"></script>
+    <script src="/assets/app/js/modules/agile/controllers/performance/tasks.js"></script>
+</head>
+<body role="document" data-authorization>
+
+    <div class="container-fluid theme-showcase">
+        <div data-app-view-segment="0"></div>
+    </div>
+
+    <footer class="container-fluid">
+        <hr/>
+        <a href="http://symmetrics.de">
+            <img src="/assets/app/img/symmetrics-logo.png" height="35" width="144"/>
+        </a>
+        <p>If any issue occurs try clearing your local storage,
+            look into JS console for errors and contact Max Gopey.</p>
+        <div data-auth-info=""></div>
+    </footer>
+</body>
+</html>

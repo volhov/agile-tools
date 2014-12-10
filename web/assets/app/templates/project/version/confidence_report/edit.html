@@ -1,0 +1,117 @@
+<div data-ng-controller="Version_ConfidenceReport_Import" data-ng-include="template"></div>
+
+<div class="cl-report-container" data-ng-if="!hideIssues">
+
+    <div class="filter-row-container">
+        <div class="row filter-row">
+            <div class="col-sm-3">
+                <div class="filter-holder"
+                     data-confidence-report-filter>
+                    <input type="search" class="form-control input-sm" placeholder="Filter issues"
+                           data-ng-model="$parent.$parent.searchIssue">
+                </div>
+            </div>
+            <div class="col-sm-6 options"
+                 data-ng-init="showSubtasks = true; showStats = true;">
+                <div class="checkbox">
+                    <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assignees</label>
+                    <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
+                    <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+                    <label><input type="checkbox" data-ng-model="showStats"> Show Stats</label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="pull-right filter-holder">
+                    <button type="button" class="btn btn-sm btn-info"
+                            data-ng-click="exportConfidenceReport()">Export</button>
+                    <button type="button" class="btn btn-sm btn-primary"
+                            data-ng-click="saveConfidenceReport()">Save</button>
+                    <button type="button" class="btn btn-sm btn-warning"
+                            data-ng-click="updateConfidenceReport(true)">Update</button>
+                    <button type="button" class="btn btn-sm"
+                            data-ng-hide="1"
+                            data-ng-click="actualizeIssuesState()">Actualize State</button>
+                    <button type="button" class="btn btn-sm"
+                            data-ng-hide="1"
+                            data-ng-click="actualizeIssuesAssignees()">Actualize Assignees</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cl-report" data-ng-hide="showUpdateLoader">
+        <div class="row cl-report-header">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <strong>Key</strong>
+                    </div>
+                    <div class="col-sm-7">
+                        <strong>Story Key / Summary</strong>
+                        <span class="pull-right">
+                            <span title="Estimated">E</span>
+                            / <span title="Remaining">R</span>
+                            / <span title="Spent">S</span>
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <strong>Assignees</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <strong>Status</strong>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-3 cell-progress">
+                        <strong>Progress</strong>
+                    </div>
+                    <div class="col-sm-2 cell-cl">
+                        <strong>CL</strong>
+                    </div>
+                    <div class="col-sm-7 cell-checkboxes">
+                        <div class="row">
+                            <div class="col-sm-2"><strong>Impl</strong></div>
+                            <div class="col-sm-2"><strong>Doc</strong></div>
+                            <div class="col-sm-2"><strong>TBD</strong></div>
+                            <div class="col-sm-2"><strong>TC</strong></div>
+                            <div class="col-sm-2"><strong>QA</strong></div>
+                            <div class="col-sm-2"><strong>CR</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <strong>Risks, issues, etc.</strong>
+            </div>
+        </div>
+
+        <div class="sorting-container"
+             data-ng-class="{empty:!sortedIssues.export.length}"
+             data-ui-sortable="sortableOptions" data-ng-model="sortedIssues.export">
+            <div class="row cl-report-row"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:true} | confidenceReportIssues:$parent.$parent.searchIssue"
+                 data-ng-controller="Version_ConfidenceReport_IssueInfo"
+                 data-ng-include="template">
+            </div>
+        </div>
+        <h4>Watched</h4>
+        <div class="sorting-container"
+             data-ng-class="{empty:!sortedIssues.watch.length}"
+             data-ui-sortable="sortableOptions" data-ng-model="sortedIssues.watch">
+            <div class="row cl-report-row"
+                 data-ng-repeat="issueInfo in confidenceReport.issues | filter:{export:false} | confidenceReportIssues:$parent.$parent.searchIssue"
+                 data-ng-controller="Version_ConfidenceReport_IssueInfo"
+                 data-ng-include="template">
+            </div>
+        </div>
+    </div>
+
+    <p data-ng-show="showUpdateLoader" class="info bg-info">
+        <span class="loading-indicator" title="Please wait..."></span>
+        Issues are being updated. Please wait for a moment.
+    </p>
+
+    <div data-ng-controller="Version_ConfidenceReport_Stats_Overview"  data-ng-include="template"></div>
+</div>

@@ -1,0 +1,84 @@
+<h3>General Information</h3>
+<p>
+    Issues are imported from Jira with all their sub-tasks and linked bugs.
+    After importing some information is aggregated and saved.
+</p>
+<h4>Columns</h4>
+<p>
+    The <strong>Assignees</strong> field shows the aggregated information about assignees.
+    <br>In simple mode only the developers are shown.
+        In detailed mode (see "Expand Assignees" below) the testing-developeris also shown.
+</p>
+<p>
+    The <strong>Status</strong> field shows the aggregated issue status.
+    <br>It may be one of: Open, In progress, Doc, In TBD, In QA, Resolved, Done.
+</p>
+<p>
+    The <strong>CL</strong> field shows the
+        <a href="https://wiki.symmetrics.de/display/TEAMLEADS/Confidence+levels+reporting+guidelines">Confidence Level</a>
+        of the issue.
+</p>
+<p>See "Filtering issues" section below to learn how to filter by assignees, status or CL.</p>
+<p>
+    The <strong>Impl</strong>, <strong>Doc</strong>, <strong>TBD</strong>, <strong>TC</strong>,
+        <strong>QA</strong> and <strong>CR</strong> fields are calculated dynamically.
+    <br>The dash "&mdash;" means that appropriate task is not needed.
+</p>
+<h4>Updating and saving</h4>
+<p>
+    To update the issues state click the orange "Update" button and wait for a moment.
+    <br>All issues will be re-imported. All aggregated fields will be re-calculated and saved.
+    <br>You can also update each issue separately. Click the update button
+        <span class="glyphicon glyphicon-repeat"></span> near the issue key to do so.
+</p>
+<p>
+    The CLR is being saved automatically after any update.
+    <br>But you have to save additionally after any manual input, i.e. changing the progress, cl, or note.
+</p>
+<h3>Importing issues</h3>
+<p>
+    You can add any story, task or bug from this iteration to the Confidence Levels report.
+    <br>To do so click the appropriate link after the "Import:".
+    <br>Already imported issues will be hidden by default. Click the "Show imported" checkbox to show them.
+</p>
+<h3>Filtering issues</h3>
+<p>
+    Type a search keyword to filter issues by key, summary, note, status, progress.
+    <br>Issues will be filtered on-the-fly as you will enter more than 2 symbols.
+</p>
+<p>
+    Type <code>s: qa</code> or <code>s: tbd</code> or <code>s: %whatever%</code> to filter issues by aggregated status.
+</p>
+<p>
+    Type <code>a: %name%</code> to filter issues by aggregated assignees.
+</p>
+<p>
+    Type <code>t: %name%</code> to filter issues by developer who is responsible for TBD.
+</p>
+<p>
+    Type <code>c: %component%</code> to filter issues by component.
+</p>
+<p>
+    Type <code>tp: %type%</code> to filter issues by type (i.e. story, task or bug).
+</p>
+<p>
+    Type <code>cl: %expr%</code> to filter issues by CL. Examples:
+    <br><code>cl: 9</code> — shows issues with CL = 9.
+    <br><code>cl: >6</code> — shows issues with CL > 6. Also works with "<".
+    <br><code>cl: 4-6</code> — shows issues with CL between 4 and 6 (incl).
+</p>
+<p>
+    You can also filter by multiple statuses, assignees or tester.
+    Just type them separated by comma.
+    <br>Ex.: <code>s: open, progress, doc</code> or <code>s: tbd, qa</code>.
+</p>
+<h3>Manage view</h3>
+<p>
+    Check <strong>Expand Assignees</strong> to show detailed information about assignees for the story.
+</p>
+<p>
+    Check <strong>Show Subtasks</strong> to show sub-tasks in detailed issue view.
+</p>
+<p>
+    Check <strong>Show Linked Issues</strong> to show linked issues in detailed issue view.
+</p>

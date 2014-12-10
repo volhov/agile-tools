@@ -1,0 +1,226 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "79c31e5d09afcfa46a16f37f68c7914a",
+    "packages": [
+        {
+            "name": "chobie/jira-api-restclient",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chobie/jira-api-restclient.git",
+                "reference": "661e028fa3e96451202307259c4695d25df1a393"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chobie/jira-api-restclient/zipball/661e028fa3e96451202307259c4695d25df1a393",
+                "reference": "661e028fa3e96451202307259c4695d25df1a393",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "chobie\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shuhei Tanuma",
+                    "email": "chobieeee@php.net",
+                    "homepage": "http://chobie.github.io/"
+                }
+            ],
+            "description": "JIRA REST API.",
+            "keywords": [
+                "api",
+                "jira",
+                "rest"
+            ],
+            "time": "2014-07-27 11:55:20"
+        },
+        {
+            "name": "peej/tonic",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/peej/tonic.git",
+                "reference": "7589f49abc0f6c2a482978e0d7108bc7ba273543"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/peej/tonic/zipball/7589f49abc0f6c2a482978e0d7108bc7ba273543",
+                "reference": "7589f49abc0f6c2a482978e0d7108bc7ba273543",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "behat/behat": "2.*",
+                "peej/phpdoctor": "dev-master",
+                "phpspec/phpspec": "1.*"
+            },
+            "suggest": {
+                "pimple/pimple": "A simple dependancy injection container to handle your services",
+                "smarty/smarty": "PHP templating engine for building response representations"
+            },
+            "bin": [
+                "web/dispatch.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Tonic": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul James",
+                    "email": "paul@peej.co.uk"
+                }
+            ],
+            "description": "The RESTful Web App PHP Micro-Framework",
+            "homepage": "http://peej.github.com/tonic",
+            "keywords": [
+                "microframework",
+                "rest"
+            ],
+            "time": "2014-02-06 15:15:44"
+        },
+        {
+            "name": "pimple/pimple",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabpot/Pimple.git",
+                "reference": "3764c3985684ad6af4ad3c7d2e0595f9f09faf5f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/3764c3985684ad6af4ad3c7d2e0595f9f09faf5f",
+                "reference": "3764c3985684ad6af4ad3c7d2e0595f9f09faf5f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2014-07-29 17:32:26"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Yaml",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Yaml.git",
+                "reference": "d84b97a12046b2c34e8457626b9f2b72dec0c183"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/d84b97a12046b2c34e8457626b9f2b72dec0c183",
+                "reference": "d84b97a12046b2c34e8457626b9f2b72dec0c183",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Yaml\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-08-05 09:07:51"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "peej/tonic": 20,
+        "pimple/pimple": 20,
+        "symfony/yaml": 20,
+        "chobie/jira-api-restclient": 20
+    },
+    "prefer-stable": false,
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

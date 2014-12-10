@@ -1,0 +1,29 @@
+<div class="project-import" data-ng-show="showImport">
+    <label>
+        <input type="search" placeholder="User Name" class="form-control input-sm"
+               data-ng-model="userQuery"
+               data-ng-change="searchUser(userQuery)"/>
+    </label>
+    <ul>
+        <li class="project-import-user"
+             data-ng-repeat="jiraUser in jiraUsers">
+            <span class="a"
+                  data-ng-click="addUser(jiraUser)"
+                  data-ng-bind-html="jiraUser.html"></span>
+        </li>
+        </ul>
+</div>
+
+<p data-ng-show="showImportLoader" class="info bg-info">
+    <span class="loading-indicator" title="Please wait..."></span>
+    User is being imported. Please wait for a moment.
+</p>
+
+<p data-ng-hide="showImportLoader">
+    <button type="button" class="btn btn-sm btn-default"
+            data-ng-hide="showImport"
+            data-ng-click="openImportForm()">Add user</button>
+    <button type="button" class="btn btn-sm btn-warning"
+            data-ng-show="showImport"
+            data-ng-click="hideImport()">Cancel</button>
+</p>
