@@ -12,18 +12,6 @@ use Tonic\Application;
 class Crucible_Client_CurlClient implements ClientInterface
 {
     /**
-     * @var Application Application instance.
-     */
-    protected $app;
-
-    protected $cookiesDirPath;
-
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-    }
-
-    /**
      * Send request to the api server and get the result.
      *
      * @param string                  $method     Request method.
@@ -51,16 +39,20 @@ class Crucible_Client_CurlClient implements ClientInterface
 
         $curl = curl_init();
 
-        if ($method == 'GET') {
+        if ($method == 'GET' && $data) {
             $url .= '?' . http_build_query($data);
+        }
+
+        if ($credential->getCredential()) {
+            $authData = [
+                'FEAUTH' => $credential->getCredential()
+            ];
+            $url .= ($method == 'GET' && $data ? '&' : '?') . http_build_query($authData);
         }
 
         curl_setopt($curl, CURLOPT_URL, $endpoint . $url);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        curl_setopt($curl, CURLOPT_COOKIEFILE, $this->getCookieJarPath($credential));
-        curl_setopt($curl, CURLOPT_COOKIEJAR, $this->getCookieJarPath($credential));
 
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -69,19 +61,18 @@ class Crucible_Client_CurlClient implements ClientInterface
         if ($isFile) {
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Atlassian-Token: nocheck'));
         } else {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/x-www-form-urlencoded;charset=UTF-8"));
+            if ($method == 'POST' && $method == 'PUT') {
+                curl_setopt($curl, CURLOPT_HTTPHEADER,
+                    array("Content-Type: application/x-www-form-urlencoded;charset=UTF-8"));
+            }
         }
         if ($method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);
-            if ($isFile) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            } else {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
         } else {
             if ($method == "PUT") {
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
             }
         }
 

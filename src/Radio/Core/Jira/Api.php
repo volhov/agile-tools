@@ -126,9 +126,6 @@ class Jira_Api extends Api
         }
         try {
             $this->api(self::REQUEST_DELETE, '/rest/auth/1/session');
-            if ($this->authentication instanceof ResetableAuthentication) {
-                $this->authentication->reset();
-            }
             $this->clearJiraSession();
         } catch (Api\UnauthorizedException $exception) {
             throw $exception;
@@ -147,6 +144,9 @@ class Jira_Api extends Api
 
     protected function clearJiraSession()
     {
+        if ($this->authentication instanceof ResetableAuthentication) {
+            $this->authentication->reset();
+        }
         unset($_SESSION['jira-session']);
     }
 }

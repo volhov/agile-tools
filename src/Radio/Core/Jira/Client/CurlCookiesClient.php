@@ -11,17 +11,11 @@ use Tonic\Application;
 
 class Jira_Client_CurlCookiesClient implements ClientInterface
 {
-    /**
-     * @var Application Application instance.
-     */
-    protected $app;
-
     protected $cookiesDirPath;
 
-    public function __construct(Application $app)
+    public function __construct($container)
     {
-        $this->app = $app;
-        $this->cookiesDirPath = $this->app->container['dir.var'] . '/cookies';
+        $this->cookiesDirPath = $container['dir.var'] . '/cookies';
     }
 
     /**

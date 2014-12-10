@@ -21,6 +21,16 @@ class Crucible_Authentication_Token implements AuthenticationInterface, Resetabl
         $_SESSION[$this->sessionKey] = $token;
     }
 
+    public function getTokenName()
+    {
+        $token = $this->getCredential();
+        // "max.gopey:1099:3be26285c70ae598c35a00d1fd43caae"
+        if ($token) {
+            return substr($token, 0, strpos($token, ':'));
+        }
+        return null;
+    }
+
     public function reset()
     {
         unset($_SESSION[$this->sessionKey]);

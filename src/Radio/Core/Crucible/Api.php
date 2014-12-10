@@ -8,6 +8,9 @@ use Radio\Core\Jira_Authentication_ResetableAuthentication as ResetableAuthentic
 
 class Crucible_Api extends Api
 {
+    /** @var Crucible_Authentication_Token */
+    protected $authentication;
+
     /**
      * Set Client instance.
      *
@@ -27,11 +30,12 @@ class Crucible_Api extends Api
      */
     public function checkAuthorization()
     {
-        if (!$this->checkJiraSession()) {
+        if (!$this->checkCrucibleSession()) {
             throw new Api\UnauthorizedException('Not authorized');
         }
         try {
-            $response = $this->api(self::REQUEST_GET, '/rest/auth/1/session', [], true);
+            $username = $this->authentication->getTokenName();
+            $response = $this->api(self::REQUEST_GET, '/rest-service/users-v1/' . $username . '.json', [], true);
             return $response;
         } catch (Api\UnauthorizedException $exception) {
             throw $exception;
@@ -47,43 +51,36 @@ class Crucible_Api extends Api
         $response = $this->api(self::REQUEST_POST, '/rest-service/auth-v1/login.json', $authData, true);
         // {"token":"max.gopey:1099:3be26285c70ae598c35a00d1fd43caae"}
 
-        if (isset($response['session']) && !isset($response['errorMessages'])) {
-            $this->saveJiraSession($response['session']);
-            return $response['session'];
+        if (isset($response['token']) && !isset($response['error'])) {
+            $this->saveCrucibleSession($response['token']);
+            return $response['token'];
         } else {
-            $message = isset($response['errorMessages']) ? implode(PHP_EOL, $response['errorMessages']) : '';
+            $message = isset($response['error']) ? $response['error'] : '';
             throw new Api\UnauthorizedException($message);
         }
     }
 
     public function clearAuthorization()
     {
-        if (!$this->checkJiraSession()) {
-            throw new Api\UnauthorizedException('Not authorized');
+        // Crucible API doesn't provide logout ability.
+        // So we just get rid of the token.
+        $this->clearCrucibleSession();
+    }
+
+    protected function saveCrucibleSession($token)
+    {
+        $this->authentication->setToken($token);
+    }
+
+    protected function checkCrucibleSession()
+    {
+        return !is_null($this->authentication->getCredential());
+    }
+
+    protected function clearCrucibleSession()
+    {
+        if ($this->authentication instanceof ResetableAuthentication) {
+            $this->authentication->reset();
         }
-        try {
-            $this->api(self::REQUEST_DELETE, '/rest/auth/1/session');
-            if ($this->authentication instanceof ResetableAuthentication) {
-                $this->authentication->reset();
-            }
-            $this->clearJiraSession();
-        } catch (Api\UnauthorizedException $exception) {
-            throw $exception;
-        }
-    }
-
-    protected function saveJiraSession($session)
-    {
-        $_SESSION['jira-session'] = $session['value'];
-    }
-
-    protected function checkJiraSession()
-    {
-        return isset($_SESSION['jira-session']);
-    }
-
-    protected function clearJiraSession()
-    {
-        unset($_SESSION['jira-session']);
     }
 }

@@ -21,9 +21,6 @@ $config = array(
 
 $app = new Application($config);
 $app->container = $container;
-$app->container['jira.api']->setClient(
-    new \Radio\Core\Jira_Client_CurlCookiesClient($app)
-);
 
 $request = new Request();
 
