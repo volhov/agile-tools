@@ -78,15 +78,17 @@ angular.module('agile.controllers')
                             }).then(function(response) {
                                 Helper.setAlert('success', response.message);
                                 $scope.$parent.loadConfidenceReport().then(function() {
-                                    $scope.actualizeIssuesState();
-                                    $scope.actualizeIssuesAssignees();
+
+                                    $scope.$emit('confidenceReportIssuesUpdated');
+
                                     $scope.saveConfidenceReport();
+
+                                    $scope.$emit('confidenceReportChanged');
+
                                     $scope.hideImport();
                                     Helper.setAlert('success', 'Issues state has been updated.');
                                 });
                             });
-                            // Todo: find out if this is really needed. I don't think so.
-                            $scope.$parent.saveConfidenceReport();
                         });
                     } else {
                         $scope.hideImport();

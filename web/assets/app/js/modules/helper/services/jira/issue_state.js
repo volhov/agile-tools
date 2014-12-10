@@ -51,20 +51,22 @@ angular.module('helper')
                 if (devIssues) {
                     if (devIssuesInProgress || (devIssuesOpened && devIssuesResolved)) {
                         issueState.impl = 2;
-                    } else if (!devIssuesOpened && !devIssuesInProgress /* && devIssuesResolved*/) {
+                    } else if (!devIssuesOpened && !devIssuesInProgress && devIssuesResolved) {
                         issueState.impl = 1;
+                    } else {
+                        issueState.impl = 0;
                     }
+                } else {
+                    issueState.impl = -1;
                 }
 
                 aggregateIssueStatus(issueState);
-                if (issueState.status == 'Open' && issue.status.name == 'In Progress') {
-                    issueState.status = issue.status.name;
-                }
             }
 
             function defineSimpleTaskState(issue, issueState)
             {
-                if (issue.issuetype.name != 'Task' && issue.issuetype.name != 'Bug Report') {
+                if (issue.issuetype.name != 'Task'
+                    && issue.issuetype.name != 'Bug Report') {
                     return;
                 }
                 var taskType = getTaskType(issue);
@@ -81,8 +83,6 @@ angular.module('helper')
                         issueState[taskType] = getStatusCode(issue);
                         break;
                 }
-
-                issueState.status = issue.status.name;
             }
 
             function aggregateIssueStatus(issueState) {
@@ -94,14 +94,15 @@ angular.module('helper')
                     }
                 } else if (issueState.impl == 2) {
                     issueState.status = 'In Progress';
-                } else if (issueState.impl == 1) {
+                } else if (issueState.impl == 1 || issueState.impl == -1) {
                     if (issueState.doc == 0 || issueState.doc == 2) {
                         issueState.status = 'Doc';
                     } else if (issueState.tbd == 0 || issueState.tbd == 2) {
                         issueState.status = 'In TBD';
                     } else if (issueState.qa == 0 || issueState.qa == 2) {
                         issueState.status = 'In QA';
-                    } else if (issueState.cr == 0 || issueState.cr == 2 || issueState.tc == 0 || issueState.tc == 2) {
+                    } else if (issueState.cr == 0 || issueState.cr == 2
+                        || issueState.tc == 0 || issueState.tc == 2) {
                         issueState.status = 'Resolved';
                     } else {
                         issueState.status = 'Done';
@@ -121,7 +122,7 @@ angular.module('helper')
                      *      3 means item is on hold:, "on hold", feedback required or available but not accepted yet
                      */
                     var issueState = {
-                        status: null,
+                        status: issue.status.name,
                         impl: -1,
                         doc: -1,
                         tbd: -1,

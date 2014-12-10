@@ -37,10 +37,10 @@ angular.module('helper')
                     {
                         for (var aKey = 0; aKey < assignees.devs.length; aKey++) {
                             if (assignees.devs[aKey].name == assignee.name) {
-                                return false;
+                                return true;
                             }
                         }
-                        return true;
+                        return false;
                     }
 
                     return assignees;
