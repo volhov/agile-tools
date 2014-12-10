@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-12">
             <h3>Stats</h3>
-            <p>Collected for {{ moment().format('DD.MM.YYYY') }}</p>
+            <p>Collected for {{ 'now' | dateFormat:'DD.MM.YYYY' }}</p>
         </div>
     </div>
     <div data-ng-controller="Performance_Bugs" data-ng-include="template"></div>

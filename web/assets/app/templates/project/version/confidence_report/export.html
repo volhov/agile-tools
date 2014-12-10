@@ -30,7 +30,7 @@
                 <td><strong>QA</strong></td>
                 <td class="current-cl"><strong>CL</strong></td>
                 <td data-ng-repeat="clDate in clDates">
-                    <strong>{{ moment(clDate).format('D.MM') }}</strong>
+                    <strong>{{ clDate | dateFormat:'D.MM' }}</strong>
                 </td>
                 <td><strong>Risks, issues, action items</strong></td>
             </tr>

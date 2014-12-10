@@ -17,6 +17,7 @@ class Jira_Issue extends Adapter
             'priority',
             'status',
             'assignee',
+            'components',
             'customfield_10150', // custom task type
             'subtasks',
             'issuelinks',
@@ -57,8 +58,9 @@ class Jira_Issue extends Adapter
                 'id' => $this->original['fields']['status']['id'],
                 'name' => $this->original['fields']['status']['name'],
             ),
-            'subtasks' => array(),
             'versions' => array(),
+            'components' => array(),
+            'subtasks' => array(),
             'links' => array(),
             'assignee' => array(
                 'key' => $this->original['fields']['assignee']['name'],
@@ -70,16 +72,23 @@ class Jira_Issue extends Adapter
             $issue['issuetype']['custom'] = $this->original['fields']['customfield_10150']['value'];
         }
 
-        foreach ($this->original['fields']['subtasks'] as $subtask) {
-            $subtaskAdapter = new Jira_Issue_Subtask($subtask);
-            $issue['subtasks'][] = $subtaskAdapter->getAdaptation();
-        }
-
         foreach ($this->original['fields']['fixVersions'] as $version) {
             $issue['versions'][] = array(
                 'id' => $version['id'],
                 'name' => $version['name'],
             );
+        }
+
+        foreach ($this->original['fields']['components'] as $version) {
+            $issue['components'][] = array(
+                'id' => $version['id'],
+                'name' => $version['name'],
+            );
+        }
+
+        foreach ($this->original['fields']['subtasks'] as $subtask) {
+            $subtaskAdapter = new Jira_Issue_Subtask($subtask);
+            $issue['subtasks'][] = $subtaskAdapter->getAdaptation();
         }
 
         foreach ($this->original['fields']['issuelinks'] as $link) {

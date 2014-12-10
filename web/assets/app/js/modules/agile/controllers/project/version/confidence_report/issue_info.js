@@ -15,11 +15,28 @@ angular.module('agile.controllers')
             };
 
             $scope.getRowClass = function() {
+
                 return {
                     'good': $scope.issueInfo.cl > 6,
                     'so-so': $scope.issueInfo.cl <= 6 && $scope.issueInfo.cl > 3,
                     'bad': $scope.issueInfo.cl <= 3 || !$scope.issueInfo.cl,
-                    'updating': $scope.issueIsUpdating
+                    'updating': $scope.issueIsUpdating,
+                    'wrong-version': !checkIssueVersion()
                 };
             };
+
+            function checkIssueVersion()
+            {
+                if (!$scope.issueInfo.issue) {
+                    return true;
+                }
+                if ($scope.issueInfo.issue.versions) {
+                    for (var i = 0; i < $scope.issueInfo.issue.versions.length; i++) {
+                        if ($scope.issueInfo.issue.versions[i].id == $scope.version.jira_id) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
         }]);

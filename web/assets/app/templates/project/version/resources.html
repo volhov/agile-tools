@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label">Iteration length</label>
             <div class="col-sm-3">
-                <p class="form-control-static">{{ moment(resourcesPlan.endDate).diff(resourcesPlan.startDate) }}</p>
+                <p class="form-control-static">{{ resourcesPlan.endDate | dateDiff:resourcesPlan.startDate }}</p>
             </div>
         </div>
         <div class="form-group">

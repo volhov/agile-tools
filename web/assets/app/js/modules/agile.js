@@ -11,7 +11,10 @@ angular.module('agile', [
     .config(['$routeProvider', '$routeSegmentProvider', '$locationProvider', 'TEMPLATES_URL',
         function($routeProvider, $routeSegmentProvider, $locationProvider, TEMPLATES_URL) {
 
-            $locationProvider.html5Mode(true);
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
 
             /**
              * Managing redirects through native $routeProvider.
