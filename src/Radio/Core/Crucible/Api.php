@@ -11,14 +11,11 @@ class Crucible_Api extends Api
     /** @var Crucible_Authentication_Token */
     protected $authentication;
 
-    /**
-     * Set Client instance.
-     *
-     * @param Api\Client\ClientInterface $client Client instance.
-     */
-    public function setClient(Api\Client\ClientInterface $client)
+    public function getReviewsForIssue($issuesKey)
     {
-        $this->client = $client;
+        $result = $this->api(self::REQUEST_GET, '/rest-service/search-v1/reviews.json', array('term' => $issuesKey));
+
+        return $result;
     }
 
     /**

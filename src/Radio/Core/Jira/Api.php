@@ -72,16 +72,6 @@ class Jira_Api extends Api
     }
 
     /**
-     * Set Client instance.
-     *
-     * @param Api\Client\ClientInterface $client Client instance.
-     */
-    public function setClient(Api\Client\ClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
      * Check Jira authorization.
      *
      * @throws \chobie\Jira\Api\UnauthorizedException

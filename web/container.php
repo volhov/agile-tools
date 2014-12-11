@@ -29,6 +29,10 @@ $container['conf.crucible'] = function($container) {
     return $container['yaml.parser']->parse($yaml);
 };
 
+$container['config'] = function($container) {
+    return new \Radio\Core\Config($container);
+};
+
 
 // Mongo.
 

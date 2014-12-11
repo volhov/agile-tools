@@ -21,7 +21,8 @@ class Api_Config extends Core\Resource
     {
         $config = $projectKey ? $this->getProjectConfig($projectKey) : $this->getGlobalConfig();
         $yaml = array(
-            'jira_url' => $this->app->container['conf.jira']['server']
+            'jira_url' => $this->app->container['conf.jira']['server'],
+            'crucible_url' => $this->app->container['conf.crucible']['server'],
         );
 
         $response = new Core\JsonResponse(Response::OK);
@@ -70,24 +71,10 @@ class Api_Config extends Core\Resource
 
     protected function getProjectConfig($projectKey)
     {
-        /** @var \MongoDB $db */
-        $db = $this->app->container['database'];
+        /** @var \Radio\Core\Config $config */
+        $config = $this->app->container['config'];
 
-        $globalConfig = $this->getGlobalConfig();
-
-        if ($globalConfig) {
-            $projectConfig = $db->config->findOne(array(
-                '_id' => $projectKey
-            ));
-            if (!$projectConfig) {
-                $projectConfig = array(
-                    '_id' => $projectKey
-                );
-            }
-            return array_merge($globalConfig, $projectConfig);
-        }
-
-        return null;
+        return $config->getProjectConfig($projectKey);
     }
 
     /**
@@ -95,12 +82,9 @@ class Api_Config extends Core\Resource
      */
     protected function getGlobalConfig()
     {
-        /** @var \MongoDB $db */
-        $db = $this->app->container['database'];
-        $globalConfig = $db->config->findOne(array('_id' => 'global'));
+        /** @var \Radio\Core\Config $config */
+        $config = $this->app->container['config'];
 
-        return $globalConfig;
+        return $config->getGlobalConfig();
     }
-
-
 }

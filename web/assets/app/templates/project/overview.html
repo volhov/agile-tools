@@ -5,7 +5,10 @@
         </div>
         <div class="media-body">
             <h1>{{ project.name }}</h1>
-            <p>&nbsp;Project Key: <strong>{{ project.key }}</strong></p>
+            <p>
+                &nbsp;Project Key: <strong>{{ project.key }}</strong>
+                | <a href="/config/{{ project.key }}">Edit Configuration</a>
+            </p>
         </div>
     </div>
     <div data-ng-show="alert.message" role="alert"
