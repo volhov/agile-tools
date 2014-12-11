@@ -77,8 +77,13 @@ class Api_ConfidenceReports_ConfidenceReport extends Core\Resource
             $report['expansion'] = array();
             $fields = explode(',', $expand);
             foreach($fields as $field) {
-                if ($field == 'issues') {
-                    $this->expandReportWithIssues($report);
+                switch ($field) {
+                    case 'issues':
+                        $this->expandReportWithIssues($report);
+                        break;
+                    case 'reviews':
+                        $this->expandReportWithReviews($report);
+                        break;
                 }
             }
         }
@@ -96,6 +101,33 @@ class Api_ConfidenceReports_ConfidenceReport extends Core\Resource
             $issue = $db->issues->findOne(array('_id' => $issueKey));
             if ($issue) {
                 $report['expansion']['issues'][] = $issue;
+            }
+        }
+    }
+
+    protected function expandReportWithReviews(&$report)
+    {
+        /** @var \MongoDB $db */
+        $db = $this->app->container['database'];
+
+        $report['expansion']['reviews'] = array();
+
+        foreach ($report['issues'] as $issueInfo) {
+            $issueKey = $issueInfo['key'];
+            $reviews = $db->reviews->find(array('linked_issues' => $issueKey));
+            if ($reviews) {
+                foreach ($reviews as $review) {
+                    $skipReview = false;
+                    foreach ($report['expansion']['reviews'] as $addedReview) {
+                        if ($addedReview['key'] == $review['key']) {
+                            $skipReview = true;
+                            break;
+                        }
+                    }
+                    if (!$skipReview) {
+                        $report['expansion']['reviews'][] = $review;
+                    }
+                }
             }
         }
     }

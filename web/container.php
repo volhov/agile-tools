@@ -24,6 +24,15 @@ $container['conf.jira'] = function($container) {
     $yaml = file_get_contents($container['dir.conf'] . '/jira.yaml');
     return $container['yaml.parser']->parse($yaml);
 };
+$container['conf.crucible'] = function($container) {
+    $yaml = file_get_contents($container['dir.conf'] . '/crucible.yaml');
+    return $container['yaml.parser']->parse($yaml);
+};
+
+$container['config'] = function($container) {
+    return new \Radio\Core\Config($container);
+};
+
 
 // Mongo.
 
@@ -43,6 +52,7 @@ $container['mongo.db'] = function($container) {
 
 $container['database'] = $container['mongo.db'];
 
+
 // Jira.
 
 $container['jira.api'] = function($container) {
@@ -50,7 +60,8 @@ $container['jira.api'] = function($container) {
 
     $api = new Radio\Core\Jira_Api(
         $config['server'],
-        new \Radio\Core\Jira_Authentication_Cookies()
+        new \Radio\Core\Jira_Authentication_Cookies(),
+        new \Radio\Core\Jira_Client_CurlCookiesClient($container)
     );
 
     return $api;
@@ -59,6 +70,21 @@ $container['jira.api'] = function($container) {
 $container['jira.walker'] = function($container) {
     $api = $container['jira.api'];
     return new \chobie\Jira\Issues\Walker($api);
+};
+
+
+// Crucible.
+
+$container['crucible.api'] = function($container) {
+    $config = $container['conf.crucible'];
+
+    $api = new Radio\Core\Crucible_Api(
+        $config['server'],
+        new \Radio\Core\Crucible_Authentication_Token(),
+        new \Radio\Core\Crucible_Client_CurlClient()
+    );
+
+    return $api;
 };
 
 
