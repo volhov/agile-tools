@@ -41,20 +41,15 @@ class Config
         $db = $this->container['database'];
 
         $globalConfig = $this->getGlobalConfig();
+        $projectConfig = $db->config->findOne(array(
+            '_id' => $projectKey
+        ));
 
         if ($globalConfig) {
-            $projectConfig = $db->config->findOne(array(
-                '_id' => $projectKey
-            ));
-            if (!$projectConfig) {
-                $projectConfig = array(
-                    '_id' => $projectKey
-                );
-            }
             return array_merge($globalConfig, $projectConfig);
+        } else {
+            return $projectConfig;
         }
-
-        return null;
     }
 
     public function getGlobalConfigValue($key)

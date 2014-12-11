@@ -1,13 +1,14 @@
 angular.module('agile.controllers')
-    .controller('Project', ['$scope', '$location', '$routeParams', 'Api', 'Helper',
-        function($scope, $location, $routeParams, Api, Helper) {
+    .controller('Project', ['$scope', '$location', '$routeParams', 'Api', 'Helper', 'Config',
+        function($scope, $location, $routeParams, Api, Helper, Config) {
 
-            loadConfig($routeParams.projectKey).then(function() {
-                loadProject($routeParams.projectKey).then(function() {
+            Config.load($routeParams.projectKey).then(function() {
+                loadProject().then(function() {
                     Helper.setTitle($scope.project.name);
                 })
             });
 
+            $scope.config = Config;
             $scope.loadProject = loadProject;
             $scope.userTypes = Helper.getUserTypes();
 
@@ -20,19 +21,11 @@ angular.module('agile.controllers')
                     });
             };
 
-            function loadProject(projectKey)
+            function loadProject()
             {
-                return Api.get('Project').get(projectKey)
+                return Api.get('Project').get($routeParams.projectKey)
                     .then(function(project) {
                         $scope.project = project;
-                    });
-            }
-
-            function loadConfig(projectKey) {
-                return Api.get('Config')
-                    .get(projectKey)
-                    .then(function (config) {
-                        $scope.config = config;
                     });
             }
         }]);

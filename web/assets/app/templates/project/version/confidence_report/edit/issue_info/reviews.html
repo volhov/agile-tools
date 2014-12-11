@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-sm-2 cell-key">
                         &nbsp;<span class="secondary-info">&ndash;</span>
-                        <a href="{{ config.yaml.crucible_url }}/cru/{{ review.key }}"
+                        <a href="{{ config.value('crucible_url', 'yaml') }}/cru/{{ review.key }}"
                            target="_blank">{{ review.key }}</a>
                     </div>
                     <div class="col-sm-7 cell-summary">

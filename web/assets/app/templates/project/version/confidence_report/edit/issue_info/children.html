@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-sm-2 cell-key">
                         &nbsp;<span class="secondary-info">&ndash;</span>
-                        <a href="{{ config.yaml.jira_url }}/browse/{{ subTask.key }}"
+                        <a href="{{ config.value('jira_url', 'yaml') }}/browse/{{ subTask.key }}"
                            target="_blank">{{ subTask.key }}</a>
                     </div>
                     <div class="col-sm-7 cell-summary">

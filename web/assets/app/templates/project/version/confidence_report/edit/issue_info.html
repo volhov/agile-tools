@@ -3,7 +3,7 @@
         <div class="cell col-sm-6">
             <div class="row">
                 <div class="col-sm-2 cell-key">
-                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}"
+                    <a href="{{ config.value('jira_url', 'yaml') }}/browse/{{ issueInfo.key }}"
                        target="_blank">{{ issueInfo.key }}</a>
                     <span class="loading-indicator" title="Please wait..."
                           data-ng-show="issueIsUpdating"></span>
@@ -102,7 +102,7 @@
             <div class="col-sm-9">
                 <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/children.html'"></div>
                 <div data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/links.html'"></div>
-                <div data-ng-if="config.config.import_reviews" data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/reviews.html'"></div>
+                <div data-ng-if="config.value('import_reviews')" data-ng-include="'/assets/app/templates/project/version/confidence_report/edit/issue_info/reviews.html'"></div>
             </div>
             <div class="col-sm-3">
                 <div data-ng-if="showStats"

@@ -30,7 +30,7 @@
             <input type="checkbox" data-ng-model="jiraIssue.import"
                     data-ng-hide="jiraIssue.imported"/>
 
-            <a href="{{ config.yaml.jira_url }}/browse/{{ jiraIssue.key }}"
+            <a href="{{ config.value('jira_url', 'yaml') }}/browse/{{ jiraIssue.key }}"
                target="_blank" class="issue-key-url">
                 <img data-ng-src="{{jiraIssue.fields.issuetype.iconUrl}}"
                      title="{{jiraIssue.fields.issuetype.name}}"

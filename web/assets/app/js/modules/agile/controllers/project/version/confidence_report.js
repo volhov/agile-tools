@@ -1,6 +1,6 @@
 angular.module('agile.controllers')
-    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', '$location', 'Api', 'Helper', 'JiraHelper',
-        function($rootScope, $scope, $location, Api, Helper, JiraHelper) {
+    .controller('Version_ConfidenceReport', ['$rootScope', '$scope', '$location', 'Api', 'Helper', 'JiraHelper', 'Config',
+        function($rootScope, $scope, $location, Api, Helper, JiraHelper, Config) {
 
             $scope.searchIssue = '';
 
@@ -49,7 +49,7 @@ angular.module('agile.controllers')
                 }
 
                 var expandWith = ['issues'];
-                if ($scope.config.config.import_reviews) {
+                if (Config.value('import_reviews')) {
                     expandWith.push('reviews');
                 }
                 var promise = confidenceReportApi.get(reportId, expandWith.join(','))
@@ -158,7 +158,7 @@ angular.module('agile.controllers')
             function injectExpansion(confidenceReport) {
                 angular.forEach(confidenceReport.issues, function (issueInfo) {
                     issueInfo.issue = getIssueFromExpansion(issueInfo.key);
-                    if ($scope.config.config.import_reviews) {
+                    if (Config.value('import_reviews')) {
                         issueInfo.reviews = [];
                         angular.forEach(issueInfo.issue.reviews, function (reviewKey) {
                             issueInfo.reviews.push(getReviewFromExpansion(reviewKey));
@@ -170,7 +170,7 @@ angular.module('agile.controllers')
             function extractExpansion(confidenceReport) {
                 angular.forEach(confidenceReport.issues, function (issueInfo) {
                     delete issueInfo.issue;
-                    if ($scope.config.config.import_reviews) {
+                    if (Config.value('import_reviews')) {
                         delete issueInfo.reviews;
                     }
                 });
