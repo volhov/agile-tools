@@ -28,7 +28,7 @@ angular.module('agile', [
                     }
                 })
                 .otherwise({
-                    redirectTo: '/start'
+                    redirectTo: '/projects'
                 });
 
             /**
