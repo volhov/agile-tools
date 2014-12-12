@@ -62,6 +62,7 @@ class Jira_Issue extends Adapter
             'components' => array(),
             'subtasks' => array(),
             'links' => array(),
+            'reviews' => array(),
             'assignee' => array(
                 'key' => $this->original['fields']['assignee']['name'],
                 'name' => $this->original['fields']['assignee']['displayName'],

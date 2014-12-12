@@ -7,7 +7,6 @@ angular.module('agile.controllers')
             $scope.$watch('project', function () {
                 if ($scope.project) {
                     loadResourcesPlan();
-                    loadConfig();
                 }
             });
 
@@ -53,17 +52,7 @@ angular.module('agile.controllers')
                     });
             }
 
-
             function getResourcesPlanKey(project, version) {
                 return project.key + '-' + version.jira_id;
             }
-
-            function loadConfig() {
-                Api.get('Config')
-                    .get($scope.project.key)
-                    .then(function (config) {
-                        $scope.config = config;
-                    });
-            }
-
         }]);

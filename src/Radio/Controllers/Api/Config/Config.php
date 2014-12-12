@@ -9,19 +9,19 @@ use chobie\Jira\Api;
 /**
  * Config API controller.
  *
- * @uri /api/config
- * @uri /api/config/{projectKey}
+ * @uri /api/configs/{projectKey}
  */
-class Api_Config extends Core\Resource
+class Api_Configs_Config extends Core\Resource
 {
     /**
      * @method GET
      */
     public function showConfig($projectKey = null)
     {
-        $config = $projectKey ? $this->getProjectConfig($projectKey) : $this->getGlobalConfig();
+        $config = $projectKey == 'global' ? $this->getGlobalConfig() : $this->getProjectConfig($projectKey);
         $yaml = array(
-            'jira_url' => $this->app->container['conf.jira']['server']
+            'jira_url' => $this->app->container['conf.jira']['server'],
+            'crucible_url' => $this->app->container['conf.crucible']['server'],
         );
 
         $response = new Core\JsonResponse(Response::OK);
@@ -40,6 +40,33 @@ class Api_Config extends Core\Resource
     }
 
     /**
+     * @method POST
+     */
+    public function createConfig($projectKey = null)
+    {
+        $requestData = $this->request->getDecodedData();
+
+        $newConfig = $requestData['config'];
+
+        if ($newConfig) {
+            /** @var \MongoDB $db */
+            $db = $this->app->container['database'];
+            $db->config->save($newConfig);
+
+            $response = new Core\JsonResponse(Response::OK, array(
+                'message' => 'Configuration has been created.'
+            ));
+        } else {
+            $response = new Core\JsonResponse(Response::NOTFOUND, array(
+                'message' => 'Data can\'t is not found in the request.'
+            ));
+        }
+
+        return $response;
+    }
+
+
+    /**
      * @method PUT
      */
     public function saveConfig($projectKey = null)
@@ -47,7 +74,7 @@ class Api_Config extends Core\Resource
         $requestData = $this->request->getDecodedData();
 
         $newConfig = $requestData['config'];
-        $originalConfig = $projectKey ? $this->getProjectConfig($projectKey) : $this->getGlobalConfig();
+        $originalConfig = $projectKey == 'global' ? $this->getGlobalConfig() : $this->getProjectConfig($projectKey);
 
         if ($originalConfig && $newConfig) {
             $config = array_merge($originalConfig, $newConfig);
@@ -70,24 +97,10 @@ class Api_Config extends Core\Resource
 
     protected function getProjectConfig($projectKey)
     {
-        /** @var \MongoDB $db */
-        $db = $this->app->container['database'];
+        /** @var \Radio\Core\Config $config */
+        $config = $this->app->container['config'];
 
-        $globalConfig = $this->getGlobalConfig();
-
-        if ($globalConfig) {
-            $projectConfig = $db->config->findOne(array(
-                '_id' => $projectKey
-            ));
-            if (!$projectConfig) {
-                $projectConfig = array(
-                    '_id' => $projectKey
-                );
-            }
-            return array_merge($globalConfig, $projectConfig);
-        }
-
-        return null;
+        return $config->getProjectConfig($projectKey);
     }
 
     /**
@@ -95,12 +108,9 @@ class Api_Config extends Core\Resource
      */
     protected function getGlobalConfig()
     {
-        /** @var \MongoDB $db */
-        $db = $this->app->container['database'];
-        $globalConfig = $db->config->findOne(array('_id' => 'global'));
+        /** @var \Radio\Core\Config $config */
+        $config = $this->app->container['config'];
 
-        return $globalConfig;
+        return $config->getGlobalConfig();
     }
-
-
 }

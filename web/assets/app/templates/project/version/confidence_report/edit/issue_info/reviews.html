@@ -1,0 +1,24 @@
+<div class="row cl-report-row-reviews"
+     data-ng-if="issueInfo.reviews.length && showReviews">
+    <div class="cell col-sm-12">
+        <p><strong>Reviews</strong></p>
+        <div class="row" data-ng-repeat="review in issueInfo.reviews">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-2 cell-key">
+                        &nbsp;<span class="secondary-info">&ndash;</span>
+                        <a href="{{ config.value('crucible_url', 'yaml') }}/cru/{{ review.key }}"
+                           target="_blank">{{ review.key }}</a>
+                    </div>
+                    <div class="col-sm-7 cell-summary">
+                        {{ review.name }}
+                    </div>
+                    <div class="col-sm-3 cell-assignee">
+                        <span>{{ review.author.name | assigneeShort }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">{{ review.state }}</div>
+        </div>
+    </div>
+</div>

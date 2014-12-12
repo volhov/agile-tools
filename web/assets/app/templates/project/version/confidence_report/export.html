@@ -41,7 +41,7 @@
                  data-ng-init="cl = issueInfo.cl - 0"
                  data-ng-class="{good: cl > 6, 'so-so': cl > 3 && cl <= 6, 'bad': cl <= 3}">
                 <td class="cell-key">
-                    <a href="{{ config.yaml.jira_url }}/browse/{{ issueInfo.key }}" target="_blank">
+                    <a href="{{ config.value('jira_url', 'yaml') }}/browse/{{ issueInfo.key }}" target="_blank">
                         {{ issueInfo.key }}
                     </a>
                 </td>

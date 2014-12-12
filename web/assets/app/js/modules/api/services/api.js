@@ -8,7 +8,7 @@ angular.module('api')
         'JiraProjects', 'JiraProject',
         'JiraIssues', 'JiraIssue', 'JiraIssueTypes',
         'JiraUsers', 'JiraUser',
-        'Config',
+        'ConfigsApi', 'ConfigApi',
         function(
             Projects, Project, ProjectsImport,
             Users, User, UsersImport,
@@ -18,7 +18,7 @@ angular.module('api')
             JiraProjects, JiraProject,
             JiraIssues, JiraIssue, JiraIssueTypes,
             JiraUsers, JiraUser,
-            Config
+            ConfigsApi, ConfigApi
             ) {
             return {
                 'Projects': Projects, 'Project': Project, 'ProjectsImport': ProjectsImport,
@@ -29,7 +29,7 @@ angular.module('api')
                 'JiraProjects': JiraProjects, 'JiraProject': JiraProject,
                 'JiraIssues': JiraIssues, 'JiraIssue': JiraIssue, 'JiraIssueTypes': JiraIssueTypes,
                 'JiraUsers': JiraUsers, 'JiraUser': JiraUser,
-                'Config': Config,
+                'Configs': ConfigsApi, 'Config': ConfigApi,
                 get: function (resourceName) {
                     return this[resourceName];
                 }

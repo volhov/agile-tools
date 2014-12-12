@@ -9,15 +9,8 @@ use chobie\Jira\Api\Exception as ApiException;
 use chobie\Jira\Api\UnauthorizedException;
 use Tonic\Application;
 
-class Jira_Client_CurlCookiesClient implements ClientInterface
+class Crucible_Client_CurlClient implements ClientInterface
 {
-    protected $cookiesDirPath;
-
-    public function __construct($container)
-    {
-        $this->cookiesDirPath = $container['dir.var'] . '/cookies';
-    }
-
     /**
      * Send request to the api server and get the result.
      *
@@ -38,24 +31,28 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
     public function sendRequest($method, $url, $data = array(), $endpoint,
                                 AuthenticationInterface $credential, $isFile = false, $debug = false)
     {
-        if (!($credential instanceof Jira_Authentication_Cookies)) {
+        if (!($credential instanceof Crucible_Authentication_Token)) {
             throw new \Exception(
-                sprintf('CurlCookiesClient does not support %s authentication.', get_class($credential))
+                sprintf('This Client does not support %s authentication.', get_class($credential))
             );
         }
 
         $curl = curl_init();
 
-        if ($method == 'GET') {
+        if ($method == 'GET' && $data) {
             $url .= '?' . http_build_query($data);
+        }
+
+        if ($credential->getCredential()) {
+            $authData = [
+                'FEAUTH' => $credential->getCredential()
+            ];
+            $url .= ($method == 'GET' && $data ? '&' : '?') . http_build_query($authData);
         }
 
         curl_setopt($curl, CURLOPT_URL, $endpoint . $url);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        curl_setopt($curl, CURLOPT_COOKIEFILE, $this->getCookieJarPath($credential));
-        curl_setopt($curl, CURLOPT_COOKIEJAR, $this->getCookieJarPath($credential));
 
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -64,19 +61,18 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
         if ($isFile) {
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Atlassian-Token: nocheck'));
         } else {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json;charset=UTF-8"));
+            if ($method == 'POST' && $method == 'PUT') {
+                curl_setopt($curl, CURLOPT_HTTPHEADER,
+                    array("Content-Type: application/x-www-form-urlencoded;charset=UTF-8"));
+            }
         }
         if ($method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);
-            if ($isFile) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            } else {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
         } else {
             if ($method == "PUT") {
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
             }
         }
 
@@ -85,7 +81,7 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
         $errorNumber = curl_errno($curl);
         if ($errorNumber > 0) {
             throw new ApiException(
-                sprintf('Jira request failed: code = %s, "%s"', $errorNumber, curl_error($curl))
+                sprintf('Crucible request failed: code = %s, "%s"', $errorNumber, curl_error($curl))
             );
         }
 
@@ -96,11 +92,11 @@ class Jira_Client_CurlCookiesClient implements ClientInterface
 
         // if empty result and status != "204 No Content"
         if ($data === '' && curl_getinfo($curl, CURLINFO_HTTP_CODE) != 204) {
-            throw new ApiException("JIRA Rest server returns unexpected result.");
+            throw new ApiException("Crucible Rest server returns unexpected result.");
         }
 
         if (is_null($data)) {
-            throw new ApiException("JIRA Rest server returns unexpected result.");
+            throw new ApiException("Crucible Rest server returns unexpected result.");
         }
 
         return $data;

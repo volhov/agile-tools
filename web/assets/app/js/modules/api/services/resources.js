@@ -1,7 +1,10 @@
 angular.module('api')
 
-    .factory('Config',  ['Factory', function(Factory) {
-        return Factory.item('config/:id', {id: '@id'});
+    .factory('ConfigsApi',  ['Factory', function(Factory) {
+        return Factory.collection('configs', {id: '@id'});
+    }])
+    .factory('ConfigApi',  ['Factory', function(Factory) {
+        return Factory.item('configs/:id', {id: '@id'});
     }])
 
     .factory('ConfidenceReports', ['Factory', function(Factory) {

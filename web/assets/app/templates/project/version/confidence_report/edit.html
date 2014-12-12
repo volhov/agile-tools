@@ -17,6 +17,9 @@
                     <label><input type="checkbox" data-ng-model="expandAssignees"> Expand Assignees</label>
                     <label><input type="checkbox" data-ng-model="showSubtasks"> Show Subtasks</label>
                     <label><input type="checkbox" data-ng-model="showLinkedIssues"> Show Linked Issues</label>
+                    <label data-ng-if="config.value('import_reviews')">
+                        <input type="checkbox" data-ng-model="showReviews"> Show Reviews
+                    </label>
                     <label><input type="checkbox" data-ng-model="showStats"> Show Stats</label>
                 </div>
             </div>

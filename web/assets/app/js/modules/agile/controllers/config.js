@@ -6,23 +6,31 @@ angular.module('agile.controllers')
             $scope.validateYaml = validateYaml;
 
             Helper.setTitle('Config');
-            loadConfig($routeParams.projectKey);
+            loadConfig($routeParams.projectKey || 'global');
 
             function loadConfig(projectKey) {
                 Api.get('Config')
                     .get(projectKey)
                     .then(function (config) {
-                        $scope.config = config;
-                        var editableConfig = angular.copy(config.config);
-                        var customCss = null;
-                        delete editableConfig._id;
-                        if ('custom_css' in editableConfig) {
-                            customCss = editableConfig.custom_css;
-                            delete editableConfig.custom_css;
+                        var editableConfig;
+                        if (!config.config) {
+                            createConfig(projectKey).then(function() {
+                                loadConfig(projectKey);
+                            });
+                        } else {
+                            editableConfig = angular.copy(config.config);
+                            var customCss = '';
+                            delete editableConfig._id;
+                            if ('custom_css' in editableConfig) {
+                                customCss = editableConfig.custom_css;
+                                delete editableConfig.custom_css;
+                            }
+                            var yamlConfig =  yamlFilter(editableConfig, 'dump').trim();
+
+                            $scope.config = config;
+                            $scope.yamlConfig = yamlConfig == '{}' ? '' : yamlConfig;
+                            $scope.customCss = customCss;
                         }
-                        delete editableConfig._id;
-                        $scope.yamlConfig = yamlFilter(editableConfig, 'dump');
-                        $scope.customCss = customCss;
                     });
             }
 
@@ -41,7 +49,20 @@ angular.module('agile.controllers')
                     }
                 }
                 Api.get('Config')
-                    .put(config.config.id, config)
+                    .put(config.config._id, config)
+                    .then(function (response) {
+                        Helper.setAlert('success', response.message);
+                    });
+            }
+
+            function createConfig(projectKey)
+            {
+                return Api.get('Configs')
+                    .post({
+                        config: {
+                            '_id': projectKey
+                        }
+                    })
                     .then(function (response) {
                         Helper.setAlert('success', response.message);
                     });
@@ -50,9 +71,14 @@ angular.module('agile.controllers')
             function validateYaml(yamlConfig)
             {
                 try {
-                    return yamlFilter(yamlConfig, 'load');
+                    if (yamlConfig == '') {
+                        return {};
+                    }
+                    var loadedConfig = yamlFilter(yamlConfig, 'load');
+                    return typeof loadedConfig == 'object' ? loadedConfig : null;
                 } catch (e) {
                     return null;
                 }
             }
+
         }]);
