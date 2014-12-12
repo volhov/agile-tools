@@ -1,6 +1,9 @@
 <div class="page-header">
     <div class="config-header">
-        <h1>{{ config.config._id == 'global' ? 'Global Config' : 'Config of ' + config.config._id }}</h1>
+        <h1 data-ng-if="config.config._id == 'global'">Global Config</h1>
+        <h1 data-ng-if="config.config._id != 'global'">
+            Config of <a href="/project/{{ config.config._id }}">{{ config.config._id }}</a>
+        </h1>
     </div>
     <div data-ng-show="alert.message" role="alert"
          class="alert alert-{{alert.type}}">{{alert.message}}</div>
